@@ -26,4 +26,5 @@ public class Account {
     private int provinceId;
     private int districtId;
     private int villageId;
+    private boolean flg;
 }
