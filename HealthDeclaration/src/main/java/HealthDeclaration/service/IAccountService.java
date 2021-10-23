@@ -13,5 +13,5 @@ public interface IAccountService {
 
     Account update(Account account);
 
-    //Account deleteByUsername(String account);
+    void deleteByUsername(String username);
 }

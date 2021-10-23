@@ -20,7 +20,8 @@ public class AccountController {
     IAccountService service;
 
     @GetMapping("/getAll")
-    private ResponseEntity<List<Account>> getAll() {
+    private ResponseEntity getAll() {
+        //ResponseMessa
         try {
             List<Account> list = service.getAll();
             if (list.isEmpty()) {
@@ -32,8 +33,8 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/getOne/{username}")
-    private ResponseEntity<Account> getByUsername(@PathVariable String username) {
+    @GetMapping("/getOne")
+    private ResponseEntity<Account> getByUsername(@RequestParam String username) {
         try {
             Account account = service.getByUsername(username);
             if (account == null) {

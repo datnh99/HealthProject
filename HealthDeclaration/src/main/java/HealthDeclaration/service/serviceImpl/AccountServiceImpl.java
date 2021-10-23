@@ -12,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-@Transactional
-@Scope(proxyMode = ScopedProxyMode.INTERFACES)
 public class AccountServiceImpl implements IAccountService {
     @Autowired
     IAccountRepository repository;
@@ -38,8 +36,9 @@ public class AccountServiceImpl implements IAccountService {
         return repository.save(account);
     }
 
-//    @Override
-//    public Account deleteByUsername(String username) {
-//        return repository.deleteByUsername(username);
-//    }
+    @Override
+    public void deleteByUsername(String username) {
+        repository.deleteByUsername(username);
+    }
+
 }
