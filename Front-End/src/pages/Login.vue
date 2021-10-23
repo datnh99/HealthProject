@@ -43,7 +43,7 @@
 </template>
 <script>
 import { BaseInput, Card } from "@/components/index";
-import { processGoogleToken, basicProcessLogins } from "../api/processLogin";
+import { basicProcessLogins } from "../api/processLogin";
 import axios from "axios";
 import Vue from "vue";
 
@@ -55,13 +55,13 @@ const defaultFormAddUser = {
   address: "",
   gender: 0,
   phoneNumber: "",
-  dateOfBirth: "1970-01-01"
+  dateOfBirth: "1970-01-01",
 };
 
 export default {
-  components:{
+  components: {
     Card,
-    BaseInput
+    BaseInput,
   },
   data() {
     return {
@@ -96,29 +96,23 @@ export default {
   },
   methods: {
     async basicLogin() {
-      this.userData = await basicProcessLogins(this.username, this.password);
-      if (this.userData) {
-        console.log("this.userData ---> ", this.userData.token);
-        axios.defaults.headers.common["Authorization"] =
-          "Bearer " + this.userData.token;
-        Vue.$cookies.set("accessToken", this.userData.token);
-        // this.$cookies.set("account", this.userData.account);
-        // this.$cookies.set("role", this.userData.role);
-        this.$router.push("dashboard");
-      } else {
-        this.errorLogin = "Username or password is incorrect!";
-      }
-    },
-    processToken: async function(userLogin) {
-      this.userData = await processGoogleToken(userLogin);
-      console.log(this.userData.gg_profile);
-      if (!this.userData) {
-        this.$notification.error({
-          message: "Please use FPT University's account to login!",
+      await basicProcessLogins(this.username, this.password)
+        .then(res => {
+          if (res) {
+            this.userData = res;
+            axios.defaults.headers.common["Authorization"] =
+              "Bearer " + this.userData.token;
+            Vue.$cookies.set("accessToken", this.userData.token);
+            // this.$cookies.set("account", this.userData.account);
+            // this.$cookies.set("role", this.userData.role);
+            this.$router.push("dashboard");
+          } else {
+            this.errorLogin = "Username or password is incorrect!";
+          }
+        })
+        .catch(() => {
+          this.errorLogin = "Username or password is incorrect!";
         });
-        return;
-      }
-      this.checkUserInfor();
     }
   }
 };

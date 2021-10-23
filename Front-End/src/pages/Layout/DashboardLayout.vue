@@ -2,12 +2,21 @@
   <div class="wrapper">
     <!-- <div class="wrapper" :class="{'nav-open': $sidebar.showSidebar}"> -->
 
-    <side-bar :background-color="backgroundColor">
+    <side-bar :background-color="backgroundColor" v-if="checkToken">
       <!-- <mobile-menu slot="content"></mobile-menu> -->
       <sidebar-link to="/dashboard">
         <i class="tim-icons icon-chart-pie-36"></i>
         <template v-if="!isRTL">
           <p>Dashboard</p>
+        </template>
+        <template v-else>
+          <p>لوحة القيادة</p>
+        </template>
+      </sidebar-link>
+      <sidebar-link to="/class-management">
+        <i class="tim-icons icon-bank"></i>
+        <template v-if="!isRTL">
+          <p>Class Management</p>
         </template>
         <template v-else>
           <p>لوحة القيادة</p>
@@ -109,12 +118,18 @@ export default {
   },
   data() {
     return {
-      backgroundColor: "green"
+      backgroundColor: "blue"
     };
   },
   computed: {
     isRTL() {
       return this.$rtl.isRTL;
+    },
+    checkToken() {
+      if (this.$cookies.get("accessToken")) {
+        return true;
+      }
+      return false;
     }
   },
   methods: {
@@ -126,3 +141,5 @@ export default {
   }
 };
 </script>
+<style scoped>
+</style>

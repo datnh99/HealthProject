@@ -1,5 +1,6 @@
 package HealthDeclaration.modal.entity;
 
+import HealthDeclaration.common.base.entity.BaseEntity;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -9,8 +10,9 @@ import javax.persistence.Id;
 
 @Data
 @Entity
-public class Provice {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class Province extends BaseEntity {
+
+    private String name;
+
+    private String code;
 }

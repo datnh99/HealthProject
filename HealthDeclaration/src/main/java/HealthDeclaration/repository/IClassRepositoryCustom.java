@@ -1,12 +1,11 @@
-package HealthDeclaration.service;
+package HealthDeclaration.repository;
 
 import HealthDeclaration.form.ClassFormSearch;
 import HealthDeclaration.modal.dto.ClassDto;
 
 import java.util.List;
 
-public interface IClassService {
-    List<ClassDto> getClasses();
+public interface IClassRepositoryCustom {
 
     List<ClassDto> searchClass(ClassFormSearch classFormSearch, int pageIndex, int pageSize);
 }

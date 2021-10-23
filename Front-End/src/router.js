@@ -2,6 +2,7 @@ import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
 
 import Dashboard from "@/pages/Dashboard.vue";
 import Login from "@/pages/Login.vue";
+import ClassManagement from "@/pages/ClassManagement.vue";
 import Icons from "@/pages/Icons.vue";
 import Maps from "@/pages/Maps.vue";
 import Notifications from "@/pages/Notifications.vue";
@@ -16,63 +17,67 @@ import { includes } from "lodash";
 
 import VueScrollTo from "vue-scrollto";
 
-const router = [{
-  path: "/",
-  component: Login,
-  redirect: "login",
-  children:[
-    {
-      path: "login",
-      name: "Login",
-      component: Login
-    },
-    {
-      path: "dashboard",
-      name: "Dashboard",
-      component: Dashboard
-      // beforeEnter: async (to, from, next) => {
-      //   await checkLogin(next);
-      // }
-    },
-    {
-      path: "icons",
-      name: "Icons",
-      component: Icons
-    },
-    {
-      path: "maps",
-      name: "Maps",
-      component: Maps
-    },
-    {
-      path: "notifications",
-      name: "Notifications",
-      component: Notifications
-    },
-    {
-      path: "user",
-      name: "User Profile",
-      component: UserProfile
-    },
-    {
-      path: "table",
-      name: "Table List",
-      component: TableList
-    },
-    {
-      path: "typography",
-      name: "Typography",
-      component: Typography
-    }
-  ],
-  scrollBehavior: (to) => {
-    if (to.hash) {
-      return { selector: to.hash };
-    } else {
-      return { x: 0, y: 0 };
-    }
+const router = [
+  {
+    path: "/",
+    component: DashboardLayout,
+    redirect: "dashboard",
+    children: [
+      {
+        path: "login",
+        name: "Login",
+        component: Login,
+      },
+      {
+        path: "dashboard",
+        name: "Dashboard",
+        component: Dashboard,
+      },
+      {
+        path: "class-management",
+        name: "ClassManagement",
+        component: ClassManagement,
+      },
+      {
+        path: "icons",
+        name: "Icons",
+        component: Icons,
+      },
+      {
+        path: "maps",
+        name: "Maps",
+        component: Maps,
+      },
+      {
+        path: "notifications",
+        name: "Notifications",
+        component: Notifications,
+      },
+      {
+        path: "user",
+        name: "User Profile",
+        component: UserProfile,
+      },
+      {
+        path: "table",
+        name: "Table List",
+        component: TableList,
+      },
+      {
+        path: "typography",
+        name: "Typography",
+        component: Typography,
+      },
+    ],
+    // scrollBehavior: to => {
+    //   if (to.hash) {
+    //     return { selector: to.hash };
+    //   } else {
+    //     return { x: 0, y: 0 };
+    //   }
+    // },
   },
-}];
+];
 
 const notAuthRoutes = ["login", "Forbidden", "NotFound"];
 // router.afterEach(to => {

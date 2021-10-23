@@ -1,30 +1,50 @@
 package HealthDeclaration.modal.entity;
 
-import lombok.Data;
+import HealthDeclaration.common.base.entity.BaseEntity;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import java.sql.Date;
+import java.util.Date;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 @Entity
-public class Account {
-    @Id
+public class Account extends BaseEntity {
+
+    @Column(name = "username")
     private String username;
+
+    @Column(name = "password")
     private String password;
+
+    @Column(name = "full_name")
     private String fullName;
+
+    @Column(name = "dob")
     private Date dob;
+
+    @Column(name = "gender")
     private boolean gender;
-    @Column(length = 10)
+
+    @Column(name = "phone_number", length = 10)
     private String phoneNumber;
-    @Column(length = 10)
+
+    @Column(name = "parent_phone_number", length = 10)
     private String parentPhoneNumber;
-    private String createBy;
-    private Date createTime;
-    private int classId;
-    private int provinceId;
-    private int districtId;
-    private int villageId;
-    private boolean flg;
+
+    @Column(name = "province_id")
+    private Long provinceId;
+
+    @Column(name = "district_id")
+    private Long districtId;
+
+    @Column(name = "village_id")
+    private Long villageId;
+
+    @Column(name = "role_id")
+    private Long roleID;
 }

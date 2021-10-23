@@ -16,13 +16,15 @@
 
 */
 import Vue from "vue";
+import Antd from "ant-design-vue";
 import VueRouter from "vue-router";
-import SocialSharing from "vue-social-sharing"
-import VueGitHubButtons from "vue-github-buttons"
-import "vue-github-buttons/dist/vue-github-buttons.css"
+import SocialSharing from "vue-social-sharing";
+import VueGitHubButtons from "vue-github-buttons";
+import "vue-github-buttons/dist/vue-github-buttons.css";
+import "ant-design-vue/dist/antd.css";
 import App from "./App.vue";
-import '@/assets/scss/white-dashboard.scss';
-import '@/assets/css/nucleo-icons.css';
+import "@/assets/scss/white-dashboard.scss";
+import "@/assets/css/nucleo-icons.css";
 import "@/assets/demo/demo.css";
 
 
@@ -33,7 +35,6 @@ import Notify from "@/components/NotificationPlugin";
 import i18n from "./i18n";
 import SideBar from "@/components/SidebarPlugin";
 import VueCookies from "vue-cookies";
-
 
 Vue.config.productionTip = false;
 
@@ -55,6 +56,7 @@ Vue.use(GlobalDirectives);
 Vue.use(RTLPlugin);
 Vue.use(SideBar);
 Vue.use(Notify);
+Vue.use(Antd);
 
 new Vue({
   router,

@@ -10,10 +10,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface IAccountRepository extends JpaRepository<Account, Long> {
+public interface IAccountRepository extends JpaRepository<Account, Long>, CrudRepository<Account, Long> {
     Account getByUsername(String username);
 
-    @Query("update account acc set acc.flg = true where acc.account = :username")
+    @Query("update Account acc set acc.deleted = true where acc.username = :username")
     List<String> deleteByUsername(@Param("username") String username);
 
     @Query(value = "select a from Account a where a.username = :username")
