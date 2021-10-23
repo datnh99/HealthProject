@@ -10,11 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/class")
 @Log4j2
+@CrossOrigin(origins = "http://localhost:8181")
 public class ClassController {
     @Autowired
     IClassService classService;
@@ -24,7 +27,7 @@ public class ClassController {
         return classService.getClasses();
     }
 
-    @PostMapping("/search-class")
+    @RequestMapping(value = "/search-class", method = RequestMethod.POST)
     public ResponseEntity searchClasses(@RequestBody ClassFormSearch classFormSearch
             , @RequestParam("pageIndex") int pageIndex
             , @RequestParam("pageSize") int pageSize) {
@@ -32,7 +35,11 @@ public class ClassController {
         try{
             responseMessage.setSuccess(true);
             List<ClassDto> result = classService.searchClass(classFormSearch, pageIndex, pageSize);
-            responseMessage.setData(result);
+            Long total = classService.countSearchClass(classFormSearch);
+            Map<String, Object> results = new HashMap<>();
+            results.put("items", result);
+            results.put("total", total);
+            responseMessage.setData(results);
         } catch (Exception e) {
             log.error(e);
             responseMessage.setSuccess(false);

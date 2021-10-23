@@ -102,6 +102,9 @@ export default {
             this.userData = res;
             axios.defaults.headers.common["Authorization"] =
               "Bearer " + this.userData.token;
+            // axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
+            // axios.defaults.headers.common["Access-Control-Allow-Methods"] =
+            //   "GET, PUT, POST, DELETE, OPTIONS, post, get";
             Vue.$cookies.set("accessToken", this.userData.token);
             // this.$cookies.set("account", this.userData.account);
             // this.$cookies.set("role", this.userData.role);

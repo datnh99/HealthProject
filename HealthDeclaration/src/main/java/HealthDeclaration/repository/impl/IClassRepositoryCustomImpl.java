@@ -23,37 +23,29 @@ public class IClassRepositoryCustomImpl extends BaseRepository implements IClass
 
     @Override
     public List<ClassDto> searchClass(ClassFormSearch classFormSearch, int pageIndex, int pageSize) {
-        TypedQuery<ClassDto> query = this.buildSearchNotification(false , classFormSearch, ClassDto.class);
+        TypedQuery<ClassDto> query = this.buildSearchClass(false , classFormSearch, ClassDto.class);
         query.setFirstResult((pageIndex - 1) * pageSize).setMaxResults(pageSize);
         return query.getResultList();
     }
 
-    private <T> TypedQuery<T> buildSearchNotification2(final boolean count, ClassFormSearch classFormSearch, Class<T> clazz) {
-        String username = SecurityContextHolder.getContext()
-                .getAuthentication().getName();
-        String baseQuery =
-                "select HealthDeclaration.modal.dto.ClassDto(cl.id, cl.name, acc.id, acc.username, acc.fullName) "
-                        + "from Class cl join Account acc " +
-                        "ON acc.id = cl.teacherId "
-                        + " where 1=1 ";
-        StringBuilder sql = new StringBuilder(baseQuery);
-        Map<String, Object> params = new HashMap<>();
-
-        sql.append(" ORDER BY cl.name ASC");
-        return super.createQuery(sql.toString(), params, clazz);
+    @Override
+    public Long countSearchClass(ClassFormSearch classFormSearch) {
+        TypedQuery<Long> query = this.buildSearchClass(true , classFormSearch, Long.class);
+        return query.getSingleResult();
     }
 
-    private <T> TypedQuery<T> buildSearchNotification(final boolean count, ClassFormSearch classFormSearch, Class<T> clazz) {
+    private <T> TypedQuery<T> buildSearchClass(final boolean count, ClassFormSearch classFormSearch, Class<T> clazz) {
         StringBuilder sql = new StringBuilder();
-        sql.append("select new HealthDeclaration.modal.dto.ClassDto(cl.id, cl.name, acc.id, acc.username, acc.fullName) "
-            + "from Class cl join Account acc " +
-            "ON acc.id = cl.teacherId "
-            + " where 1=1 ");
         if (count) {
-            sql.append("select count(cl) "
+            sql.append("select count(cl.id) "
                 + "from Class cl join Account acc " +
                 "ON acc.id = cl.teacherId "
                 + " where 1=1 ");
+        } else {
+            sql.append("select new HealthDeclaration.modal.dto.ClassDto(cl.id, cl.name, acc.id, acc.username, acc.fullName) "
+                    + "from Class cl join Account acc " +
+                    "ON acc.id = cl.teacherId "
+                    + " where 1=1 ");
         }
         Map<String, Object> params = new HashMap<>();
         if (!ObjectUtils.isEmpty(classFormSearch.getClassName())) {

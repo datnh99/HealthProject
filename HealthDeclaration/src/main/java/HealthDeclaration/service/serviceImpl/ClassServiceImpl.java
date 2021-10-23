@@ -36,6 +36,11 @@ public class ClassServiceImpl implements IClassService {
         return classRepositoryCustom.searchClass(classFormSearch, pageIndex, pageSize);
     }
 
+    @Override
+    public Long countSearchClass(ClassFormSearch classFormSearch) {
+        return classRepositoryCustom.countSearchClass(classFormSearch);
+    }
+
     private ClassDto mapToClassDto(Class c) {
         ClassDto classDto = mapper.map(c, ClassDto.class);
         return classDto;

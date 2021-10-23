@@ -9,4 +9,6 @@ public interface IClassService {
     List<ClassDto> getClasses();
 
     List<ClassDto> searchClass(ClassFormSearch classFormSearch, int pageIndex, int pageSize);
+
+    Long countSearchClass(ClassFormSearch classFormSearch);
 }

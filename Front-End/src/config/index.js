@@ -16,4 +16,4 @@ const config = {
     SYSTEM_CONFIG: "super_admin"
   }
 };
-export default  config
+export default config
