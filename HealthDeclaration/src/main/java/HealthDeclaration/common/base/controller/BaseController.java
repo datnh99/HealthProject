@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Validator;
-import sun.misc.MessageUtils;
+//import sun.misc.MessageUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ public class BaseController {
     /**
      * The Message utils.
      */
-    private MessageUtils messageUtils;
+//    private MessageUtils messageUtils;
     /**
      * The Validator.
      */
@@ -66,9 +66,9 @@ public class BaseController {
      *
      * @return the message utils
      */
-    public MessageUtils getMessageUtils() {
-        return messageUtils;
-    }
+//    public MessageUtils getMessageUtils() {
+//        return messageUtils;
+//    }
     /**
      * Sets message utils.
      *
