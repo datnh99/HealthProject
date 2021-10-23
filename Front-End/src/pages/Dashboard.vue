@@ -172,10 +172,7 @@
   </div>
 </template>
 <script>
-
-import {
-  Card
-} from "@/components/index";
+import { Card } from "@/components/index";
 
 import LineChart from '@/components/Charts/LineChart';
 import BarChart from '@/components/Charts/BarChart';

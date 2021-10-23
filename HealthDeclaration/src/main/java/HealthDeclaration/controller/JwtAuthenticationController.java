@@ -1,6 +1,7 @@
 package HealthDeclaration.controller;
 
 import HealthDeclaration.config.JwtTokenUtil;
+import HealthDeclaration.modal.entity.Account;
 import HealthDeclaration.modal.request.JwtRequest;
 import HealthDeclaration.modal.response.JwtResponse;
 import HealthDeclaration.service.serviceImpl.JwtUserDetailsService;

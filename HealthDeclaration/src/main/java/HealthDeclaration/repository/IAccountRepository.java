@@ -15,4 +15,7 @@ public interface IAccountRepository extends JpaRepository<Account, Long> {
 
     @Query("update account acc set acc.flg = true where acc.account = :username")
     List<String> deleteByUsername(@Param("username") String username);
+
+    @Query(value = "select a from Account a where a.username = :username")
+    Account getByTen(@Param("username") String username);
 }

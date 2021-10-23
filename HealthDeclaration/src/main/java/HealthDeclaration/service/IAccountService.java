@@ -9,6 +9,8 @@ public interface IAccountService {
 
     Account getByUsername(String username);
 
+    Account getByTen(String username);
+
     Account add(Account account);
 
     Account update(Account account);

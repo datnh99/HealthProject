@@ -30,8 +30,9 @@ import GlobalComponents from "./globalComponents";
 import GlobalDirectives from "./globalDirectives";
 import RTLPlugin from "./RTLPlugin";
 import Notify from "@/components/NotificationPlugin";
-import i18n from "./i18n"
+import i18n from "./i18n";
 import SideBar from "@/components/SidebarPlugin";
+import VueCookies from "vue-cookies";
 
 
 Vue.config.productionTip = false;
@@ -46,6 +47,7 @@ const router = new VueRouter({
 });
 
 Vue.use(VueRouter);
+Vue.use(VueCookies)
 Vue.use(SocialSharing);
 Vue.use(VueGitHubButtons, { useCache: true });
 Vue.use(GlobalComponents);

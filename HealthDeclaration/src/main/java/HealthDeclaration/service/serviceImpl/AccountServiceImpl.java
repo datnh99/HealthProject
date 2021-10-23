@@ -27,6 +27,11 @@ public class AccountServiceImpl implements IAccountService {
     }
 
     @Override
+    public Account getByTen(String username) {
+        return repository.getByTen(username);
+    }
+
+    @Override
     public Account add(Account account) {
         return repository.save(account);
     }

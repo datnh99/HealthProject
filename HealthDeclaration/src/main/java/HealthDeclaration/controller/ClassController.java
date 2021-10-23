@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/class")
+@RequestMapping("/api/class")
 public class ClassController {
     @Autowired
     IClassService service;
