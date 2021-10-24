@@ -14,7 +14,11 @@
                 style="font-size: 24px"
                 spin
               />
-              <a-table :data-source="data" :columns="columns">
+              <a-table
+                :data-source="data"
+                :columns="columns"
+                :pagination="false"
+              >
                 <div
                   slot="filterDropdown"
                   slot-scope="{
@@ -32,7 +36,7 @@
                     :value="selectedKeys[0]"
                     style="width: 188px; margin-bottom: 8px; display: block;"
                     @change="
-                      e =>
+                      (e) =>
                         setSelectedKeys(e.target.value ? [e.target.value] : [])
                     "
                     @pressEnter="
@@ -94,16 +98,16 @@
                     {{ text }}
                   </template>
                 </template>
-                <div class="gutter-example pt-md pagnigation-custom">
-                  <a-pagination
-                    v-model="current"
-                    show-quick-jumper
-                    :default-current="1"
-                    :total="totals"
-                    @change="paginate"
-                  />
-                </div>
               </a-table>
+              <div class="gutter-example pt-md pagnigation-custom">
+                <a-pagination
+                  v-model="current"
+                  show-quick-jumper
+                  :default-current="1"
+                  :total="totals"
+                  @change="paginate"
+                />
+              </div>
             </a-spin>
           </div>
         </card>
@@ -205,8 +209,7 @@ export default {
     paginate(current = 1) {
       this.loading = true;
       this.current = current;
-      this.loading = true;
-      ClassRepository.searchClass(this.categoryNameSearch, this.current).then(
+      ClassRepository.searchClass(this.formDataSearch, this.current).then(
         (res) => {
           this.data = res.data.data.items;
           this.totals = res.data.data.total;
@@ -219,6 +222,7 @@ export default {
       ClassRepository.searchClass(this.formDataSearch, 1).then((res) => {
         this.data = res.data.data.items;
         this.totals = res.data.data.total;
+        this.current = 1;
         this.loading = false;
       });
     },
@@ -250,5 +254,13 @@ export default {
 .highlight {
   background-color: rgb(255, 192, 105);
   padding: 0px;
+}
+
+.gutter-example {
+  padding-bottom: 40px;
+}
+
+.pagnigation-custom {
+  float: right;
 }
 </style>
