@@ -1,9 +1,17 @@
 package HealthDeclaration.service.serviceImpl;
 
+import HealthDeclaration.common.utils.ObjectUtils;
+import HealthDeclaration.constants.RoleConstant;
+import HealthDeclaration.modal.dto.UserDto;
+import HealthDeclaration.modal.entity.Role;
 import HealthDeclaration.modal.entity.User;
 import HealthDeclaration.repository.IUserRepository;
+import HealthDeclaration.repository.IUserRepositoryCustom;
+import HealthDeclaration.service.IRoleService;
 import HealthDeclaration.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,6 +20,12 @@ import java.util.List;
 public class UserServiceImpl implements IUserService {
     @Autowired
     IUserRepository repository;
+
+    @Autowired
+    IUserRepositoryCustom userRepositoryCustom;
+
+    @Autowired
+    private IRoleService roleService;
 
     @Override
     public List<User> getAll() {
@@ -41,6 +55,19 @@ public class UserServiceImpl implements IUserService {
     @Override
     public void deleteByUsername(String username) {
         repository.deleteByUsername(username);
+    }
+
+    @Override
+    public List<UserDto> searchTeacherByName(String teacherName, int pPageIndex, int pageSize) {
+//        int pageIndex = pPageIndex-1;
+//        pageIndex = pageIndex > 0 ? pageIndex : 0;
+//        Pageable pageable = PageRequest.of(pageIndex, pageSize);
+        Role teacherRole = roleService.getByCode(RoleConstant.ROLE_GVCN);
+        if(!ObjectUtils.isNullorEmpty(teacherRole)) {
+//            return repository.searchTeacherByName(teacherName, teacherRole.getId());
+            return userRepositoryCustom.searchTeacherByName(teacherName, teacherRole.getId() , pPageIndex, pageSize);
+        }
+        return null;
     }
 
 }

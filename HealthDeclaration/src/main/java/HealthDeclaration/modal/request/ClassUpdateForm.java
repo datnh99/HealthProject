@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class ClassUpdateForm {
     private Long id;
-    private String name;
-    private Long teacherId;
+    private String className;
+    private Long teacherID;
 }

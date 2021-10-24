@@ -7,12 +7,14 @@ import HealthDeclaration.modal.entity.Class;
 import HealthDeclaration.modal.request.ClassAddForm;
 import HealthDeclaration.modal.request.ClassUpdateForm;
 import HealthDeclaration.service.IClassService;
+import HealthDeclaration.vo.Message;
 import HealthDeclaration.vo.ResponseMessage;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +81,7 @@ public class ClassController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity deleteClass(@RequestParam int id) {
+    public ResponseEntity deleteClass(@RequestParam Long id) {
         ResponseMessage responseMessage = new ResponseMessage();
         try {
             responseMessage.setSuccess(true);
@@ -87,6 +89,7 @@ public class ClassController {
             responseMessage.setData(true);
         } catch (Exception e) {
             responseMessage.setSuccess(false);
+            responseMessage.setData(false);
             return  ResponseUtils.buildResponseMessage(false, responseMessage);
         }
         return  ResponseUtils.buildResponseMessage(true, responseMessage);

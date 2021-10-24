@@ -14,4 +14,7 @@ import java.util.List;
 
 @Repository
 public interface IClassRepository extends JpaRepository<Class, Long>, CrudRepository<Class, Long> {
+
+    @Query(value = "Select cl FROM Class cl where cl.name = :className")
+    Class getByClassName(@Param("className") String className);
 }

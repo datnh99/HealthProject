@@ -19,7 +19,7 @@ import java.util.UUID;
 @Repository
 @Transactional
 @Log4j2
-public class IClassRepositoryCustomImpl extends BaseRepository implements IClassRepositoryCustom {
+public class ClassRepositoryCustomImpl extends BaseRepository implements IClassRepositoryCustom {
 
     @Override
     public List<ClassDto> searchClass(ClassFormSearch classFormSearch, int pageIndex, int pageSize) {
@@ -40,12 +40,12 @@ public class IClassRepositoryCustomImpl extends BaseRepository implements IClass
             sql.append("select count(cl.id) "
                 + "from Class cl join User u " +
                 "ON u.id = cl.teacherId "
-                + " where 1=1 ");
+                + " where 1=1 AND cl.deleted = false ");
         } else {
             sql.append("select new HealthDeclaration.modal.dto.ClassDto(cl.id, cl.name, u.id, u.username, u.fullName) "
                     + "from Class cl join User u " +
                     "ON u.id = cl.teacherId "
-                    + " where 1=1 ");
+                    + " where 1=1 AND cl.deleted = false ");
         }
         Map<String, Object> params = new HashMap<>();
         if (!ObjectUtils.isEmpty(classFormSearch.getClassName())) {

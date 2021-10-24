@@ -1,16 +1,24 @@
 package HealthDeclaration.controller;
 
+import HealthDeclaration.common.response.utils.ResponseUtils;
+import HealthDeclaration.modal.dto.UserDto;
 import HealthDeclaration.modal.entity.User;
 import HealthDeclaration.service.IUserService;
+import HealthDeclaration.vo.ResponseMessage;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("api/user")
+@RequestMapping("/api/user")
+@Log4j2
 public class UserController {
     @Autowired
     IUserService service;
@@ -27,6 +35,25 @@ public class UserController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/search-teacher-by-name")
+    private ResponseEntity searchTeacherByName(@Param("teacherName") String teacherName,
+                                        @Param("pageIndex") int pageIndex,
+                                        @Param("pageSize") int pageSize) {
+        ResponseMessage responseMessage = new ResponseMessage();
+        try{
+            responseMessage.setSuccess(true);
+            List<UserDto> result = service.searchTeacherByName(teacherName, pageIndex, pageSize);
+            Map<String, Object> results = new HashMap<>();
+            results.put("items", result);
+            responseMessage.setData(results);
+        } catch (Exception e) {
+            log.error(e);
+            responseMessage.setSuccess(false);
+            return ResponseUtils.buildResponseMessage(false, responseMessage);
+        }
+        return ResponseUtils.buildResponseMessage(true, responseMessage);
     }
 
     @GetMapping("/getOne")

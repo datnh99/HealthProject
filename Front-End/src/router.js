@@ -4,7 +4,6 @@ import Dashboard from "@/pages/Dashboard.vue";
 import Login from "@/pages/Login.vue";
 import ClassManagement from "@/pages/ClassManagement.vue";
 import Icons from "@/pages/Icons.vue";
-import Maps from "@/pages/Maps.vue";
 import Notifications from "@/pages/Notifications.vue";
 import UserProfile from "@/pages/UserProfile.vue";
 import TableList from "@/pages/TableList.vue";
@@ -43,11 +42,6 @@ const router = [
         path: "icons",
         name: "Icons",
         component: Icons
-      },
-      {
-        path: "maps",
-        name: "Maps",
-        component: Maps
       },
       {
         path: "notifications",

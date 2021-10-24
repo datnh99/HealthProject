@@ -1,5 +1,6 @@
 package HealthDeclaration.service;
 
+import HealthDeclaration.modal.dto.UserDto;
 import HealthDeclaration.modal.entity.User;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface IUserService {
     User update(User user);
 
     void deleteByUsername(String username);
+
+    List<UserDto> searchTeacherByName(String teacherName, int pageIndex, int pageSize);
 }

@@ -2,168 +2,202 @@
   <div class="content">
     <div class="row">
       <div class="col-12">
-        <card>
-          <template slot="header">
-            <h4 class="card-title">Class Management</h4>
-          </template>
-          <div class="table-responsive text-left">
-            <a-spin :spinning="loading">
-              <a-icon
-                type="loading"
-                slot="indicator"
-                style="font-size: 24px"
-                spin
-              />
-              <a-table
-                :data-source="data"
-                :columns="columns"
-                :scroll="{ x: 500 }"
-                :pagination="false"
-              >
-                <div
-                  slot="filterDropdown"
-                  slot-scope="{
-                    setSelectedKeys,
-                    selectedKeys,
-                    confirm,
-                    clearFilters,
-                    column,
-                  }"
-                  style="padding: 8px"
-                >
-                  <a-input
-                    v-ant-ref="(c) => (searchInput = c)"
-                    :placeholder="`Search ${column.dataIndex}`"
-                    :value="selectedKeys[0]"
-                    style="width: 188px; margin-bottom: 8px; display: block;"
-                    @change="
-                      (e) =>
-                        setSelectedKeys(e.target.value ? [e.target.value] : [])
-                    "
-                    @pressEnter="
-                      () => handleSearch(selectedKeys, column.dataIndex)
-                    "
-                  />
-                  <a-button
-                    type="primary"
-                    icon="search"
-                    size="small"
-                    style="width: 90px; margin-right: 8px"
-                    @click="() => handleSearch(selectedKeys, column.dataIndex)"
-                  >
-                    Search
-                  </a-button>
-                  <a-button
-                    size="small"
-                    style="width: 90px"
-                    @click="() => handleReset(column.dataIndex, clearFilters)"
-                  >
-                    Reset
-                  </a-button>
-                </div>
-                <a-icon
-                  slot="filterIcon"
-                  slot-scope="filtered"
-                  type="search"
-                  :style="{ color: filtered ? '#108ee9' : undefined }"
-                />
-                <template
-                  slot="customRender"
-                  slot-scope="text, record, index, column"
-                >
-                  <span
-                    v-if="searchText && searchedColumn === column.dataIndex"
-                  >
-                    <template
-                      v-for="(fragment, i) in text
-                        .toString()
-                        .split(
-                          new RegExp(
-                            `(?<=${searchText})|(?=${searchText})`,
-                            'i'
-                          )
-                        )"
-                    >
-                      <mark
-                        v-if="
-                          fragment.toLowerCase() === searchText.toLowerCase()
-                        "
-                        :key="i"
-                        class="highlight"
-                        >{{ fragment }}</mark
-                      >
-                      <template v-else>{{ fragment }}</template>
-                    </template>
-                  </span>
-                  <template v-else>
-                    {{ text }}
-                  </template>
-                </template>
-                <template #action="item">
-                  <a-dropdown>
-                    <a-menu slot="overlay">
-                      <a-menu-item
-                        key="1"
-                        @click="handleEditItemBtnClick(item)"
-                      >
-                        Sửa
-                      </a-menu-item>
+        <template slot="header">
+          <h4 class="card-title">Class Management</h4>
+        </template>
 
-                      <a-menu-item key="2">
-                        <a-popconfirm
-                          placement="leftBottom"
-                          ok-text="Yes"
-                          cancel-text="No"
-                          @confirm="deleteSubItemBtnClick(item)"
-                        >
-                          <template slot="title">
-                            <span
-                              >Ban có chắc chắn muốn xóa lớp học này
-                              không?</span
-                            ><br />
-                          </template>
-                          Xóa
-                        </a-popconfirm>
-                      </a-menu-item>
-                    </a-menu>
-                    <a-button> <a-icon type="down" /> </a-button>
-                  </a-dropdown>
-                </template>
-              </a-table>
-              <div class="gutter-example pt-md pagnigation-custom">
-                <a-pagination
-                  v-model="current"
-                  show-quick-jumper
-                  :default-current="1"
-                  :total="totals"
-                  @change="paginate"
-                />
-              </div>
-            </a-spin>
+        <div class="container cus-header-class">
+          <div class="row justify-content-between">
+            <div class="col-2 button-add-custom">
+              <base-button type="primary" @click="openAddForm()"
+                >Thêm lớp học</base-button
+              >
+            </div>
+            <div class="col-6"></div>
+            <div class="col-4">
+              <a-pagination
+                v-model="current"
+                show-quick-jumper
+                :default-current="1"
+                :total="totals"
+                @change="paginate"
+              />
+            </div>
           </div>
-        </card>
+        </div>
+        <!-- <div class="row">
+          <div class="col-12">
+            <div class="col-4">
+              <base-button type="primary" block>Thêm lớp học</base-button>
+            </div>
+
+            <div class="col-4 gutter-example pt-md pagnigation-custom">
+              <a-pagination
+                v-model="current"
+                show-quick-jumper
+                :default-current="1"
+                :total="totals"
+                @change="paginate"
+              />
+            </div>
+          </div>
+        </div> -->
+        <div class="table-responsive-class text-left">
+          <a-spin :spinning="loading">
+            <a-icon
+              type="loading"
+              slot="indicator"
+              style="font-size: 24px"
+              spin
+            />
+            <a-table
+              :data-source="data"
+              :columns="columns"
+              :scroll="{ x: 500 }"
+              :pagination="false"
+            >
+              <div
+                slot="filterDropdown"
+                slot-scope="{
+                  setSelectedKeys,
+                  selectedKeys,
+                  confirm,
+                  clearFilters,
+                  column,
+                }"
+                style="padding: 8px"
+              >
+                <a-input
+                  v-ant-ref="(c) => (searchInput = c)"
+                  :placeholder="`Search ${column.dataIndex}`"
+                  :value="selectedKeys[0]"
+                  style="width: 188px; margin-bottom: 8px; display: block;"
+                  @change="
+                    (e) =>
+                      setSelectedKeys(e.target.value ? [e.target.value] : [])
+                  "
+                  @pressEnter="
+                    () => handleSearch(selectedKeys, column.dataIndex)
+                  "
+                />
+                <a-button
+                  type="primary"
+                  icon="search"
+                  size="small"
+                  style="width: 90px; margin-right: 8px"
+                  @click="() => handleSearch(selectedKeys, column.dataIndex)"
+                >
+                  Search
+                </a-button>
+                <a-button
+                  size="small"
+                  style="width: 90px"
+                  @click="() => handleReset(column.dataIndex, clearFilters)"
+                >
+                  Reset
+                </a-button>
+              </div>
+              <a-icon
+                slot="filterIcon"
+                slot-scope="filtered"
+                type="search"
+                :style="{ color: filtered ? '#108ee9' : undefined }"
+              />
+              <template
+                slot="customRender"
+                slot-scope="text, record, index, column"
+              >
+                <span v-if="searchText && searchedColumn === column.dataIndex">
+                  <template
+                    v-for="(fragment, i) in text
+                      .toString()
+                      .split(
+                        new RegExp(`(?<=${searchText})|(?=${searchText})`, 'i')
+                      )"
+                  >
+                    <mark
+                      v-if="fragment.toLowerCase() === searchText.toLowerCase()"
+                      :key="i"
+                      class="highlight"
+                      >{{ fragment }}</mark
+                    >
+                    <template v-else>{{ fragment }}</template>
+                  </template>
+                </span>
+                <template v-else>
+                  {{ text }}
+                </template>
+              </template>
+              <template #action="item">
+                <a-dropdown>
+                  <a-menu slot="overlay">
+                    <a-menu-item key="1" @click="handleEditItemBtnClick(item)">
+                      Sửa
+                    </a-menu-item>
+
+                    <a-menu-item key="2">
+                      <a-popconfirm
+                        placement="leftBottom"
+                        ok-text="Yes"
+                        cancel-text="No"
+                        @confirm="deleteSubItemBtnClick(item)"
+                      >
+                        <template slot="title">
+                          <span
+                            >Ban có chắc chắn muốn xóa lớp học này không?</span
+                          ><br />
+                        </template>
+                        Xóa
+                      </a-popconfirm>
+                    </a-menu-item>
+                  </a-menu>
+                  <a-button> <a-icon type="down" /> </a-button>
+                </a-dropdown>
+              </template>
+            </a-table>
+          </a-spin>
+        </div>
 
         <!-- edit modal -->
         <a-modal
           title="Chỉnh sửa lớp học"
           v-model="showModal.edit"
-          @ok="saveEditClass"
-          @cancel="closeEditForm()"
+          :maskClosable="false"
+          :destroyOnClose="true"
+          :closable="false"
         >
+          <template slot="footer">
+            <a-button
+              key="submit"
+              type="primary"
+              :loading="loadingModal"
+              @click="saveEditClass"
+            >
+              Cập nhật
+            </a-button>
+            <a-button
+              key="cancel"
+              type="secondary"
+              :disabled="loadingModal"
+              @click="closeEditForm()"
+            >
+              Hủy
+            </a-button>
+          </template>
           <a-row :gutter="[24, 16]">
             <a-col :span="8"
-              >Category Name
+              >Tên lớp
               <span class="red">*</span>
             </a-col>
             <a-col :span="16">
               <a-textarea
-                v-model="editForm.categoryName"
+                v-model="editForm.className"
                 :auto-size="{ minRows: 1, maxRows: 5 }"
                 :min="0"
                 class="full-width--i"
               />
-              <span v-if="errors.categoryName" class="red">
-                {{ errors.categoryName }}
+              <span v-if="errors.className" class="red">
+                {{ errors.className }}
               </span>
             </a-col>
           </a-row>
@@ -174,16 +208,84 @@
             </a-col>
             <a-col :span="16">
               <a-select
-                v-model="editForm.deleted"
+                v-model="editForm.teacherID"
                 class="filter-select"
                 style="width: 100%"
+                @search="fetchTeacher"
               >
                 <a-select-option
-                  v-for="item in statusList"
-                  :key="item.key"
-                  :value="item.value"
+                  v-for="item in teacherList"
+                  :key="item.id"
+                  :value="item.id"
                 >
-                  {{ item.key }}
+                  {{ item.fullName }}
+                </a-select-option>
+              </a-select>
+            </a-col>
+          </a-row>
+        </a-modal>
+
+        <!-- Add modal -->
+        <a-modal
+          title="Thêm mới lớp học"
+          v-model="showModal.add"
+          :maskClosable="false"
+          :destroyOnClose="true"
+          :closable="false"
+        >
+          <template slot="footer">
+            <a-button
+              key="submit"
+              type="primary"
+              :loading="loadingModal"
+              @click="addNewClass"
+            >
+              Thêm
+            </a-button>
+            <a-button
+              key="cancel"
+              type="secondary"
+              :disabled="loadingModal"
+              @click="closeModal()"
+            >
+              Hủy
+            </a-button>
+          </template>
+          <a-row :gutter="[24, 16]">
+            <a-col :span="8"
+              >Tên lớp
+              <span class="red">*</span>
+            </a-col>
+            <a-col :span="16">
+              <a-textarea
+                v-model="addForm.className"
+                :auto-size="{ minRows: 1, maxRows: 5 }"
+                :min="0"
+                class="full-width--i"
+              />
+              <span v-if="errors.className" class="red">
+                {{ errors.className }}
+              </span>
+            </a-col>
+          </a-row>
+
+          <a-row :gutter="[24, 16]">
+            <a-col :span="8">
+              Giáo viên chủ nhiệm
+            </a-col>
+            <a-col :span="16">
+              <a-select
+                v-model="addForm.teacherID"
+                class="filter-select"
+                style="width: 100%"
+                @search="fetchTeacher"
+              >
+                <a-select-option
+                  v-for="item in teacherList"
+                  :key="item.id"
+                  :value="item.id"
+                >
+                  {{ item.fullName }}
                 </a-select-option>
               </a-select>
             </a-col>
@@ -195,6 +297,7 @@
 </template>
 <script>
 import ClassRepository from "../api/class.js";
+import UserRepository from "../api/user.js";
 
 const defaultModalState = {
   add: false,
@@ -210,22 +313,25 @@ const defaultForm = {
 const requiredError = "This field can't blank";
 
 const defaultInputErrors = {
-  className: ""
+  className: "",
 };
 
 export default {
   data() {
     return {
       data: [],
+      teacherList: [],
       current: 1,
       totals: 0,
       loading: false,
+      loadingModal: false,
       formDataSearch: {
         className: "",
         teacherName: "",
       },
       showModal: { ...defaultModalState },
       editForm: { ...defaultForm },
+      addForm: { ...defaultForm },
       errors: { ...defaultInputErrors },
       selectedItem: null,
       searchText: "",
@@ -319,6 +425,7 @@ export default {
   },
   created() {
     this.searchClass();
+    this.fetchTeacher("");
   },
   methods: {
     paginate(current = 1) {
@@ -363,6 +470,7 @@ export default {
       this.searchText = "";
     },
     async handleEditItemBtnClick(item) {
+      this.fetchTeacher("");
       this.selectedItem = item;
       this.editForm.id = item.id;
       this.editForm.className = item.className;
@@ -379,10 +487,13 @@ export default {
       this.showModal = { ...defaultModalState };
       this.errors = { ...defaultInputErrors };
       this.editForm = { ...defaultForm };
+      this.addForm = { ...defaultForm };
     },
     saveEditClass() {
+      this.loadingModal = true;
       const validation = this.validate();
       if (!validation) {
+        this.loadingModal = false;
         return;
       }
       var formEditData = {
@@ -391,23 +502,65 @@ export default {
         teacherID: this.editForm.teacherID,
       };
       ClassRepository.editClass(formEditData)
-        .then(response => {
-          if (response.data.data === true) {
+        .then((response) => {
+          if (response.data.success === true) {
             this.$notification.success({
-              message: "Chỉnh sửa thành công!"
+              message: "Chỉnh sửa thành công!",
             });
             this.paginate();
             this.closeModal();
+            this.loadingModal = false;
           } else {
             this.$notification.error({
-              message: "Chỉnh sửa thất bại!"
+              message: "Chỉnh sửa thất bại!",
             });
+            this.loadingModal = false;
           }
         })
         .catch(() => {
           this.$notification.error({
-            message: "Chỉnh sửa thất bại!"
+            message: "Chỉnh sửa thất bại!",
           });
+          this.loadingModal = false;
+        });
+    },
+    openAddForm() {
+      this.showModal = {
+        add: true
+      };
+    },
+    addNewClass() {
+      this.loadingModal = true;
+      const validation = this.validateAddNew();
+      if (!validation) {
+        this.loadingModal = false;
+        return;
+      }
+      var formEditData = {
+        className: this.addForm.className,
+        teacherId: this.addForm.teacherID,
+      };
+      ClassRepository.addNewClass(formEditData)
+        .then((response) => {
+          if (response.data.success === true) {
+            this.$notification.success({
+              message: "Thêm mới thành công!",
+            });
+            this.paginate();
+            this.closeModal();
+            this.loadingModal = false;
+          } else {
+            this.$notification.error({
+              message: "Tên lớp học đã tồn tại!",
+            });
+            this.loadingModal = false;
+          }
+        })
+        .catch(() => {
+          this.$notification.error({
+            message: "Tên lớp học đã tồn tại!",
+          });
+          this.loadingModal = false;
         });
     },
     validate() {
@@ -417,6 +570,43 @@ export default {
         isValid = false;
       }
       return isValid;
+    },
+    validateAddNew() {
+      let isValid = true;
+      if (this.addForm.className == "" || this.addForm.className == null) {
+        this.errors.className = requiredError;
+        isValid = false;
+      }
+      return isValid;
+    },
+    fetchTeacher(teacherName) {
+      UserRepository.searchTeacherByName(teacherName, 1).then((res) => {
+        this.teacherList = res.data.data.items;
+      });
+    },
+    deleteSubItemBtnClick(item) {
+      this.loading = true;
+      this.selectedItem = item;
+      ClassRepository.deleteClass(this.selectedItem.id)
+        .then((res) => {
+          if (res.data.success === true) {
+            this.$notification.success({
+              message: "Xóa lớp học thành công!",
+            });
+            this.paginate();
+          } else {
+            this.$notification.error({
+              message: "Xóa lớp học thất bại!",
+            });
+            this.loading = false;
+          }
+        })
+        .catch((e) => {
+          this.$notification.error({
+            message: e.response.data.message,
+          });
+          this.loading = false;
+        });
     },
   },
 };
@@ -431,7 +621,21 @@ export default {
   padding-bottom: 40px;
 }
 
-.pagnigation-custom {
+/* .pagnigation-custom {
   float: right;
+} */
+.button-add-custom {
+  float: left;
+}
+.table-responsive-class {
+  padding-top: 10px;
+}
+.ant-pagination {
+  float: right;
+}
+
+.cus-header-class {
+  margin: none !important;
+  padding: none !important;
 }
 </style>

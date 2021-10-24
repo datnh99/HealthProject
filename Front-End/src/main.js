@@ -55,6 +55,7 @@ Vue.use(GlobalComponents);
 Vue.use(GlobalDirectives);
 Vue.use(RTLPlugin);
 Vue.use(SideBar);
+require('./config/interceptor')
 Vue.use(Notify);
 Vue.use(Antd);
 

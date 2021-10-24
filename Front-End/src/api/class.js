@@ -15,11 +15,21 @@ function searchClass(classFormSearch, pageIndex) {
 }
 
 function editClass(classFormEdit) {
-  return axios.post(`${API_CLASS}/edit-class`, classFormEdit);
+  return axios.put(`${API_CLASS}/update?`, classFormEdit);
+}
+
+function addNewClass(classFormAddNew) {
+  return axios.post(`${API_CLASS}/add?`, classFormAddNew);
+}
+
+function deleteClass(id) {
+  return axios.delete(`${API_CLASS}/delete?id=${id}`);
 }
 
 export default {
   getALlClass,
   searchClass,
-  editClass
+  editClass,
+  addNewClass,
+  deleteClass
 };

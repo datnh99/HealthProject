@@ -8,15 +8,12 @@ import CONFIG from "./index";
     data: () => {
       return {
         loginUsername: Vue.$cookies.get("account") || "",
-        token,
+        token
       };
     },
   });
   if (token) {
     axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-    // axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
-    // axios.defaults.headers.common["Access-Control-Allow-Methods"] =
-    //   "GET, PUT, POST, DELETE, OPTIONS, post, get";
   } else {
     axios.defaults.headers.common["Authorization"] = null;
   }
@@ -28,9 +25,9 @@ import CONFIG from "./index";
     (err) => {
       if (typeof err.response === "undefined" || err.response.status === 401) {
         //   window.location.href = `${CONFIG.LOGIN_URL}${encodeURIComponent(window.location.href)}`;
-        window.location.href = `${CONFIG.CLIENT_URL}/authenticate`;
+        window.location.href = `${CONFIG.CLIENT_URL}/#/login`;
       } else if (err.response.status === 403) {
-        window.location.href = `${CONFIG.CLIENT_URL}/forbidden`;
+        window.location.href = `${CONFIG.CLIENT_URL}/#/forbidden`;
       }
       return Promise.reject(err);
     }

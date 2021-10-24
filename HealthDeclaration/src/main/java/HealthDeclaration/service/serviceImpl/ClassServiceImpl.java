@@ -1,6 +1,7 @@
 package HealthDeclaration.service.serviceImpl;
 
 import HealthDeclaration.common.base.service.BaseService;
+import HealthDeclaration.common.utils.ObjectUtils;
 import HealthDeclaration.form.ClassFormSearch;
 import HealthDeclaration.modal.dto.ClassDto;
 import HealthDeclaration.modal.entity.Class;
@@ -55,13 +56,16 @@ public class ClassServiceImpl extends BaseService implements IClassService {
 
     @Override
     public Class addClass(ClassAddForm c) {
+        if(!checkClassNameNotExist(c.getClassName())) {
+            throw new IllegalArgumentException("That class name already exist!");
+        }
         Class clazz = new Class();
         String username = getLoggedInUsername();
         clazz.setCreatedBy(username);
         clazz.setCreatedTime(new Date());
         clazz.setModifiedBy(username);
         clazz.setModifiedTime(new Date());
-        clazz.setName(c.getName());
+        clazz.setName(c.getClassName());
         clazz.setTeacherId(c.getTeacherId());
         clazz.setDeleted(false);
         return repository.save(clazz);
@@ -69,18 +73,23 @@ public class ClassServiceImpl extends BaseService implements IClassService {
 
     @Override
     public Class updateClass(ClassUpdateForm c) {
+        if(!checkClassNameNotExist(c.getClassName())) {
+            throw new IllegalArgumentException("That class name already exist!");
+        }
         Class clazz = repository.getById(c.getId());
         clazz.setModifiedBy(getLoggedInUsername());
         clazz.setModifiedTime(new Date());
-        clazz.setName(c.getName());
-        clazz.setTeacherId(c.getTeacherId());
+        clazz.setName(c.getClassName());
+        clazz.setTeacherId(c.getTeacherID());
         System.out.println(clazz);
         return repository.save(clazz);
     }
 
     @Override
-    public void deleteClass(int id) {
-        Class clazz = repository.getById(new Long(id));
+    public void deleteClass(Long id) {
+        Class clazz = repository.getById(id);
+        clazz.setModifiedBy(getLoggedInUsername());
+        clazz.setCreatedTime(new Date());
         clazz.setDeleted(true);
         repository.save(clazz);
     }
@@ -93,5 +102,10 @@ public class ClassServiceImpl extends BaseService implements IClassService {
     private Class mapToClass(ClassDto classDto) {
         Class c = mapper.map(classDto, Class.class);
         return c;
+    }
+
+    private boolean checkClassNameNotExist(String className) {
+        Class clazz = repository.getByClassName(className);
+        return ObjectUtils.isNullorEmpty(clazz);
     }
 }

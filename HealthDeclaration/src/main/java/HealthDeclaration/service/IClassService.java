@@ -19,5 +19,5 @@ public interface IClassService {
 
     Class updateClass(ClassUpdateForm c);
 
-    void deleteClass(int id);
+    void deleteClass(Long id);
 }
