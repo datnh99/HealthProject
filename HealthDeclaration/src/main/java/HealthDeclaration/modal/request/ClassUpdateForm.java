@@ -6,5 +6,5 @@ import lombok.Data;
 public class ClassUpdateForm {
     private Long id;
     private String name;
-    private String teacherUsername;
+    private Long teacherId;
 }

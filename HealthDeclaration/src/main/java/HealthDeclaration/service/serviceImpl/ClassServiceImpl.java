@@ -1,11 +1,12 @@
 package HealthDeclaration.service.serviceImpl;
 
+import HealthDeclaration.common.base.service.BaseService;
 import HealthDeclaration.form.ClassFormSearch;
 import HealthDeclaration.modal.dto.ClassDto;
 import HealthDeclaration.modal.entity.Class;
 import HealthDeclaration.modal.request.ClassAddForm;
 import HealthDeclaration.modal.request.ClassUpdateForm;
-import HealthDeclaration.repository.IAccountRepository;
+import HealthDeclaration.repository.IUserRepository;
 import HealthDeclaration.repository.IClassRepository;
 import HealthDeclaration.repository.IClassRepositoryCustom;
 import HealthDeclaration.service.IClassService;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ClassServiceImpl implements IClassService {
+public class ClassServiceImpl extends BaseService implements IClassService {
     @Autowired
     IClassRepository repository;
 
@@ -29,7 +30,7 @@ public class ClassServiceImpl implements IClassService {
     ModelMapper mapper;
 
     @Autowired
-    IAccountRepository accountRepository;
+    IUserRepository accountRepository;
 
     @Override
     public List<ClassDto> getClasses() {
@@ -51,12 +52,13 @@ public class ClassServiceImpl implements IClassService {
     @Override
     public Class addClass(ClassAddForm c) {
         Class clazz = new Class();
-        clazz.setCreatedBy(c.getTeacherUsername());
+        String username = getLoggedInUsername();
+        clazz.setCreatedBy(username);
         clazz.setCreatedTime(new Date());
-        clazz.setModifiedBy(c.getTeacherUsername());
+        clazz.setModifiedBy(username);
         clazz.setModifiedTime(new Date());
         clazz.setName(c.getName());
-        clazz.setTeacherId(accountRepository.getIdByUsername(c.getTeacherUsername()));
+        clazz.setTeacherId(c.getTeacherId());
         clazz.setDeleted(false);
         return repository.save(clazz);
     }
@@ -64,10 +66,10 @@ public class ClassServiceImpl implements IClassService {
     @Override
     public Class updateClass(ClassUpdateForm c) {
         Class clazz = repository.getById(c.getId());
-        clazz.setModifiedBy(c.getTeacherUsername());
+        clazz.setModifiedBy(getLoggedInUsername());
         clazz.setModifiedTime(new Date());
         clazz.setName(c.getName());
-        clazz.setTeacherId(accountRepository.getIdByUsername(c.getTeacherUsername()));
+        clazz.setTeacherId(c.getTeacherId());
         System.out.println(clazz);
         return repository.save(clazz);
     }

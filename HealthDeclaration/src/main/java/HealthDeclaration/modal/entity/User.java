@@ -13,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 @Entity
-public class Account extends BaseEntity {
+public class User extends BaseEntity {
 
     @Column(name = "username")
     private String username;
