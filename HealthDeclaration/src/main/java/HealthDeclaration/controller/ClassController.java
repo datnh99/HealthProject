@@ -3,6 +3,9 @@ package HealthDeclaration.controller;
 import HealthDeclaration.common.response.utils.ResponseUtils;
 import HealthDeclaration.form.ClassFormSearch;
 import HealthDeclaration.modal.dto.ClassDto;
+import HealthDeclaration.modal.entity.Class;
+import HealthDeclaration.modal.request.ClassAddForm;
+import HealthDeclaration.modal.request.ClassUpdateForm;
 import HealthDeclaration.service.IClassService;
 import HealthDeclaration.vo.ResponseMessage;
 import lombok.extern.log4j.Log4j2;
@@ -47,4 +50,46 @@ public class ClassController {
         }
         return ResponseUtils.buildResponseMessage(true, responseMessage);
     }
+
+    @PostMapping("/add")
+    public ResponseEntity addClass(@RequestBody ClassAddForm clazz) {
+        ResponseMessage responseMessage = new ResponseMessage();
+        try {
+            responseMessage.setSuccess(true);
+            responseMessage.setData(classService.addClass(clazz));
+        } catch (Exception e) {
+            log.error(e);
+            responseMessage.setSuccess(false);
+            return  ResponseUtils.buildResponseMessage(false, responseMessage);
+        }
+        return  ResponseUtils.buildResponseMessage(true, responseMessage);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity updateClass(@RequestBody ClassUpdateForm clazz) {
+        ResponseMessage responseMessage = new ResponseMessage();
+        try {
+            responseMessage.setSuccess(true);
+            responseMessage.setData(classService.updateClass(clazz));
+        } catch (Exception e) {
+            responseMessage.setSuccess(false);
+            return  ResponseUtils.buildResponseMessage(false, responseMessage);
+        }
+        return  ResponseUtils.buildResponseMessage(true, responseMessage);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity deleteClass(@RequestParam int id) {
+        ResponseMessage responseMessage = new ResponseMessage();
+        try {
+            responseMessage.setSuccess(true);
+            classService.deleteClass(id);
+            responseMessage.setData(true);
+        } catch (Exception e) {
+            responseMessage.setSuccess(false);
+            return  ResponseUtils.buildResponseMessage(false, responseMessage);
+        }
+        return  ResponseUtils.buildResponseMessage(true, responseMessage);
+    }
+
 }

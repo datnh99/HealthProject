@@ -18,4 +18,7 @@ public interface IAccountRepository extends JpaRepository<Account, Long>, CrudRe
 
     @Query(value = "select a from Account a where a.username = :username")
     Account getByTen(@Param("username") String username);
+
+    @Query(value = "select acc.id from  Account acc where acc.username = :username")
+    Long getIdByUsername(@Param(("username")) String username);
 }
