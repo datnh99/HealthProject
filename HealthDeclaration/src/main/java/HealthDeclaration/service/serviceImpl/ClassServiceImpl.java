@@ -41,7 +41,11 @@ public class ClassServiceImpl extends BaseService implements IClassService {
 
     @Override
     public List<ClassDto> searchClass(ClassFormSearch classFormSearch, int pageIndex, int pageSize) {
-        return classRepositoryCustom.searchClass(classFormSearch, pageIndex, pageSize);
+        List<ClassDto> classDtoList = classRepositoryCustom.searchClass(classFormSearch, pageIndex, pageSize);
+        for(int i = 0 ; i < classDtoList.size(); i++) {
+            classDtoList.get(i).setIndex((long) ((pageSize * (pageIndex - 1)) + (i + 1)));
+        }
+        return classDtoList;
     }
 
     @Override

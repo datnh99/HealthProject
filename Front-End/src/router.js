@@ -9,13 +9,14 @@ import Notifications from "@/pages/Notifications.vue";
 import UserProfile from "@/pages/UserProfile.vue";
 import TableList from "@/pages/TableList.vue";
 import Typography from "@/pages/Typography.vue";
-import CONFIG from "./config/index";
-import { checkLogin, checkPermission } from "./api/processLogin";
-import { preloaderFinished } from "./config/preloader";
+import NotFound from "@/pages/404.vue";
+// import CONFIG from "./config/index";
+// import { checkLogin, checkPermission } from "./api/processLogin";
+// import { preloaderFinished } from "./config/preloader";
 
-import { includes } from "lodash";
+// import { includes } from "lodash";
 
-import VueScrollTo from "vue-scrollto";
+// import VueScrollTo from "vue-scrollto";
 
 const router = [
   {
@@ -26,49 +27,54 @@ const router = [
       {
         path: "login",
         name: "Login",
-        component: Login,
+        component: Login
       },
       {
         path: "dashboard",
         name: "Dashboard",
-        component: Dashboard,
+        component: Dashboard
       },
       {
         path: "class-management",
         name: "ClassManagement",
-        component: ClassManagement,
+        component: ClassManagement
       },
       {
         path: "icons",
         name: "Icons",
-        component: Icons,
+        component: Icons
       },
       {
         path: "maps",
         name: "Maps",
-        component: Maps,
+        component: Maps
       },
       {
         path: "notifications",
         name: "Notifications",
-        component: Notifications,
+        component: Notifications
       },
       {
         path: "user",
         name: "User Profile",
-        component: UserProfile,
+        component: UserProfile
       },
       {
         path: "table",
         name: "Table List",
-        component: TableList,
+        component: TableList
       },
       {
         path: "typography",
         name: "Typography",
-        component: Typography,
+        component: Typography
       },
-    ],
+      {
+        path: ":catchAll(.*)",
+        name: "NotFound",
+        component: NotFound
+      }
+    ]
     // scrollBehavior: to => {
     //   if (to.hash) {
     //     return { selector: to.hash };
@@ -76,10 +82,10 @@ const router = [
     //     return { x: 0, y: 0 };
     //   }
     // },
-  },
+  }
 ];
 
-const notAuthRoutes = ["login", "Forbidden", "NotFound"];
+// const notAuthRoutes = ["login", "Forbidden", "NotFound"];
 // router.afterEach(to => {
 //   preloaderFinished();
 

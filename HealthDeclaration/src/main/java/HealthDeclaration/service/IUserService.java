@@ -9,7 +9,7 @@ public interface IUserService {
 
     User getByUsername(String username);
 
-    User getByTen(String username);
+//    User getByTen(String username);
 
     User add(User user);
 

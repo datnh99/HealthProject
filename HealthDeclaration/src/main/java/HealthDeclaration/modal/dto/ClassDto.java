@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClassDto {
+    private Long index;
+
     private Long id;
 
     private String className;
@@ -17,4 +19,12 @@ public class ClassDto {
     private String teacherAccount;
 
     private String teacherName;
+
+    public ClassDto(Long id, String className, Long teacherID, String teacherAccount, String teacherName) {
+        this.id = id;
+        this.className = className;
+        this.teacherID = teacherID;
+        this.teacherAccount = teacherAccount;
+        this.teacherName = teacherName;
+    }
 }

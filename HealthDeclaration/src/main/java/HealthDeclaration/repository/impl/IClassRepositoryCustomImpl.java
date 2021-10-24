@@ -38,13 +38,13 @@ public class IClassRepositoryCustomImpl extends BaseRepository implements IClass
         StringBuilder sql = new StringBuilder();
         if (count) {
             sql.append("select count(cl.id) "
-                + "from Class cl join Account acc " +
-                "ON acc.id = cl.teacherId "
+                + "from Class cl join User u " +
+                "ON u.id = cl.teacherId "
                 + " where 1=1 ");
         } else {
-            sql.append("select new HealthDeclaration.modal.dto.ClassDto(cl.id, cl.name, acc.id, acc.username, acc.fullName) "
-                    + "from Class cl join Account acc " +
-                    "ON acc.id = cl.teacherId "
+            sql.append("select new HealthDeclaration.modal.dto.ClassDto(cl.id, cl.name, u.id, u.username, u.fullName) "
+                    + "from Class cl join User u " +
+                    "ON u.id = cl.teacherId "
                     + " where 1=1 ");
         }
         Map<String, Object> params = new HashMap<>();
@@ -53,7 +53,7 @@ public class IClassRepositoryCustomImpl extends BaseRepository implements IClass
             params.put("className", "%" + classFormSearch.getClassName().toLowerCase() + "%");
         }
         if (!ObjectUtils.isEmpty(classFormSearch.getTeacherName())) {
-            sql.append(" and ( LOWER(acc.username) like :teacherName OR LOWER(acc.fullName) like :teacherName)");
+            sql.append(" and ( LOWER(u.username) like :teacherName OR LOWER(u.fullName) like :teacherName)");
             params.put("teacherName", "%" + classFormSearch.getTeacherName().toLowerCase() + "%");
         }
         if (!count) {

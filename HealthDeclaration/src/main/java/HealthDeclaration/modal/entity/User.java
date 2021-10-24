@@ -47,4 +47,7 @@ public class User extends BaseEntity {
 
     @Column(name = "role_id")
     private Long roleID;
+
+    @Column(name = "class_id")
+    private Long classID;
 }

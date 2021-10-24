@@ -14,7 +14,12 @@ function searchClass(classFormSearch, pageIndex) {
   );
 }
 
+function editClass(classFormEdit) {
+  return axios.post(`${API_CLASS}/edit-class`, classFormEdit);
+}
+
 export default {
   getALlClass,
   searchClass,
+  editClass
 };

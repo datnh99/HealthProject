@@ -31,15 +31,16 @@ public class UserController {
 
     @GetMapping("/getOne")
     private ResponseEntity<User> getByUsername(@RequestParam("username") String username) {
-        try {
-            User user = service.getByTen(username);
-            if (user == null) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+//        try {
+//            User user = service.getByTen(username);
+//            if (user == null) {
+//                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//            }
+//            return new ResponseEntity<>(user, HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+        return null;
     }
 
     @PostMapping("/add")

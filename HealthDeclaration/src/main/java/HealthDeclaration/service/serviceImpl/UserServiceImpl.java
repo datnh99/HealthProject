@@ -23,10 +23,10 @@ public class UserServiceImpl implements IUserService {
         return repository.getByUsername(username);
     }
 
-    @Override
-    public User getByTen(String username) {
-        return repository.getByTen(username);
-    }
+//    @Override
+//    public User getByTen(String username) {
+//        return repository.getByTen(username);
+//    }
 
     @Override
     public User add(User user) {
