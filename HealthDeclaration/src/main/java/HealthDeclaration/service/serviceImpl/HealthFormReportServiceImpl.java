@@ -6,9 +6,11 @@ import HealthDeclaration.modal.request.HealthFormReportAdd;
 import HealthDeclaration.repository.IHealthFormReportRepository;
 import HealthDeclaration.service.IHealthFormReportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
+@Service
 public class HealthFormReportServiceImpl extends BaseService implements IHealthFormReportService {
     @Autowired
     IHealthFormReportRepository repository;
@@ -21,6 +23,7 @@ public class HealthFormReportServiceImpl extends BaseService implements IHealthF
         report.setModifiedBy(getLoggedInUsername());
         report.setModifiedTime(new Date());
         report.setDeleted(false);
+        //
         report.setDiChuyen(formReportAdd.isDiChuyen());
         report.setDauHieuCovid(formReportAdd.isDauHieuCovid());
         report.setTiepXucCovider(formReportAdd.isTiepXucCovider());
@@ -30,12 +33,15 @@ public class HealthFormReportServiceImpl extends BaseService implements IHealthF
         report.setTenPhuongTien(formReportAdd.getTenPhuongTien());
         report.setSoHieu(formReportAdd.getSoHieu());
         report.setStartDate(formReportAdd.getStartDate());
-        report.setStartProvinceId(formReportAdd.getStartProvinceId());
-        report.setStartDistrictId(formReportAdd.getStartDistrictId());
-        report.setStartWardId(formReportAdd.getStartWardId());
+        report.setEndProvince(formReportAdd.getStartProvince());
+        report.setStartDistrict(formReportAdd.getStartDistrict());
+        report.setStartWard(formReportAdd.getStartWard());
         report.setStartDetailAddress(formReportAdd.getStartDetailAddress());
         report.setEndDate(formReportAdd.getEndDate());
-        //report.set
+        report.setEndProvince(formReportAdd.getEndProvince());
+        report.setEndDistrict(formReportAdd.getEndDistrict());
+        report.setEndWard(formReportAdd.getEndWard());
+        report.setEndDetailAddress(formReportAdd.getEndDetailAddress());
         return repository.save(report);
     }
 

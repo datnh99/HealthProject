@@ -3,6 +3,7 @@ package HealthDeclaration.service;
 import HealthDeclaration.modal.dto.UserDto;
 import HealthDeclaration.modal.entity.User;
 import HealthDeclaration.modal.request.UserChangePassForm;
+import HealthDeclaration.modal.request.UserUpdateForm;
 
 import java.awt.*;
 import java.util.List;
@@ -16,9 +17,11 @@ public interface IUserService {
 
     User add(User user);
 
-    User update(User user);
+    boolean update(UserUpdateForm updateForm);
 
     void deleteByUsername(String username);
+
+    public void delete(Long id);
 
     List<UserDto> searchTeacherByName(String teacherName, int pageIndex, int pageSize);
 

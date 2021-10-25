@@ -15,4 +15,8 @@ public class UserUpdateForm {
     private Long provinceId;
     private Long districtId;
     private Long wardId;
+    private String provinceName;
+    private String districtName;
+    private String wardName;
+    private String addressDetail;
 }

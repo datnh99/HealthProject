@@ -1,11 +1,13 @@
 package HealthDeclaration.service.serviceImpl;
 
+import HealthDeclaration.common.base.service.BaseService;
 import HealthDeclaration.common.utils.ObjectUtils;
 import HealthDeclaration.constants.RoleConstant;
 import HealthDeclaration.modal.dto.UserDto;
 import HealthDeclaration.modal.entity.Role;
 import HealthDeclaration.modal.entity.User;
 import HealthDeclaration.modal.request.UserChangePassForm;
+import HealthDeclaration.modal.request.UserUpdateForm;
 import HealthDeclaration.repository.IUserRepository;
 import HealthDeclaration.repository.IUserRepositoryCustom;
 import HealthDeclaration.service.IRoleService;
@@ -15,10 +17,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
-public class UserServiceImpl implements IUserService {
+public class UserServiceImpl extends BaseService implements IUserService {
     @Autowired
     IUserRepository repository;
 
@@ -49,13 +52,36 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public User update(User user) {
-        return repository.save(user);
+    public boolean update(UserUpdateForm updateForm) {
+        User user = repository.getById(updateForm.getId());
+        user.setModifiedBy(getLoggedInUsername());
+        user.setModifiedTime(new Date());
+        user.setFullName(updateForm.getFullName());
+        user.setDob(updateForm.getDob());
+        user.setGender(updateForm.isGender());
+        user.setPhoneNumber(updateForm.getPhoneNumber());
+        user.setParentPhoneNumber(updateForm.getParentPhoneNumber());
+        user.setProvinceId(updateForm.getProvinceId());
+        user.setDistrictId(updateForm.getDistrictId());
+        user.setWardId(updateForm.getWardId());
+        user.setProvinceName(updateForm.getProvinceName());
+        user.setDistrictName(updateForm.getDistrictName());
+        user.setWardName(updateForm.getWardName());
+        user.setAddressDetail(updateForm.getAddressDetail());
+        repository.save(user);
+        return true;
     }
 
     @Override
     public void deleteByUsername(String username) {
-        repository.deleteByUsername(username);
+
+    }
+
+    @Override
+    public void delete(Long id) {
+        User user = repository.getById(id);
+        user.setDeleted(true);
+        repository.save(user);
     }
 
     @Override

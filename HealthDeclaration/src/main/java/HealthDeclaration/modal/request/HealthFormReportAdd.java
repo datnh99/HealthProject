@@ -15,13 +15,13 @@ public class HealthFormReportAdd {
     private String tenPhuongTien;
     private String SoHieu;
     private Date startDate;
-    private int startProvinceId;
-    private int startDistrictId;
-    private int startWardId;
+    private String startProvince;
+    private String startDistrict;
+    private String startWard;
     private String startDetailAddress;
     private Date endDate;
-    private int endProvinceId;
-    private int endDistrictId;
-    private int endWardId;
+    private String endProvince;
+    private String endDistrict;
+    private String endWard;
     private String endDetailAddress;
 }
