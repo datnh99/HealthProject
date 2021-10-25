@@ -374,10 +374,33 @@ export default {
           },
         },
         {
-          title: "Tên GVCN",
-          dataIndex: "teacherName",
+          title: "Địa chỉ",
+          dataIndex: "addressDetail",
           width: 100,
-          key: "teacherName",
+          key: "addressDetail",
+          scopedSlots: {
+            filterDropdown: "filterDropdown",
+            filterIcon: "filterIcon",
+            customRender: "customRender",
+          },
+          onFilter: (value, record) =>
+            record.address
+              .toString()
+              .toLowerCase()
+              .includes(value.toLowerCase()),
+          onFilterDropdownVisibleChange: (visible) => {
+            if (visible) {
+              setTimeout(() => {
+                this.searchInput.focus();
+              });
+            }
+          },
+        },
+        {
+          title: "Địa chỉ",
+          dataIndex: "addressDetail",
+          width: 100,
+          key: "addressDetail",
           scopedSlots: {
             filterDropdown: "filterDropdown",
             filterIcon: "filterIcon",
