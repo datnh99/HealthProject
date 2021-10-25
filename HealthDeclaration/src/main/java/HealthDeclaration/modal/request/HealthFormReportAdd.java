@@ -1,14 +1,11 @@
-package HealthDeclaration.modal.entity;
+package HealthDeclaration.modal.request;
 
-import HealthDeclaration.common.base.entity.BaseEntity;
 import lombok.Data;
 
-import javax.persistence.Entity;
 import java.util.Date;
 
 @Data
-@Entity
-public class HealthFormReport extends BaseEntity {
+public class HealthFormReportAdd {
     private boolean diChuyen;
     private boolean dauHieuCovid;
     private boolean tiepXucCovider;
@@ -27,5 +24,4 @@ public class HealthFormReport extends BaseEntity {
     private int endDistrictId;
     private int endVillageId;
     private String endDetailAddress;
-    private Long id;
 }

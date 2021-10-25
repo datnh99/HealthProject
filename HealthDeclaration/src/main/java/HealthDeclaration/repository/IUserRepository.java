@@ -21,4 +21,6 @@ public interface IUserRepository extends JpaRepository<User, Long>, CrudReposito
     @Query(value = "select new HealthDeclaration.modal.dto.UserDto(u.id, u.username, u.fullName) " +
             " FROM User u where u.fullName like :teacherName AND u.roleID = :teacherRole and u.deleted = false")
     List<UserDto> searchTeacherByName(@Param("teacherName") String teacherName, @Param("teacherRole") Long teacherRole);
+
+
 }
