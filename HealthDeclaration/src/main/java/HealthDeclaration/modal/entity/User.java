@@ -45,6 +45,9 @@ public class User extends BaseEntity {
     @Column(name = "ward_id")
     private Long wardId;
 
+    @Column(name = "address_detail")
+    private String addressDetail;
+
     @Column(name = "role_id")
     private Long roleID;
 
