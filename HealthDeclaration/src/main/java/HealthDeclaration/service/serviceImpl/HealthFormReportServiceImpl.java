@@ -32,7 +32,7 @@ public class HealthFormReportServiceImpl extends BaseService implements IHealthF
         report.setStartDate(formReportAdd.getStartDate());
         report.setStartProvinceId(formReportAdd.getStartProvinceId());
         report.setStartDistrictId(formReportAdd.getStartDistrictId());
-        report.setStartVillageId(formReportAdd.getStartVillageId());
+        report.setStartWardId(formReportAdd.getStartWardId());
         report.setStartDetailAddress(formReportAdd.getStartDetailAddress());
         report.setEndDate(formReportAdd.getEndDate());
         //report.set

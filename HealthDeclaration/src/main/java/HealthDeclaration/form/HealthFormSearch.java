@@ -18,12 +18,12 @@ public class HealthFormSearch {
     private Date startDate;
     private int startProvinceId;
     private int startDistrictId;
-    private int startVillageId;
+    private int startWardId;
     private String startDetailAddress;
     private Date endDate;
     private int endProvinceId;
     private int endDistrictId;
-    private int endVillageId;
+    private int endWardId;
     private String endDetailAddress;
     // username
     private String username;

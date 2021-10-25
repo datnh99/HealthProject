@@ -14,5 +14,5 @@ public class UserUpdateForm {
     private String parentPhoneNumber;
     private Long provinceId;
     private Long districtId;
-    private Long villageId;
+    private Long wardId;
 }
