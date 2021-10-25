@@ -5,6 +5,7 @@ import HealthDeclaration.constants.RoleConstant;
 import HealthDeclaration.modal.dto.UserDto;
 import HealthDeclaration.modal.entity.Role;
 import HealthDeclaration.modal.entity.User;
+import HealthDeclaration.modal.request.UserChangePassForm;
 import HealthDeclaration.repository.IUserRepository;
 import HealthDeclaration.repository.IUserRepositoryCustom;
 import HealthDeclaration.service.IRoleService;
@@ -68,6 +69,27 @@ public class UserServiceImpl implements IUserService {
             return userRepositoryCustom.searchTeacherByName(teacherName, teacherRole.getId() , pPageIndex, pageSize);
         }
         return null;
+    }
+
+    @Override
+    public boolean changePassword(UserChangePassForm form) {
+        User user = repository.getByUsername(form.getUsername());
+        if (user == null) {
+            return false;
+        }
+        if (!user.getPassword().equals(form.getOldPassword())) {
+            return false;
+        }
+        // newpass # oldpass
+        if (user.getPassword().equals(form.getNewPassword())) {
+            return false;
+        }
+        if (!form.getNewPassword().equals(form.getConfirmPassword())) {
+            return false;
+        }
+        user.setPassword(form.getNewPassword());
+        repository.save(user);
+        return true;
     }
 
 }

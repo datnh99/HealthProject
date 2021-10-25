@@ -3,6 +3,8 @@ package HealthDeclaration.controller;
 import HealthDeclaration.common.response.utils.ResponseUtils;
 import HealthDeclaration.modal.dto.UserDto;
 import HealthDeclaration.modal.entity.User;
+import HealthDeclaration.modal.request.ClassUpdateForm;
+import HealthDeclaration.modal.request.UserChangePassForm;
 import HealthDeclaration.service.IUserService;
 import HealthDeclaration.vo.ResponseMessage;
 import lombok.extern.log4j.Log4j2;
@@ -22,6 +24,19 @@ import java.util.Map;
 public class UserController {
     @Autowired
     IUserService service;
+
+    @PutMapping("/changePassword")
+    public ResponseEntity changePassword(@RequestBody UserChangePassForm form) {
+        ResponseMessage responseMessage = new ResponseMessage();
+        try {
+            responseMessage.setSuccess(true);
+            responseMessage.setData(service.changePassword(form));
+        } catch (Exception e) {
+            responseMessage.setSuccess(false);
+            return  ResponseUtils.buildResponseMessage(false, responseMessage);
+        }
+        return  ResponseUtils.buildResponseMessage(true, responseMessage);
+    }
 
     @GetMapping("/getAll")
     private ResponseEntity getAll() {

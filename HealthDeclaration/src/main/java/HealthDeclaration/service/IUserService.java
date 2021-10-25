@@ -2,7 +2,9 @@ package HealthDeclaration.service;
 
 import HealthDeclaration.modal.dto.UserDto;
 import HealthDeclaration.modal.entity.User;
+import HealthDeclaration.modal.request.UserChangePassForm;
 
+import java.awt.*;
 import java.util.List;
 
 public interface IUserService {
@@ -19,4 +21,6 @@ public interface IUserService {
     void deleteByUsername(String username);
 
     List<UserDto> searchTeacherByName(String teacherName, int pageIndex, int pageSize);
+
+    boolean changePassword(UserChangePassForm form);
 }
