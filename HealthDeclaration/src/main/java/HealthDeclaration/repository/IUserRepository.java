@@ -15,6 +15,9 @@ import java.util.List;
 public interface IUserRepository extends JpaRepository<User, Long>, CrudRepository<User, Long> {
     User getByUsername(String username);
 
+    @Query("select r.roleCode from User u join Role r ON r.id = u.roleID WHERE u.username = :username")
+    String getUserRoleByUsername(@Param("username") String username);
+
     @Query("update User acc set acc.deleted = true where acc.username = :username")
     List<String> deleteByUsername(@Param("username") String username);
 

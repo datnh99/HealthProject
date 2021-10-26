@@ -6,5 +6,9 @@ import lombok.ToString;
 
 public class RoleConstant {
 
-    public static final String ROLE_GVCN = "GVCN";
+    public static final String ROLE_HIEU_TRUONG = "HIEU_TRUONG";
+
+    public static final String ROLE_GIAO_VIEN_CHU_NHIEM = "GIAO_VIEN_CHU_NHIEM";
+
+    public static final String ROLE_HOC_SINH = "HOC_SINH";
 }

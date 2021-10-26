@@ -197,7 +197,7 @@
                 @search="fetchTeacher"
               >
                 <a-select-option
-                  v-for="item in teacherList"
+                  v-for="item in studentList"
                   :key="item.id"
                   :value="item.id"
                 >
@@ -264,7 +264,7 @@
                 @search="fetchTeacher"
               >
                 <a-select-option
-                  v-for="item in teacherList"
+                  v-for="item in studentList"
                   :key="item.id"
                   :value="item.id"
                 >
@@ -279,38 +279,56 @@
   </div>
 </template>
 <script>
-import ClassRepository from "../api/class.js";
 import UserRepository from "../api/user.js";
 
 const defaultModalState = {
   add: false,
-  edit: false,
+  edit: false
 };
 
 const defaultForm = {
   id: undefined,
-  className: "",
-  teacherID: undefined,
+  fullName: "",
+  username: "",
+  dob: "2000-01-01",
+  gender: 1,
+  phoneNumber: "",
+  parentPhoneNumber: "",
+  provinceId: undefined,
+  provinceName: "",
+  districtId: undefined,
+  districtName: "",
+  wardId: undefined,
+  wardName: "",
+  addressDetail: ""
 };
 
-const requiredError = "This field can't blank";
+const requiredError = "Không được để trống thông tin này!";
 
 const defaultInputErrors = {
-  className: "",
+  fullName: "",
+  username: "",
+  gender: "",
+  phoneNumber: "",
+  parentPhoneNumber: "",
+
 };
 
 export default {
   data() {
     return {
       data: [],
-      teacherList: [],
+      studentList: [],
       current: 1,
       totals: 0,
       loading: false,
       loadingModal: false,
       formDataSearch: {
-        className: "",
-        teacherName: "",
+        fullName: "",
+        gender: "",
+        wardName: "",
+        districtName: "",
+        provinceName: ""
       },
       showModal: { ...defaultModalState },
       editForm: { ...defaultForm },
@@ -329,16 +347,62 @@ export default {
         },
         {
           title: "Tên học sinh",
-          dataIndex: "studentName",
+          dataIndex: "fullName",
           width: 100,
-          key: "studentName",
+          key: "fullName",
           scopedSlots: {
             filterDropdown: "filterDropdown",
             filterIcon: "filterIcon",
             customRender: "customRender",
           },
           onFilter: (value, record) =>
-            record.name
+            record.fullName
+              .toString()
+              .toLowerCase()
+              .includes(value.toLowerCase()),
+          onFilterDropdownVisibleChange: (visible) => {
+            if (visible) {
+              setTimeout(() => {
+                this.searchInput.focus();
+              }, 0);
+            }
+          },
+        },
+        {
+          title: "Giới tính",
+          dataIndex: "gender",
+          width: 100,
+          key: "gender",
+          scopedSlots: {
+            filterDropdown: "filterDropdown",
+            filterIcon: "filterIcon",
+            customRender: "customRender",
+          },
+          onFilter: (value, record) =>
+            record.gender
+              .toString()
+              .toLowerCase()
+              .includes(value.toLowerCase()),
+          onFilterDropdownVisibleChange: (visible) => {
+            if (visible) {
+              setTimeout(() => {
+                this.searchInput.focus();
+              }, 0);
+            }
+          },
+        },
+        {
+          title: "Ngày sinh",
+          dataIndex: "dob",
+          width: 100,
+          key: "dob",
+          scopedSlots: {
+            filterDropdown: "filterDropdown",
+            filterIcon: "filterIcon",
+            customRender: "customRender",
+          },
+          onFilter: (value, record) =>
+            record.dob
               .toString()
               .toLowerCase()
               .includes(value.toLowerCase()),
@@ -352,16 +416,16 @@ export default {
         },
         {
           title: "Tài khoản",
-          dataIndex: "account",
+          dataIndex: "username",
           width: 100,
-          key: "account",
+          key: "username",
           scopedSlots: {
             filterDropdown: "filterDropdown",
             filterIcon: "filterIcon",
             customRender: "customRender",
           },
           onFilter: (value, record) =>
-            record.address
+            record.username
               .toString()
               .toLowerCase()
               .includes(value.toLowerCase()),
@@ -384,7 +448,7 @@ export default {
             customRender: "customRender",
           },
           onFilter: (value, record) =>
-            record.address
+            record.addressDetail
               .toString()
               .toLowerCase()
               .includes(value.toLowerCase()),
@@ -397,17 +461,109 @@ export default {
           },
         },
         {
-          title: "Địa chỉ",
-          dataIndex: "addressDetail",
+          title: "Tỉnh",
+          dataIndex: "provinceName",
           width: 100,
-          key: "addressDetail",
+          key: "provinceName",
           scopedSlots: {
             filterDropdown: "filterDropdown",
             filterIcon: "filterIcon",
             customRender: "customRender",
           },
           onFilter: (value, record) =>
-            record.address
+            record.provinceName
+              .toString()
+              .toLowerCase()
+              .includes(value.toLowerCase()),
+          onFilterDropdownVisibleChange: (visible) => {
+            if (visible) {
+              setTimeout(() => {
+                this.searchInput.focus();
+              });
+            }
+          },
+        },
+        {
+          title: "Huyện",
+          dataIndex: "districtName",
+          width: 100,
+          key: "districtName",
+          scopedSlots: {
+            filterDropdown: "filterDropdown",
+            filterIcon: "filterIcon",
+            customRender: "customRender",
+          },
+          onFilter: (value, record) =>
+            record.districtName
+              .toString()
+              .toLowerCase()
+              .includes(value.toLowerCase()),
+          onFilterDropdownVisibleChange: (visible) => {
+            if (visible) {
+              setTimeout(() => {
+                this.searchInput.focus();
+              });
+            }
+          },
+        },
+        {
+          title: "Xã",
+          dataIndex: "wardName",
+          width: 100,
+          key: "wardName",
+          scopedSlots: {
+            filterDropdown: "filterDropdown",
+            filterIcon: "filterIcon",
+            customRender: "customRender",
+          },
+          onFilter: (value, record) =>
+            record.wardName
+              .toString()
+              .toLowerCase()
+              .includes(value.toLowerCase()),
+          onFilterDropdownVisibleChange: (visible) => {
+            if (visible) {
+              setTimeout(() => {
+                this.searchInput.focus();
+              });
+            }
+          },
+        },
+        {
+          title: "Số điện thoại",
+          dataIndex: "phoneNumber",
+          width: 100,
+          key: "phoneNumber",
+          scopedSlots: {
+            filterDropdown: "filterDropdown",
+            filterIcon: "filterIcon",
+            customRender: "customRender",
+          },
+          onFilter: (value, record) =>
+            record.phoneNumber
+              .toString()
+              .toLowerCase()
+              .includes(value.toLowerCase()),
+          onFilterDropdownVisibleChange: (visible) => {
+            if (visible) {
+              setTimeout(() => {
+                this.searchInput.focus();
+              });
+            }
+          },
+        },
+        {
+          title: "Sđt phụ huynh",
+          dataIndex: "parentPhoneNumber",
+          width: 100,
+          key: "parentPhoneNumber",
+          scopedSlots: {
+            filterDropdown: "filterDropdown",
+            filterIcon: "filterIcon",
+            customRender: "customRender",
+          },
+          onFilter: (value, record) =>
+            record.parentPhoneNumber
               .toString()
               .toLowerCase()
               .includes(value.toLowerCase()),
@@ -430,14 +586,14 @@ export default {
     };
   },
   created() {
-    this.searchClass();
+    this.searchStudent();
     this.fetchTeacher("");
   },
   methods: {
     paginate(current = 1) {
       this.loading = true;
       this.current = current;
-      ClassRepository.searchClass(this.formDataSearch, this.current).then(
+      UserRepository.searchStudent(this.formDataSearch, this.current).then(
         (res) => {
           this.data = res.data.data.items;
           this.totals = res.data.data.total;
@@ -445,9 +601,9 @@ export default {
         }
       );
     },
-    searchClass() {
+    searchStudent() {
       this.loading = true;
-      ClassRepository.searchClass(this.formDataSearch, 1).then((res) => {
+      UserRepository.searchStudent(this.formDataSearch, 1).then((res) => {
         this.data = res.data.data.items;
         this.totals = res.data.data.total;
         this.current = 1;
@@ -462,25 +618,25 @@ export default {
       } else if (dataIndex === "teacherName") {
         this.formDataSearch.teacherName = selectedKeys[0];
       }
-      this.searchClass();
+      this.searchStudent();
     },
 
     handleReset(dataIndex, clearFilters) {
-      if (dataIndex === "className") {
-        this.formDataSearch.className = "";
-      } else if (dataIndex === "teacherName") {
-        this.formDataSearch.teacherName = "";
+      if (dataIndex === "fullName") {
+        this.formDataSearch.fullName = "";
+      } else if (dataIndex === "username") {
+        this.formDataSearch.username = "";
       }
       clearFilters();
-      this.searchClass();
+      this.searchStudent();
       this.searchText = "";
     },
     async handleEditItemBtnClick(item) {
       this.fetchTeacher("");
       this.selectedItem = item;
-      this.editForm.id = item.id;
-      this.editForm.className = item.className;
-      this.editForm.teacherID = item.teacherID;
+      // this.editForm.id = item.id;
+      // this.editForm.fullName = item.fullName;
+      // this.editForm.username = item.username;
       this.showModal = {
         edit: true,
       };
@@ -507,7 +663,7 @@ export default {
         className: this.editForm.className,
         teacherID: this.editForm.teacherID,
       };
-      ClassRepository.editClass(formEditData)
+      UserRepository.editClass(formEditData)
         .then((response) => {
           if (response.data.success === true) {
             this.$notification.success({
@@ -546,7 +702,7 @@ export default {
         className: this.addForm.className,
         teacherId: this.addForm.teacherID,
       };
-      ClassRepository.addNewClass(formEditData)
+      UserRepository.addNewClass(formEditData)
         .then((response) => {
           if (response.data.success === true) {
             this.$notification.success({
@@ -587,13 +743,13 @@ export default {
     },
     fetchTeacher(teacherName) {
       UserRepository.searchTeacherByName(teacherName, 1).then((res) => {
-        this.teacherList = res.data.data.items;
+        this.studentList = res.data.data.items;
       });
     },
     deleteSubItemBtnClick(item) {
       this.loading = true;
       this.selectedItem = item;
-      ClassRepository.deleteClass(this.selectedItem.id)
+      UserRepository.deleteClass(this.selectedItem.id)
         .then((res) => {
           if (res.data.success === true) {
             this.$notification.success({

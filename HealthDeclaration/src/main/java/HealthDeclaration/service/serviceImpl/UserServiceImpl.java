@@ -3,6 +3,7 @@ package HealthDeclaration.service.serviceImpl;
 import HealthDeclaration.common.base.service.BaseService;
 import HealthDeclaration.common.utils.ObjectUtils;
 import HealthDeclaration.constants.RoleConstant;
+import HealthDeclaration.form.UserFormSearch;
 import HealthDeclaration.modal.dto.UserDto;
 import HealthDeclaration.modal.entity.Role;
 import HealthDeclaration.modal.entity.User;
@@ -89,7 +90,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
 //        int pageIndex = pPageIndex-1;
 //        pageIndex = pageIndex > 0 ? pageIndex : 0;
 //        Pageable pageable = PageRequest.of(pageIndex, pageSize);
-        Role teacherRole = roleService.getByCode(RoleConstant.ROLE_GVCN);
+        Role teacherRole = roleService.getByCode(RoleConstant.ROLE_GIAO_VIEN_CHU_NHIEM);
         if(!ObjectUtils.isNullorEmpty(teacherRole)) {
 //            return repository.searchTeacherByName(teacherName, teacherRole.getId());
             return userRepositoryCustom.searchTeacherByName(teacherName, teacherRole.getId() , pPageIndex, pageSize);
@@ -116,6 +117,34 @@ public class UserServiceImpl extends BaseService implements IUserService {
         user.setPassword(form.getNewPassword());
         repository.save(user);
         return true;
+    }
+
+    @Override
+    public List<UserDto> searchUserToManagement(UserFormSearch formSearch, int pageIndex, int pageSize) {
+        // Get role of user
+        String userRole = repository.getUserRoleByUsername(getLoggedInUsername());
+        Long roleID = null;
+
+        // If role teacher ==> search hoc sinh
+        if(userRole.equalsIgnoreCase(RoleConstant.ROLE_GIAO_VIEN_CHU_NHIEM)) {
+            Role studentRole = roleService.getByCode(RoleConstant.ROLE_HOC_SINH);
+            roleID = studentRole.getId();
+        }
+        return userRepositoryCustom.searchUserToManagement(formSearch, roleID, pageIndex, pageSize);
+    }
+
+    @Override
+    public Long countSearchUserToManagement(UserFormSearch formSearch) {
+        // Get role of user
+        String userRole = repository.getUserRoleByUsername(getLoggedInUsername());
+        Long roleID = null;
+
+        // If role teacher ==> search hoc sinh
+        if(userRole.equalsIgnoreCase(RoleConstant.ROLE_GIAO_VIEN_CHU_NHIEM)) {
+            Role studentRole = roleService.getByCode(RoleConstant.ROLE_HOC_SINH);
+            roleID = studentRole.getId();
+        }
+        return userRepositoryCustom.countSearchUserToManagement(formSearch, roleID);
     }
 
 }

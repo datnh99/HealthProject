@@ -1,6 +1,7 @@
 package HealthDeclaration.controller;
 
 import HealthDeclaration.common.response.utils.ResponseUtils;
+import HealthDeclaration.form.UserFormSearch;
 import HealthDeclaration.modal.dto.UserDto;
 import HealthDeclaration.modal.entity.User;
 import HealthDeclaration.modal.request.ClassUpdateForm;
@@ -72,6 +73,27 @@ public class UserController {
         return ResponseUtils.buildResponseMessage(true, responseMessage);
     }
 
+    @PostMapping("/search-user-to-management")
+    private ResponseEntity searchUserToManagement(@RequestBody UserFormSearch formSearch,
+                                               @Param("pageIndex") int pageIndex,
+                                               @Param("pageSize") int pageSize) {
+        ResponseMessage responseMessage = new ResponseMessage();
+        try{
+            responseMessage.setSuccess(true);
+            List<UserDto> result = service.searchUserToManagement(formSearch, pageIndex, pageSize);
+            Long total = service.countSearchUserToManagement(formSearch);
+            Map<String, Object> results = new HashMap<>();
+            results.put("items", result);
+            results.put("total", total);
+            responseMessage.setData(results);
+        } catch (Exception e) {
+            log.error(e);
+            responseMessage.setSuccess(false);
+            return ResponseUtils.buildResponseMessage(false, responseMessage);
+        }
+        return ResponseUtils.buildResponseMessage(true, responseMessage);
+    }
+
     @PutMapping("/update")
     public ResponseEntity updateClass(@RequestBody UserUpdateForm updateForm) {
         ResponseMessage responseMessage = new ResponseMessage();
@@ -80,9 +102,9 @@ public class UserController {
             responseMessage.setData(service.update(updateForm));
         } catch (Exception e) {
             responseMessage.setSuccess(false);
-            return  ResponseUtils.buildResponseMessage(false, responseMessage);
+            return ResponseUtils.buildResponseMessage(false, responseMessage);
         }
-        return  ResponseUtils.buildResponseMessage(true, responseMessage);
+        return ResponseUtils.buildResponseMessage(true, responseMessage);
     }
 
     @DeleteMapping("/delete")

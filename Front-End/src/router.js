@@ -3,6 +3,7 @@ import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
 import Dashboard from "@/pages/Dashboard.vue";
 import Login from "@/pages/Login.vue";
 import ClassManagement from "@/pages/ClassManagement.vue";
+import UserManagement from "@/pages/UserManagement.vue";
 import Icons from "@/pages/Icons.vue";
 import Notifications from "@/pages/Notifications.vue";
 import UserProfile from "@/pages/UserProfile.vue";
@@ -37,6 +38,11 @@ const router = [
         path: "class-management",
         name: "ClassManagement",
         component: ClassManagement
+      },
+      {
+        path: "user-management",
+        name: "UserManagement",
+        component: UserManagement
       },
       {
         path: "icons",
