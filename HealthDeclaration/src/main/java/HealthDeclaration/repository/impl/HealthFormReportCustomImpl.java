@@ -44,7 +44,7 @@ public class HealthFormReportCustomImpl extends BaseRepository implements IHealt
                     + "from HealthFormReport hfr "
                     + "where 1=1 AND hfr.deleted = false ");
         }
-        if (userId != null) {
+        if (userId != null ) {
             sql.append("and hfr.userId = :userId ");
             params.put("userId", userId);
         }
