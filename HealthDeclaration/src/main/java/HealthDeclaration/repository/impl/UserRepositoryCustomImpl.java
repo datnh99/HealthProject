@@ -58,9 +58,9 @@ public class UserRepositoryCustomImpl extends BaseRepository implements IUserRep
             sql.append(" and LOWER(u.fullName) like :studentName ");
             params.put("studentName", "%" + formSearch.getFullName().toLowerCase() + "%");
         }
-        if (!ObjectUtils.isNullorEmpty(formSearch.getGender())) {
+        if (!ObjectUtils.isNullorEmpty(formSearch.getGenderSearch())) {
             sql.append(" and u.gender = :gender ");
-            params.put("gender",  formSearch.getGender());
+            params.put("gender",  formSearch.getGenderSearch());
         }
         if (!ObjectUtils.isNullorEmpty(formSearch.getDistrictName())) {
             sql.append(" and LOWER(u.districtName) like :district ");

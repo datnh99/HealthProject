@@ -99,7 +99,7 @@
                       )"
                   >
                     <mark
-                      v-if="fragment.toLowerCase() === searchText.toLowerCase()"
+                      v-if="checkContainSearchKey(fragment, searchText)"
                       :key="i"
                       class="highlight"
                       >{{ fragment }}</mark
@@ -136,6 +136,52 @@
                   </a-menu>
                   <a-button> <a-icon type="down" /> </a-button>
                 </a-dropdown>
+              </template>
+              <template slot="gender" slot-scope="text, record, index, column">
+                <span v-if="searchText && searchedColumn === column.dataIndex">
+                  <template
+                    v-for="(fragment, i) in text
+                      .toString()
+                      .split(
+                        new RegExp(`(?<=${searchText})|(?=${searchText})`, 'i')
+                      )"
+                  >
+                    <mark
+                      v-if="'nam' === searchText.toLowerCase()"
+                      :key="i"
+                      class="highlight"
+                    >
+                      Nam
+                    </mark>
+                    <!-- <template v-else>
+                      Nam
+                    </template> -->
+                    <mark
+                      v-if="
+                        'nu' === removeAccents(searchText).toLowerCase() &&
+                          searchText.toLowerCase() !== 'nam'
+                      "
+                      :key="i"
+                      class="highlight"
+                    >
+                      Nữ
+                    </mark>
+                    <!-- <template v-else-if="searchText.toLowerCase() !== 'nam'">
+                      Nữ
+                    </template> -->
+                  </template>
+                </span>
+                <template v-else>
+                  <span v-if="text">
+                    Nam
+                  </span>
+                  <span v-else>
+                    Nữ
+                  </span>
+                </template>
+              </template>
+              <template #dobCustom="item">
+                <span>{{ generateTime(item.dob) }}</span>
               </template>
             </a-table>
           </a-spin>
@@ -280,10 +326,11 @@
 </template>
 <script>
 import UserRepository from "../api/user.js";
+import moment from "moment";
 
 const defaultModalState = {
   add: false,
-  edit: false
+  edit: false,
 };
 
 const defaultForm = {
@@ -291,7 +338,7 @@ const defaultForm = {
   fullName: "",
   username: "",
   dob: "2000-01-01",
-  gender: 1,
+  gender: true,
   phoneNumber: "",
   parentPhoneNumber: "",
   provinceId: undefined,
@@ -300,7 +347,7 @@ const defaultForm = {
   districtName: "",
   wardId: undefined,
   wardName: "",
-  addressDetail: ""
+  addressDetail: "",
 };
 
 const requiredError = "Không được để trống thông tin này!";
@@ -311,7 +358,6 @@ const defaultInputErrors = {
   gender: "",
   phoneNumber: "",
   parentPhoneNumber: "",
-
 };
 
 export default {
@@ -328,7 +374,7 @@ export default {
         gender: "",
         wardName: "",
         districtName: "",
-        provinceName: ""
+        provinceName: "",
       },
       showModal: { ...defaultModalState },
       editForm: { ...defaultForm },
@@ -346,9 +392,9 @@ export default {
           key: "index",
         },
         {
-          title: "Tên học sinh",
+          title: "Họ và Tên",
           dataIndex: "fullName",
-          width: 100,
+          width: 160,
           key: "fullName",
           scopedSlots: {
             filterDropdown: "filterDropdown",
@@ -376,7 +422,7 @@ export default {
           scopedSlots: {
             filterDropdown: "filterDropdown",
             filterIcon: "filterIcon",
-            customRender: "customRender",
+            customRender: "gender",
           },
           onFilter: (value, record) =>
             record.gender
@@ -393,39 +439,24 @@ export default {
         },
         {
           title: "Ngày sinh",
-          dataIndex: "dob",
           width: 100,
           key: "dob",
           scopedSlots: {
-            filterDropdown: "filterDropdown",
-            filterIcon: "filterIcon",
-            customRender: "customRender",
-          },
-          onFilter: (value, record) =>
-            record.dob
-              .toString()
-              .toLowerCase()
-              .includes(value.toLowerCase()),
-          onFilterDropdownVisibleChange: (visible) => {
-            if (visible) {
-              setTimeout(() => {
-                this.searchInput.focus();
-              }, 0);
-            }
+            customRender: "dobCustom",
           },
         },
         {
           title: "Tài khoản",
-          dataIndex: "username",
+          dataIndex: "userName",
           width: 100,
-          key: "username",
+          key: "userName",
           scopedSlots: {
             filterDropdown: "filterDropdown",
             filterIcon: "filterIcon",
             customRender: "customRender",
           },
           onFilter: (value, record) =>
-            record.username
+            record.userName
               .toString()
               .toLowerCase()
               .includes(value.toLowerCase()),
@@ -438,40 +469,23 @@ export default {
           },
         },
         {
-          title: "Địa chỉ",
+          title: "Địa chỉ cụ thể",
           dataIndex: "addressDetail",
           width: 100,
           key: "addressDetail",
-          scopedSlots: {
-            filterDropdown: "filterDropdown",
-            filterIcon: "filterIcon",
-            customRender: "customRender",
-          },
-          onFilter: (value, record) =>
-            record.addressDetail
-              .toString()
-              .toLowerCase()
-              .includes(value.toLowerCase()),
-          onFilterDropdownVisibleChange: (visible) => {
-            if (visible) {
-              setTimeout(() => {
-                this.searchInput.focus();
-              });
-            }
-          },
         },
         {
-          title: "Tỉnh",
-          dataIndex: "provinceName",
+          title: "Xã",
+          dataIndex: "wardName",
           width: 100,
-          key: "provinceName",
+          key: "wardName",
           scopedSlots: {
             filterDropdown: "filterDropdown",
             filterIcon: "filterIcon",
             customRender: "customRender",
           },
           onFilter: (value, record) =>
-            record.provinceName
+            record.wardName
               .toString()
               .toLowerCase()
               .includes(value.toLowerCase()),
@@ -507,17 +521,17 @@ export default {
           },
         },
         {
-          title: "Xã",
-          dataIndex: "wardName",
+          title: "Tỉnh",
+          dataIndex: "provinceName",
           width: 100,
-          key: "wardName",
+          key: "provinceName",
           scopedSlots: {
             filterDropdown: "filterDropdown",
             filterIcon: "filterIcon",
             customRender: "customRender",
           },
           onFilter: (value, record) =>
-            record.wardName
+            record.provinceName
               .toString()
               .toLowerCase()
               .includes(value.toLowerCase()),
@@ -534,46 +548,12 @@ export default {
           dataIndex: "phoneNumber",
           width: 100,
           key: "phoneNumber",
-          scopedSlots: {
-            filterDropdown: "filterDropdown",
-            filterIcon: "filterIcon",
-            customRender: "customRender",
-          },
-          onFilter: (value, record) =>
-            record.phoneNumber
-              .toString()
-              .toLowerCase()
-              .includes(value.toLowerCase()),
-          onFilterDropdownVisibleChange: (visible) => {
-            if (visible) {
-              setTimeout(() => {
-                this.searchInput.focus();
-              });
-            }
-          },
         },
         {
-          title: "Sđt phụ huynh",
+          title: "Sđt nguời thân",
           dataIndex: "parentPhoneNumber",
           width: 100,
           key: "parentPhoneNumber",
-          scopedSlots: {
-            filterDropdown: "filterDropdown",
-            filterIcon: "filterIcon",
-            customRender: "customRender",
-          },
-          onFilter: (value, record) =>
-            record.parentPhoneNumber
-              .toString()
-              .toLowerCase()
-              .includes(value.toLowerCase()),
-          onFilterDropdownVisibleChange: (visible) => {
-            if (visible) {
-              setTimeout(() => {
-                this.searchInput.focus();
-              });
-            }
-          },
         },
         {
           title: "Tùy chọn",
@@ -586,14 +566,52 @@ export default {
     };
   },
   created() {
-    this.searchStudent();
+    this.searchUserDetail();
     this.fetchTeacher("");
   },
   methods: {
+    checkContainSearchKey(fragment, searchText) {
+      if (
+        this.removeAccents(fragment).toLowerCase() ===
+        this.removeAccents(searchText).toLowerCase()
+      ) {
+        return true;
+      }
+      return false;
+    },
+    removeAccents(str) {
+      var AccentsMap = [
+        "aàảãáạăằẳẵắặâầẩẫấậ",
+        "AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬ",
+        "dđ",
+        "DĐ",
+        "eèẻẽéẹêềểễếệ",
+        "EÈẺẼÉẸÊỀỂỄẾỆ",
+        "iìỉĩíị",
+        "IÌỈĨÍỊ",
+        "oòỏõóọôồổỗốộơờởỡớợ",
+        "OÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢ",
+        "uùủũúụưừửữứự",
+        "UÙỦŨÚỤƯỪỬỮỨỰ",
+        "yỳỷỹýỵ",
+        "YỲỶỸÝỴ",
+      ];
+      for (var i = 0; i < AccentsMap.length; i++) {
+        var re = new RegExp("[" + AccentsMap[i].substr(1) + "]", "g");
+        var char = AccentsMap[i][0];
+        str = str.replace(re, char);
+      }
+      return str;
+    },
+    generateTime(dateNumber) {
+      const date = new Date(dateNumber);
+      const m = moment(date);
+      return m.isValid() ? m.format("DD-MM-YYYY") : "";
+    },
     paginate(current = 1) {
       this.loading = true;
       this.current = current;
-      UserRepository.searchStudent(this.formDataSearch, this.current).then(
+      UserRepository.searchUserDetail(this.formDataSearch, this.current).then(
         (res) => {
           this.data = res.data.data.items;
           this.totals = res.data.data.total;
@@ -601,9 +619,9 @@ export default {
         }
       );
     },
-    searchStudent() {
+    searchUserDetail() {
       this.loading = true;
-      UserRepository.searchStudent(this.formDataSearch, 1).then((res) => {
+      UserRepository.searchUserDetail(this.formDataSearch, 1).then((res) => {
         this.data = res.data.data.items;
         this.totals = res.data.data.total;
         this.current = 1;
@@ -613,22 +631,35 @@ export default {
     handleSearch(selectedKeys, dataIndex) {
       this.searchText = selectedKeys[0];
       this.searchedColumn = dataIndex;
-      if (dataIndex === "className") {
-        this.formDataSearch.className = selectedKeys[0];
-      } else if (dataIndex === "teacherName") {
-        this.formDataSearch.teacherName = selectedKeys[0];
+      console.log("dataIndex", dataIndex);
+      if (dataIndex === "fullName") {
+        this.formDataSearch.fullName = selectedKeys[0];
+      } else if (dataIndex === "gender") {
+        this.formDataSearch.gender = selectedKeys[0];
+      } else if (dataIndex === "wardName") {
+        this.formDataSearch.wardName = selectedKeys[0];
+      } else if (dataIndex === "districtName") {
+        this.formDataSearch.districtName = selectedKeys[0];
+      } else if (dataIndex === "provinceName") {
+        this.formDataSearch.provinceName = selectedKeys[0];
       }
-      this.searchStudent();
+      this.searchUserDetail();
     },
 
     handleReset(dataIndex, clearFilters) {
       if (dataIndex === "fullName") {
         this.formDataSearch.fullName = "";
-      } else if (dataIndex === "username") {
-        this.formDataSearch.username = "";
+      } else if (dataIndex === "gender") {
+        this.formDataSearch.gender = "";
+      } else if (dataIndex === "wardName") {
+        this.formDataSearch.wardName = "";
+      } else if (dataIndex === "districtName") {
+        this.formDataSearch.districtName = "";
+      } else if (dataIndex === "provinceName") {
+        this.formDataSearch.provinceName = "";
       }
       clearFilters();
-      this.searchStudent();
+      this.searchUserDetail();
       this.searchText = "";
     },
     async handleEditItemBtnClick(item) {
@@ -688,7 +719,7 @@ export default {
     },
     openAddForm() {
       this.showModal = {
-        add: true
+        add: true,
       };
     },
     addNewClass() {

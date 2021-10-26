@@ -2,6 +2,7 @@ package HealthDeclaration.service.serviceImpl;
 
 import HealthDeclaration.common.base.service.BaseService;
 import HealthDeclaration.common.utils.ObjectUtils;
+import HealthDeclaration.common.utils.StringUtils;
 import HealthDeclaration.constants.RoleConstant;
 import HealthDeclaration.form.UserFormSearch;
 import HealthDeclaration.modal.dto.UserDto;
@@ -130,6 +131,16 @@ public class UserServiceImpl extends BaseService implements IUserService {
             Role studentRole = roleService.getByCode(RoleConstant.ROLE_HOC_SINH);
             roleID = studentRole.getId();
         }
+        if(!ObjectUtils.isNullorEmpty(formSearch.getGender())) {
+            String gender = StringUtils.removeAccent(formSearch.getGender()).toLowerCase();
+            if(gender.equalsIgnoreCase("nam")) {
+                formSearch.setGenderSearch(true);
+            } else if (gender.equalsIgnoreCase("nu")) {
+                formSearch.setGenderSearch(false);
+            } else {
+                return null;
+            }
+        }
         return userRepositoryCustom.searchUserToManagement(formSearch, roleID, pageIndex, pageSize);
     }
 
@@ -143,6 +154,16 @@ public class UserServiceImpl extends BaseService implements IUserService {
         if(userRole.equalsIgnoreCase(RoleConstant.ROLE_GIAO_VIEN_CHU_NHIEM)) {
             Role studentRole = roleService.getByCode(RoleConstant.ROLE_HOC_SINH);
             roleID = studentRole.getId();
+        }
+        if(!ObjectUtils.isNullorEmpty(formSearch.getGender())) {
+            String gender = StringUtils.removeAccent(formSearch.getGender()).toLowerCase();
+            if(gender.equalsIgnoreCase("nam")) {
+                formSearch.setGenderSearch(true);
+            } else if (gender.equalsIgnoreCase("nu")) {
+                formSearch.setGenderSearch(false);
+            } else {
+                return null;
+            }
         }
         return userRepositoryCustom.countSearchUserToManagement(formSearch, roleID);
     }

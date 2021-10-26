@@ -13,7 +13,7 @@ function searchTeacherByName(teacherName, pageIndex) {
   );
 }
 
-function searchStudent(formSearch, pageIndex) {
+function searchUserDetail(formSearch, pageIndex) {
   return axios.post(
     `${API_USER}/search-user-to-management?pageIndex=${pageIndex}&pageSize=${pageSize}`,
     formSearch
@@ -23,5 +23,5 @@ function searchStudent(formSearch, pageIndex) {
 export default {
   getAllUser,
   searchTeacherByName,
-  searchStudent
+  searchUserDetail
 };
