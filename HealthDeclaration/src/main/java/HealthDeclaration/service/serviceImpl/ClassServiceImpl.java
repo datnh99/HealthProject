@@ -30,9 +30,6 @@ public class ClassServiceImpl extends BaseService implements IClassService {
     @Autowired
     ModelMapper mapper;
 
-    @Autowired
-    IUserRepository accountRepository;
-
     @Override
     public List<ClassDto> getClasses() {
         List<Class> list = repository.findAll();

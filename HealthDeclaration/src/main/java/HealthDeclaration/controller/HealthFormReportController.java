@@ -1,6 +1,9 @@
 package HealthDeclaration.controller;
 
 import HealthDeclaration.common.response.utils.ResponseUtils;
+import HealthDeclaration.form.ClassFormSearch;
+import HealthDeclaration.modal.dto.ClassDto;
+import HealthDeclaration.modal.dto.HealthFormDto;
 import HealthDeclaration.modal.request.ClassAddForm;
 import HealthDeclaration.modal.request.HealthFormReportAdd;
 import HealthDeclaration.service.IHealthFormReportService;
@@ -10,6 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/health-form-report")
 @Log4j2
@@ -17,6 +24,27 @@ import org.springframework.web.bind.annotation.*;
 public class HealthFormReportController {
     @Autowired
     IHealthFormReportService service;
+
+    @GetMapping(value = "/search-health-form-report")
+    public ResponseEntity searchHealthFormReport(@RequestParam Long userId
+            , @RequestParam("pageIndex") int pageIndex
+            , @RequestParam("pageSize") int pageSize) {
+        ResponseMessage responseMessage = new ResponseMessage();
+        try{
+            responseMessage.setSuccess(true);
+            List<HealthFormDto> result = service.searchHealthFormReport(userId, pageIndex, pageSize);
+            Long total = service.countSearchHealthFormReport(userId);
+            Map<String, Object> results = new HashMap<>();
+            results.put("items", result);
+            results.put("total", total);
+            responseMessage.setData(results);
+        } catch (Exception e) {
+            log.error(e);
+            responseMessage.setSuccess(false);
+            return ResponseUtils.buildResponseMessage(false, responseMessage);
+        }
+        return ResponseUtils.buildResponseMessage(true, responseMessage);
+    }
 
     @PostMapping("/add")
     public ResponseEntity add(@RequestBody HealthFormReportAdd formReportAdd) {

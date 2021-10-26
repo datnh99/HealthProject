@@ -9,11 +9,11 @@ import java.util.Date;
 @Data
 @Entity
 public class HealthFormReport extends BaseEntity {
-    private boolean diChuyen;
-    private boolean dauHieuCovid;
-    private boolean tiepXucCovider;
-    private boolean tiepXucForeign;
-    private boolean tiepXucNguoiCoBieuHienCovid;
+    private Boolean diChuyen;
+    private Boolean dauHieuCovid;
+    private Boolean tiepXucCovider;
+    private Boolean tiepXucForeign;
+    private Boolean tiepXucNguoiCoBieuHienCovid;
     //
     private String tenPhuongTien;
     private String SoHieu;
@@ -28,6 +28,8 @@ public class HealthFormReport extends BaseEntity {
     private String endWard;
     private String endDetailAddress;
     //
-    private Date ngayKhaiBao;
-    private Long userId;
+    private Date ngayKhaiBao;  ///
+    private Long userId;       ///
+    private String reportType;  ///
+    private String status;  ///
 }
