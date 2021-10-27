@@ -16,7 +16,7 @@ public class HealthFormReport extends BaseEntity {
     private Boolean tiepXucNguoiCoBieuHienCovid;
     //
     private String tenPhuongTien;
-    private String SoHieu;
+    private String soHieu;
     private Date startDate;
     private String startProvince;
     private String startDistrict;
@@ -28,7 +28,6 @@ public class HealthFormReport extends BaseEntity {
     private String endWard;
     private String endDetailAddress;
     //
-    private Date ngayKhaiBao;  ///
     private Long userId;       ///
     private String reportType;  ///
     private String status;  ///

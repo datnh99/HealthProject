@@ -40,7 +40,7 @@ public class HealthFormReportCustomImpl extends BaseRepository implements IHealt
         if (count) {
             sql.append("select count(hfr.id) from HealthFormReport hfr where hfr.deleted = false ");
         } else {
-            sql.append("select new HealthDeclaration.modal.dto.HealthFormDto(hfr.id, hfr.ngayKhaiBao, hfr.userId, hfr.reportType, hfr.status) "
+            sql.append("select new HealthDeclaration.modal.dto.HealthFormDto(hfr.id, hfr.createdTime, hfr.userId, hfr.reportType, hfr.status) "
                     + "from HealthFormReport hfr "
                     + "where 1=1 AND hfr.deleted = false ");
         }
@@ -50,10 +50,10 @@ public class HealthFormReportCustomImpl extends BaseRepository implements IHealt
         }
         Date date = Date.from(LocalDate.now().minusDays(14).atStartOfDay(ZoneId.systemDefault()).toInstant());
         //sql.append("and hfr.ngayKhaiBao > '2021-10-13' ");
-        sql.append("and hfr.ngayKhaiBao > :dateNow ");
+        sql.append("and hfr.createdTime > :dateNow ");
         params.put("dateNow", date);
         if (!count) {
-            sql.append(" ORDER BY hfr.ngayKhaiBao ASC");
+            sql.append(" ORDER BY hfr.createdTime ASC");
         }
         return super.createQuery(sql.toString(), params, clazz);
     }

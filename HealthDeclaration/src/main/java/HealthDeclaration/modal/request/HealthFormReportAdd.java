@@ -6,14 +6,14 @@ import java.util.Date;
 
 @Data
 public class HealthFormReportAdd {
-    private boolean diChuyen;
-    private boolean dauHieuCovid;
-    private boolean tiepXucCovider;
-    private boolean tiepXucForeign;
-    private boolean tiepXucNguoiCoBieuHienCovid;
+    private Boolean diChuyen;
+    private Boolean dauHieuCovid;
+    private Boolean tiepXucCovider;
+    private Boolean tiepXucForeign;
+    private Boolean tiepXucNguoiCoBieuHienCovid;
     //
     private String tenPhuongTien;
-    private String SoHieu;
+    private String soHieu;
     private Date startDate;
     private String startProvince;
     private String startDistrict;
@@ -24,4 +24,7 @@ public class HealthFormReportAdd {
     private String endDistrict;
     private String endWard;
     private String endDetailAddress;
+    //
+    private String reportType;
+    private Long userId;
 }

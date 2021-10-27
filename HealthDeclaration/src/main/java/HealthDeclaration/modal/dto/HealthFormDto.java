@@ -12,17 +12,17 @@ import java.util.Date;
 public class HealthFormDto {
     private Long index;
     private Long id;
-    private Date ngayKhaiBao;
     private Long userId;
     private String reportType;
     private String status;
+    private Date createdTime;
 
-    public HealthFormDto(Long id, Date ngayKhaiBao, Long userId, String reportType, String status) {
+    public HealthFormDto(Long id, Date createdTime, Long userId, String reportType, String status) {
         this.id = id;
-        this.ngayKhaiBao = ngayKhaiBao;
         this.userId = userId;
         this.reportType = reportType;
         this.status = status;
+        this.createdTime = createdTime;
     }
 }
 

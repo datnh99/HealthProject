@@ -30,16 +30,16 @@ public class HealthFormReportServiceImpl extends BaseService implements IHealthF
         report.setModifiedTime(new Date());
         report.setDeleted(false);
         //
-        report.setDiChuyen(formReportAdd.isDiChuyen());
-        report.setDauHieuCovid(formReportAdd.isDauHieuCovid());
-        report.setTiepXucCovider(formReportAdd.isTiepXucCovider());
-        report.setTiepXucForeign(formReportAdd.isTiepXucForeign());
-        report.setTiepXucNguoiCoBieuHienCovid(formReportAdd.isTiepXucNguoiCoBieuHienCovid());
+        report.setDiChuyen(formReportAdd.getDiChuyen());
+        report.setDauHieuCovid(formReportAdd.getDauHieuCovid());
+        report.setTiepXucCovider(formReportAdd.getTiepXucCovider());
+        report.setTiepXucForeign(formReportAdd.getTiepXucForeign());
+        report.setTiepXucNguoiCoBieuHienCovid(formReportAdd.getTiepXucNguoiCoBieuHienCovid());
         //
         report.setTenPhuongTien(formReportAdd.getTenPhuongTien());
-        report.setSoHieu(formReportAdd.getSoHieu());
+        report.setSoHieu(formReportAdd.getSoHieu());//
         report.setStartDate(formReportAdd.getStartDate());
-        report.setEndProvince(formReportAdd.getStartProvince());
+        report.setStartProvince(formReportAdd.getStartProvince());
         report.setStartDistrict(formReportAdd.getStartDistrict());
         report.setStartWard(formReportAdd.getStartWard());
         report.setStartDetailAddress(formReportAdd.getStartDetailAddress());
@@ -48,6 +48,9 @@ public class HealthFormReportServiceImpl extends BaseService implements IHealthF
         report.setEndDistrict(formReportAdd.getEndDistrict());
         report.setEndWard(formReportAdd.getEndWard());
         report.setEndDetailAddress(formReportAdd.getEndDetailAddress());
+        //
+        report.setUserId(formReportAdd.getUserId());
+        report.setReportType(formReportAdd.getReportType());
         return repository.save(report);
     }
 
