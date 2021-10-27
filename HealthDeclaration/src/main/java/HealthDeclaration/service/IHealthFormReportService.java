@@ -16,4 +16,6 @@ public interface IHealthFormReportService {
     List<HealthFormDto> searchHealthFormReport(Long userId, int pageIndex, int pageSize);
 
     Long countSearchHealthFormReport(Long userId);
+
+    HealthFormReport getById(Long id);
 }

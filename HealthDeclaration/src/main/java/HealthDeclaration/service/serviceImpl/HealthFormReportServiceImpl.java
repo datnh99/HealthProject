@@ -72,4 +72,10 @@ public class HealthFormReportServiceImpl extends BaseService implements IHealthF
     public Long countSearchHealthFormReport(Long userId) {
         return repositoryCustom.countSearchHealthFormReport(userId);
     }
+
+    @Override
+    public HealthFormReport getById(Long id) {
+        HealthFormReport report = repository.findById(id).get();
+        return report;
+    }
 }

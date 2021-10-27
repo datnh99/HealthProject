@@ -59,4 +59,18 @@ public class HealthFormReportController {
         }
         return  ResponseUtils.buildResponseMessage(true, responseMessage);
     }
+
+    @GetMapping(value = "/getById")
+    public ResponseEntity getOne(@RequestParam Long id) {
+        ResponseMessage responseMessage = new ResponseMessage();
+        try{
+            responseMessage.setSuccess(true);
+            responseMessage.setData(service.getById(id));
+        } catch (Exception e) {
+            log.error(e);
+            responseMessage.setSuccess(false);
+            return ResponseUtils.buildResponseMessage(false, responseMessage);
+        }
+        return ResponseUtils.buildResponseMessage(true, responseMessage);
+    }
 }
