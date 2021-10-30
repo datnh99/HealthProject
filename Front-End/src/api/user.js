@@ -20,8 +20,13 @@ function searchUserDetail(formSearch, pageIndex) {
   );
 }
 
+function addNewUser(formAddNew) {
+  return axios.post(`${API_USER}/add-new-user`, formAddNew);
+}
+
 export default {
   getAllUser,
   searchTeacherByName,
-  searchUserDetail
+  searchUserDetail,
+  addNewUser,
 };
