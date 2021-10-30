@@ -91,22 +91,26 @@ export default {
       introductionImageUpload: "",
       shareId: null,
       userLogin: null,
-      errorLogin: ""
+      errorLogin: "",
     };
   },
   methods: {
     async basicLogin() {
       await basicProcessLogins(this.username, this.password)
-        .then(res => {
+        .then((res) => {
           if (res) {
+            console.log(res, "resss");
             this.userData = res;
-            console.log('this.userData ==>', this.userData);
+            const expiredTime = this.userData.expiredTime;
+            console.log("this.userData ==>", this.userData);
             axios.defaults.headers.common["Authorization"] =
-            "Bearer " + this.userData.token;
-            Vue.$cookies.set("accessToken", this.userData.token);
+              "Bearer " + this.userData.token;
+            Vue.$cookies.set("accessToken", this.userData.token,expiredTime);
+            Vue.$cookies.set("username", this.userData.username,expiredTime);
+
             // this.$cookies.set("account", this.userData.account);
             // this.$cookies.set("role", this.userData.role);
-            this.$router.push("dashboard");
+            this.$router.push("user");
           } else {
             this.errorLogin = "Username or password is incorrect!";
           }
@@ -114,8 +118,8 @@ export default {
         .catch(() => {
           this.errorLogin = "Username or password is incorrect!";
         });
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

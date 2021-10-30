@@ -6,50 +6,63 @@
       <div class="block block-three"></div>
       <div class="block block-four"></div>
       <a href="#">
-        <img class="avatar" src="../../assets/img/anime6.png" alt="...">
+        <img v-if="!user.gender" class="avatar" src="../../assets/img/anime6.png" alt="..." />
+        <img v-else class="avatar" src="../../assets/img/anime3.png" alt="..." />
+
         <h5 class="title">{{ user.fullName }}</h5>
       </a>
       <p class="description">
-        {{user.title}}
+        {{ user.phoneNumber }}
       </p>
     </div>
     <p class="card-description">
-      {{user.description}}
+      {{ user.addressDetail }}
     </p>
-    <div slot="footer" class="button-container">
-      <base-button icon round class="btn-facebook">
-        <i class="fab fa-facebook"></i>
-      </base-button>
-      <base-button icon round class="btn-twitter">
-        <i class="fab fa-twitter"></i>
-      </base-button>
-      <base-button icon round class="btn-google">
-        <i class="fab fa-google-plus"></i>
-      </base-button>
+    <div slot="footer" class="row button-container">
+      <div class="col-4">
+        <base-button type="info" icon size="lg" class="btn-facebook">
+          <i class="fas fa-qrcode fa-lg"></i>
+        </base-button>
+        <b>Quản lý QR</b>
+      </div>
+      <div class="col-4">
+        <base-button type="success" icon size="lg">
+          <a-icon style type="file-add" />
+        </base-button>
+        <b>Khai báo</b>
+      </div>
+      <div class="col-4">
+        <base-button type="warning" icon size="lg">
+          <a-icon type="message" theme="filled" />
+        </base-button>
+        <b> Feedback</b>
+      </div>
     </div>
   </card>
 </template>
 <script>
-import {
-  Card
-} from "@/components/index";
+import { Card } from "@/components/index";
 
-import BaseButton from '@/components/BaseButton';
+import BaseButton from "@/components/BaseButton";
 
 export default {
   components: {
     Card,
-    BaseButton
+    BaseButton,
   },
   props: {
     user: {
       type: Object,
       default: () => {
         return {};
-      }
-    }
-  }
-}
+      },
+    },
+  },
+};
 </script>
-<style>
+<style lang="scss" >
+.anticon {
+  // margin-right: 6px;
+  font-size: 22px;
+}
 </style>

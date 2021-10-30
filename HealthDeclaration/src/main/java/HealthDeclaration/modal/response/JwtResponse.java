@@ -1,6 +1,7 @@
 package HealthDeclaration.modal.response;
 
 import java.io.Serializable;
+import java.util.Map;
 
 public class JwtResponse implements Serializable {
 

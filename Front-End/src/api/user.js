@@ -19,9 +19,14 @@ function searchUserDetail(formSearch, pageIndex) {
     formSearch
   );
 }
-
+function getUserByUsername(username) {
+  return axios.get(
+    `${API_USER}/get-user-by-username?username=${username}`
+  );
+}
 export default {
   getAllUser,
   searchTeacherByName,
-  searchUserDetail
+  searchUserDetail,
+  getUserByUsername
 };
