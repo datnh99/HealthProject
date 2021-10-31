@@ -1,6 +1,7 @@
 package HealthDeclaration.service.serviceImpl;
 
 import HealthDeclaration.common.base.service.BaseService;
+import HealthDeclaration.modal.dto.ProvinceDTO;
 import HealthDeclaration.modal.entity.Province;
 import HealthDeclaration.modal.request.ProvinceAddRequest;
 import HealthDeclaration.repository.IProvinceRepository;

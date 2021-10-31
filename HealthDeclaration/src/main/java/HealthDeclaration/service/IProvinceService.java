@@ -1,5 +1,6 @@
 package HealthDeclaration.service;
 
+import HealthDeclaration.modal.dto.ProvinceDTO;
 import HealthDeclaration.modal.request.ProvinceAddRequest;
 
 import java.util.List;

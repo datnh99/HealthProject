@@ -6,6 +6,7 @@ import HealthDeclaration.form.DistrictAddForm;
 import HealthDeclaration.modal.dto.DistrictDTO;
 import HealthDeclaration.modal.dto.WardDTO;
 import HealthDeclaration.modal.request.UserChangePassForm;
+import HealthDeclaration.qrcode.ZXingHelper;
 import HealthDeclaration.service.IDistrictService;
 import HealthDeclaration.service.IUserService;
 import HealthDeclaration.vo.ResponseMessage;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
 import java.util.List;
 
 @RestController

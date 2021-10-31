@@ -3,6 +3,7 @@ package HealthDeclaration.controller;
 import HealthDeclaration.common.response.utils.ResponseUtils;
 import HealthDeclaration.modal.request.HealthFormReportAdd;
 import HealthDeclaration.modal.request.ProvinceAddRequest;
+import HealthDeclaration.qrcode.ZXingHelper;
 import HealthDeclaration.service.IProvinceService;
 import HealthDeclaration.vo.ResponseMessage;
 import lombok.extern.log4j.Log4j2;
@@ -11,6 +12,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
 import java.util.List;
 
 @RestController
@@ -63,5 +66,4 @@ public class ProvinceController {
         }
         return  ResponseUtils.buildResponseMessage(true, responseMessage);
     }
-
 }
