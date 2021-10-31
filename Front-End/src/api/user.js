@@ -24,9 +24,14 @@ function getUserByUsername(username) {
     `${API_USER}/get-user-by-username?username=${username}`
   );
 }
+function addNewUser(formAddNew) {
+  return axios.post(`${API_USER}/add-new-user`, formAddNew);
+}
+
 export default {
   getAllUser,
   searchTeacherByName,
   searchUserDetail,
-  getUserByUsername
+  addNewUser,
+getUserByUsername
 };
