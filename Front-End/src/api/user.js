@@ -20,12 +20,13 @@ function searchUser(formSearch, pageIndex) {
   );
 }
 function getUserByUsername(username) {
-  return axios.get(
-    `${API_USER}/get-user-by-username?username=${username}`
-  );
+  return axios.get(`${API_USER}/get-user-by-username?username=${username}`);
 }
 function addNewUser(formAddNew) {
   return axios.post(`${API_USER}/add-new-user`, formAddNew);
+}
+function addNewStudent(formAddNew) {
+  return axios.post(`${API_USER}/add-new-student`, formAddNew);
 }
 
 export default {
@@ -33,5 +34,6 @@ export default {
   searchTeacherByName,
   searchUser,
   addNewUser,
-getUserByUsername
+  getUserByUsername,
+  addNewStudent
 };

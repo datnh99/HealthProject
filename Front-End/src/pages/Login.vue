@@ -101,12 +101,14 @@ export default {
           if (res) {
             console.log(res, "resss");
             this.userData = res;
+            let userInfo = this.userData.userInfor;
             const expiredTime = this.userData.expiredTime;
             console.log("this.userData ==>", this.userData);
             axios.defaults.headers.common["Authorization"] =
               "Bearer " + this.userData.token;
-            Vue.$cookies.set("accessToken", this.userData.token,expiredTime);
-            Vue.$cookies.set("username", this.userData.username,expiredTime);
+            Vue.$cookies.set("accessToken", this.userData.token, expiredTime);
+            Vue.$cookies.set("username", this.userData.username, expiredTime);
+            Vue.$cookies.set("role", userInfo.roleCode, expiredTime);
 
             // this.$cookies.set("account", this.userData.account);
             // this.$cookies.set("role", this.userData.role);

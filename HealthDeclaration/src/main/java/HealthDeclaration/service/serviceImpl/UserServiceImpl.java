@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -117,23 +118,45 @@ public class UserServiceImpl extends BaseService implements IUserService {
     }
 
     @Override
-    public List<UserDto> searchStudentToManagement(UserFormSearch formSearch, int pageIndex, int pageSize) {
-        Class clazz = classService.getByTeacherUser(getLoggedInUsername());
+    public List<UserDto> searchUserToManagement(UserFormSearch formSearch, int pageIndex, int pageSize) {
+        List<String> roleCodeOFUser = getLoggedInUserRoles();
+        List<UserDto> resultList = new ArrayList<>();
+        if(ObjectUtils.isNullorEmpty(roleCodeOFUser)) {
+            throw new IllegalArgumentException("You don't have permission to see that data!");
+        }
+        if(roleCodeOFUser.get(0).equalsIgnoreCase(RoleConstant.ROLE_GIAO_VIEN_CHU_NHIEM)) {
+            Class clazz = classService.getByTeacherUser(getLoggedInUsername());
 
-        if(!ObjectUtils.isNullorEmpty(formSearch.getGender())) {
-            String gender = StringUtils.removeAccent(formSearch.getGender()).toLowerCase();
-            if(gender.equalsIgnoreCase("nam")) {
-                formSearch.setGenderSearch(true);
-            } else if (gender.equalsIgnoreCase("nu")) {
-                formSearch.setGenderSearch(false);
-            } else {
-                return null;
+            if (!ObjectUtils.isNullorEmpty(formSearch.getGender())) {
+                String gender = StringUtils.removeAccent(formSearch.getGender()).toLowerCase();
+                if (gender.equalsIgnoreCase("nam")) {
+                    formSearch.setGenderSearch(true);
+                } else if (gender.equalsIgnoreCase("nu")) {
+                    formSearch.setGenderSearch(false);
+                } else {
+                    return null;
+                }
             }
+            if (!ObjectUtils.isNullorEmpty(clazz)) {
+                formSearch.setClassID(clazz.getId());
+            }
+            resultList = userRepositoryCustom.searchStudentToManagement(formSearch, pageIndex, pageSize);
+        } else if (roleCodeOFUser.get(0).equalsIgnoreCase(RoleConstant.ROLE_HIEU_TRUONG)) {
+            if (!ObjectUtils.isNullorEmpty(formSearch.getGender())) {
+                String gender = StringUtils.removeAccent(formSearch.getGender()).toLowerCase();
+                if (gender.equalsIgnoreCase("nam")) {
+                    formSearch.setGenderSearch(true);
+                } else if (gender.equalsIgnoreCase("nu")) {
+                    formSearch.setGenderSearch(false);
+                } else {
+                    return null;
+                }
+            }
+            resultList = userRepositoryCustom.searchStudentToManagement(formSearch, pageIndex, pageSize);
+        } else {
+            throw new IllegalArgumentException("You don't have permission to see that data!");
         }
-        if(!ObjectUtils.isNullorEmpty(clazz)) {
-            formSearch.setClassID(clazz.getId());
-        }
-        return userRepositoryCustom.searchStudentToManagement(formSearch, pageIndex, pageSize);
+        return resultList;
     }
 
     @Override

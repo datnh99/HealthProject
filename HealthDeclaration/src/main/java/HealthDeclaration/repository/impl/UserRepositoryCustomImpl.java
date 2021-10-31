@@ -44,17 +44,17 @@ public class UserRepositoryCustomImpl extends BaseRepository implements IUserRep
         if(count) {
             sql.append("select count(u.id) "
                     + "from User u "
-                    + " where 1=1 and u.deleted = false ");
+                    + " where 1=1 ");
         } else {
             sql.append("select new HealthDeclaration.modal.dto.UserDto(u.id, u.username, u.fullName, u.dob, u.gender," +
                     " u.phoneNumber, u.parentPhoneNumber, u.provinceCode, prv.name as provinceName, u.districtCode, " +
                     " dis.name as districtName, u.wardCode, wa.name as wardName, u.addressDetail ) "
                     + " from User u "
-                    + " Join Province prv ON prv.code = u.provinceCode "
-                    + " Join District dis ON dis.code = u.districtCode "
-                    + " Join Ward wa ON wa.code = u.wardCode "
-                    + " Join Class cl ON cl.id = u.classID "
-                    + " where 1=1 and u.deleted = false ");
+                    + " LEFT JOIN Province prv ON prv.code = u.provinceCode "
+                    + " LEFT JOIN District dis ON dis.code = u.districtCode "
+                    + " LEFT JOIN Ward wa ON wa.code = u.wardCode "
+                    + " LEFT JOIN Class cl ON cl.id = u.classID "
+                    + " where 1=1 ");
         }
         Map<String, Object> params = new HashMap<>();
         if (!ObjectUtils.isNullorEmpty(formSearch.getFullName())) {

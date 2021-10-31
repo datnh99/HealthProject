@@ -14,6 +14,10 @@ function searchClass(classFormSearch, pageIndex) {
   );
 }
 
+function searchClassByName(className) {
+  return axios.get(`${API_CLASS}/search-class-by-name?className=${className}`);
+}
+
 function editClass(classFormEdit) {
   return axios.put(`${API_CLASS}/update?`, classFormEdit);
 }
@@ -29,7 +33,8 @@ function deleteClass(id) {
 export default {
   getALlClass,
   searchClass,
+  searchClassByName,
   editClass,
   addNewClass,
-  deleteClass
+  deleteClass,
 };

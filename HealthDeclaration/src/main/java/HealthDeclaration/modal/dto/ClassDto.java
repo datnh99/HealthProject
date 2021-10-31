@@ -20,12 +20,15 @@ public class ClassDto {
 
     private String teacherName;
 
-    public ClassDto(Long id, String className, Long teacherID, String teacherAccount, String teacherName) {
+    private Boolean isActive;
+
+    public ClassDto(Long id, String className, Long teacherID, String teacherAccount, String teacherName, Boolean isActive) {
         this.id = id;
         this.className = className;
         this.teacherID = teacherID;
         this.teacherAccount = teacherAccount;
         this.teacherName = teacherName;
+        this.isActive = isActive;
     }
 
     public ClassDto(Long id, String className) {

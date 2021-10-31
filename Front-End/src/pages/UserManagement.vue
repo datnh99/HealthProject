@@ -1029,33 +1029,31 @@ export default {
         gender: this.addForm.gender,
         phoneNumber: this.addForm.phoneNumber,
         parentPhoneNumber: this.addForm.parentPhoneNumber,
-        provinceId: this.addForm.provinceId,
-        provinceName: this.addForm.provinceName,
-        districtId: this.addForm.districtId,
-        districtName: this.addForm.districtName,
-        wardId: this.addForm.wardId,
-        wardName: this.addForm.wardName,
+        provinceCode: this.addForm.provinceCode,
+        districtCode: this.addForm.districtCode,
+        wardCode: this.addForm.wardCode,
         addressDetail: this.addForm.addressDetail,
+        classID: this.addForm.classID
       };
-      UserRepository.addNewUser(formAddData)
+      UserRepository.addNewStudent(formAddData)
         .then((response) => {
           if (response.data.success === true) {
             this.$notification.success({
-              message: "Thêm mới thành công!",
+              message: "Thêm mới học sinh thành công!",
             });
             this.paginate();
             this.closeModal();
             this.loadingModal = false;
           } else {
             this.$notification.error({
-              message: "Tên lớp học đã tồn tại!",
+              message: "Thêm mới học sinh thất bại!",
             });
             this.loadingModal = false;
           }
         })
         .catch(() => {
           this.$notification.error({
-            message: "Tên lớp học đã tồn tại!",
+            message: "Thêm mới học sinh thất bại!",
           });
           this.loadingModal = false;
         });

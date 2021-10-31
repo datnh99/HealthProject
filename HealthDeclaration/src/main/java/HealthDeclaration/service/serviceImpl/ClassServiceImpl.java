@@ -73,7 +73,10 @@ public class ClassServiceImpl extends BaseService implements IClassService {
         if(!checkClassNameNotExist(c.getClassName())) {
             throw new IllegalArgumentException("That class name already exist!");
         }
-        Class clazz = classRepository.getById(c.getId());
+        Class clazz = classRepository.getClassById(c.getId());
+        if(!ObjectUtils.isNullorEmpty(c.getIsActive())) {
+            clazz.setDeleted(c.getIsActive());
+        }
         clazz.setModifiedBy(getLoggedInUsername());
         clazz.setModifiedTime(new Date());
         clazz.setName(c.getClassName());
@@ -84,7 +87,7 @@ public class ClassServiceImpl extends BaseService implements IClassService {
 
     @Override
     public void deleteClass(Long id) {
-        Class clazz = classRepository.getById(id);
+        Class clazz = classRepository.getClassById(id);
         clazz.setModifiedBy(getLoggedInUsername());
         clazz.setCreatedTime(new Date());
         clazz.setDeleted(true);

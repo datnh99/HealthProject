@@ -80,14 +80,14 @@ public class UserController {
 		return ResponseUtils.buildResponseMessage(true, responseMessage);
 	}
 
-    @PostMapping("/search-student-to-management")
-    private ResponseEntity searchStudentToManagement(@RequestBody UserFormSearch formSearch,
+    @PostMapping("/search-user-to-management")
+    private ResponseEntity searchUserToManagement(@RequestBody UserFormSearch formSearch,
                                                @Param("pageIndex") int pageIndex,
                                                @Param("pageSize") int pageSize) {
         ResponseMessage responseMessage = new ResponseMessage();
         try{
             responseMessage.setSuccess(true);
-            List<UserDto> result = service.searchStudentToManagement(formSearch, pageIndex, pageSize);
+            List<UserDto> result = service.searchUserToManagement(formSearch, pageIndex, pageSize);
             Long total = service.countSearchUserToManagement(formSearch);
             Map<String, Object> results = new HashMap<>();
             results.put("items", result);

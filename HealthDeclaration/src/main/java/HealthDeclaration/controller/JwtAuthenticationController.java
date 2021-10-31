@@ -6,6 +6,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import HealthDeclaration.modal.entity.User;
+import HealthDeclaration.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,6 +37,9 @@ public class JwtAuthenticationController {
 	private AuthenticationManager authenticationManager;
 
 	@Autowired
+	private IUserService userService;
+
+	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
 
 	@Autowired
@@ -47,8 +52,10 @@ public class JwtAuthenticationController {
 		final UserDetails userDetails = userDetailsService.
 				loadUserByUsername(authenticationRequest.getUsername());
 		final String token = jwtTokenUtil.generateToken(userDetails);
+		User user = userService.getByUsername(userDetails.getUsername());
 		mapResult.put("token", token);
 		mapResult.put("username", userDetails.getUsername());
+		mapResult.put("userInfor", user);
 		mapResult.put("expiredTime", jwtTokenUtil.getExpirationDateFromToken(token).getTime());
 		return ResponseEntity.ok(mapResult);
 	}

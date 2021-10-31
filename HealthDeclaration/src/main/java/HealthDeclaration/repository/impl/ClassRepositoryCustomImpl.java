@@ -38,14 +38,14 @@ public class ClassRepositoryCustomImpl extends BaseRepository implements IClassR
         StringBuilder sql = new StringBuilder();
         if (count) {
             sql.append("select count(cl.id) "
-                + "from Class cl join User u " +
-                "ON u.id = cl.teacherId "
-                + " where 1=1 AND cl.deleted = false ");
+                + "from Class cl LEFT join User u " +
+                "ON u.username = cl.teacherUsername "
+                + " where 1=1 ");
         } else {
-            sql.append("select new HealthDeclaration.modal.dto.ClassDto(cl.id, cl.name, u.id, u.username, u.fullName) "
-                    + "from Class cl join User u " +
-                    "ON u.id = cl.teacherId "
-                    + " where 1=1 AND cl.deleted = false ");
+            sql.append("select new HealthDeclaration.modal.dto.ClassDto(cl.id, cl.name, u.id, u.username, u.fullName, cl.deleted) "
+                    + "from Class cl LEFT join User u " +
+                    "ON u.username = cl.teacherUsername "
+                    + " where 1=1 ");
         }
         Map<String, Object> params = new HashMap<>();
         if (!ObjectUtils.isEmpty(classFormSearch.getClassName())) {

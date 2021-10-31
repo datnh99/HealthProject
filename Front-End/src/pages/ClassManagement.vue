@@ -128,6 +128,19 @@
                   {{ text }}
                 </template>
               </template>
+              <template #isActiveCustom="item">
+                <a-button
+                  v-if="item.isActive == false"
+                  type="primary"
+                  shape="round"
+                  size="small"
+                >
+                  Đang hoạt động
+                </a-button>
+                <a-button v-else type="danger" shape="round" size="small">
+                  Ngừng hoạt động
+                </a-button>
+              </template>
               <template #action="item">
                 <a-dropdown>
                   <a-menu slot="overlay">
@@ -208,17 +221,40 @@
             </a-col>
             <a-col :span="16">
               <a-select
-                v-model="editForm.teacherID"
+                v-model="editForm.teacherUsername"
                 class="filter-select"
+                allow-clear
                 style="width: 100%"
                 @search="fetchTeacher"
               >
                 <a-select-option
                   v-for="item in teacherList"
-                  :key="item.id"
-                  :value="item.id"
+                  :key="item.userName"
+                  :value="item.userName"
                 >
                   {{ item.fullName }}
+                </a-select-option>
+              </a-select>
+            </a-col>
+          </a-row>
+
+          <a-row :gutter="[24, 16]">
+            <a-col :span="8"
+              >Trạng thái
+              <span class="red">*</span>
+            </a-col>
+            <a-col :span="16">
+              <a-select
+                v-model="editForm.isActive"
+                class="filter-select"
+                style="width: 100%"
+              >
+                <a-select-option
+                  v-for="item in statusList"
+                  :key="item.key"
+                  :value="item.value"
+                >
+                  {{ item.key }}
                 </a-select-option>
               </a-select>
             </a-col>
@@ -275,15 +311,15 @@
             </a-col>
             <a-col :span="16">
               <a-select
-                v-model="addForm.teacherID"
+                v-model="addForm.teacherUsername"
                 class="filter-select"
                 style="width: 100%"
                 @search="fetchTeacher"
               >
                 <a-select-option
                   v-for="item in teacherList"
-                  :key="item.id"
-                  :value="item.id"
+                  :key="item.userName"
+                  :value="item.userName"
                 >
                   {{ item.fullName }}
                 </a-select-option>
@@ -307,7 +343,8 @@ const defaultModalState = {
 const defaultForm = {
   id: undefined,
   className: "",
-  teacherID: undefined,
+  teacherUsername: undefined,
+  isActive: undefined,
 };
 
 const requiredError = "This field can't blank";
@@ -337,6 +374,16 @@ export default {
       searchText: "",
       searchInput: null,
       searchedColumn: "",
+      statusList: [
+        {
+          key: "Hoạt động",
+          value: false,
+        },
+        {
+          key: "Ngừng hoạt động",
+          value: true,
+        },
+      ],
       columns: [
         {
           title: "Stt",
@@ -365,6 +412,14 @@ export default {
                 this.searchInput.focus();
               }, 0);
             }
+          },
+        },
+        {
+          title: "Trạng thái",
+          width: 100,
+          key: "isActive",
+          scopedSlots: {
+            customRender: "isActiveCustom",
           },
         },
         {
@@ -474,7 +529,8 @@ export default {
       this.selectedItem = item;
       this.editForm.id = item.id;
       this.editForm.className = item.className;
-      this.editForm.teacherID = item.teacherID;
+      this.editForm.teacherUsername = item.teacherAccount;
+      this.editForm.isActive = item.isActive;
       this.showModal = {
         edit: true,
       };
@@ -499,7 +555,8 @@ export default {
       var formEditData = {
         id: this.editForm.id,
         className: this.editForm.className,
-        teacherID: this.editForm.teacherID,
+        teacherUsername: this.editForm.teacherUsername,
+        isActive: this.editForm.isActive,
       };
       ClassRepository.editClass(formEditData)
         .then((response) => {
@@ -526,7 +583,7 @@ export default {
     },
     openAddForm() {
       this.showModal = {
-        add: true
+        add: true,
       };
     },
     addNewClass() {
@@ -538,7 +595,7 @@ export default {
       }
       var formEditData = {
         className: this.addForm.className,
-        teacherId: this.addForm.teacherID,
+        teacherUsername: this.addForm.teacherUsername,
       };
       ClassRepository.addNewClass(formEditData)
         .then((response) => {

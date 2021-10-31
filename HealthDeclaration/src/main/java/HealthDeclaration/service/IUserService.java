@@ -29,7 +29,7 @@ public interface IUserService {
 
     boolean changePassword(UserChangePassForm form);
 
-    List<UserDto> searchStudentToManagement(UserFormSearch formSearch, int pageIndex, int pageSize);
+    List<UserDto> searchUserToManagement(UserFormSearch formSearch, int pageIndex, int pageSize);
 
     Long countSearchUserToManagement(UserFormSearch formSearch);
 

@@ -7,4 +7,5 @@ public class ClassUpdateForm {
     private Long id;
     private String className;
     private String teacherUsername;
+    private Boolean isActive;
 }
