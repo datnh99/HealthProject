@@ -3,6 +3,7 @@ package HealthDeclaration.service.serviceImpl;
 import HealthDeclaration.common.base.service.BaseService;
 import HealthDeclaration.common.utils.ObjectUtils;
 import HealthDeclaration.form.DistrictAddForm;
+import HealthDeclaration.modal.dto.DistrictDTO;
 import HealthDeclaration.modal.entity.District;
 import HealthDeclaration.repository.IDistrictRepository;
 import HealthDeclaration.service.IDistrictService;
@@ -23,7 +24,6 @@ public class IDistrictServiceImpl extends BaseService implements IDistrictServic
     public void addListDistrict(List<DistrictAddForm> formList) {
         List<District> districtList = new ArrayList<>();
         if(!ObjectUtils.isNullorEmpty(formList)) {
-//            System.out.println(formList);
             formList.forEach(element -> {
                 District district = new District();
                 district.setCreatedBy("hieppv4");
@@ -40,5 +40,10 @@ public class IDistrictServiceImpl extends BaseService implements IDistrictServic
                 districtList.add(districtNew);
             });
         }
+    }
+
+    @Override
+    public List<DistrictDTO> getDistrictByProvinceAndDistrictName(Long provinceCode, String districtName) {
+        return districtRepository.getDistrictByProvinceAndDistrictName(provinceCode, "%" + districtName + "%");
     }
 }

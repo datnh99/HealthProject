@@ -7,6 +7,7 @@ import HealthDeclaration.service.IProvinceService;
 import HealthDeclaration.vo.ResponseMessage;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,4 +49,19 @@ public class ProvinceController {
         }
         return  ResponseUtils.buildResponseMessage(true, responseMessage);
     }
+
+    @GetMapping("/get-by-name")
+    public ResponseEntity getByName(@RequestParam("provinceName") String provinceName) {
+        ResponseMessage responseMessage = new ResponseMessage();
+        try {
+            responseMessage.setSuccess(true);
+            responseMessage.setData(service.getByName(provinceName));
+        } catch (Exception e) {
+            log.error(e);
+            responseMessage.setSuccess(false);
+            return  ResponseUtils.buildResponseMessage(false, responseMessage);
+        }
+        return  ResponseUtils.buildResponseMessage(true, responseMessage);
+    }
+
 }

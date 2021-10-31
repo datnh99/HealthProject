@@ -53,6 +53,23 @@ public class ClassController {
         return ResponseUtils.buildResponseMessage(true, responseMessage);
     }
 
+    @RequestMapping(value = "/search-class-by-name", method = RequestMethod.GET)
+    public ResponseEntity searchClassesByName(@RequestParam("className") String className) {
+        ResponseMessage responseMessage = new ResponseMessage();
+        try{
+            responseMessage.setSuccess(true);
+            List<ClassDto> result = classService.searchClassesByName(className);
+            Map<String, Object> results = new HashMap<>();
+            results.put("items", result);
+            responseMessage.setData(results);
+        } catch (Exception e) {
+            log.error(e);
+            responseMessage.setSuccess(false);
+            return ResponseUtils.buildResponseMessage(false, responseMessage);
+        }
+        return ResponseUtils.buildResponseMessage(true, responseMessage);
+    }
+
     @PostMapping("/add")
     public ResponseEntity addClass(@RequestBody ClassAddForm clazz) {
         ResponseMessage responseMessage = new ResponseMessage();

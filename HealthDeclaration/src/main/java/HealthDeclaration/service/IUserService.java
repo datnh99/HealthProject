@@ -1,5 +1,6 @@
 package HealthDeclaration.service;
 
+import HealthDeclaration.form.UserAddForm;
 import HealthDeclaration.form.UserFormSearch;
 import HealthDeclaration.modal.dto.UserDto;
 import HealthDeclaration.modal.entity.User;
@@ -28,7 +29,9 @@ public interface IUserService {
 
     boolean changePassword(UserChangePassForm form);
 
-    List<UserDto> searchUserToManagement(UserFormSearch formSearch, int pageIndex, int pageSize);
+    List<UserDto> searchStudentToManagement(UserFormSearch formSearch, int pageIndex, int pageSize);
 
     Long countSearchUserToManagement(UserFormSearch formSearch);
+
+    User addNewStudent(UserAddForm userAddForm);
 }

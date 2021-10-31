@@ -3,6 +3,8 @@ package HealthDeclaration.controller;
 
 import HealthDeclaration.common.response.utils.ResponseUtils;
 import HealthDeclaration.form.DistrictAddForm;
+import HealthDeclaration.modal.dto.DistrictDTO;
+import HealthDeclaration.modal.dto.WardDTO;
 import HealthDeclaration.modal.request.UserChangePassForm;
 import HealthDeclaration.service.IDistrictService;
 import HealthDeclaration.service.IUserService;
@@ -29,6 +31,20 @@ public class DistrictController {
             districtService.addListDistrict(formList);
             responseMessage.setSuccess(true);
             responseMessage.setData(true);
+        } catch (Exception e) {
+            responseMessage.setSuccess(false);
+            return  ResponseUtils.buildResponseMessage(false, responseMessage);
+        }
+        return  ResponseUtils.buildResponseMessage(true, responseMessage);
+    }
+
+    @GetMapping("/get-district-by-province")
+    public ResponseEntity getDistrictByProvinceAndDistrictName(@RequestParam Long provinceCode, @RequestParam String districtName) {
+        ResponseMessage responseMessage = new ResponseMessage();
+        try {
+            List<DistrictDTO> districtDTOS = districtService.getDistrictByProvinceAndDistrictName(provinceCode, districtName);
+            responseMessage.setSuccess(true);
+            responseMessage.setData(districtDTOS);
         } catch (Exception e) {
             responseMessage.setSuccess(false);
             return  ResponseUtils.buildResponseMessage(false, responseMessage);

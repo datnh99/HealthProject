@@ -36,29 +36,20 @@ public class User extends BaseEntity {
     @Column(name = "parent_phone_number", length = 10)
     private String parentPhoneNumber;
 
-    @Column(name = "province_id")
-    private Long provinceId;
+    @Column(name = "province_code")
+    private Long provinceCode;
 
-    @Column(name = "province_name")
-    private String provinceName;
+    @Column(name = "district_code")
+    private Long districtCode;
 
-    @Column(name = "district_id")
-    private Long districtId;
-
-    @Column(name = "district_name")
-    private String districtName;
-
-    @Column(name = "ward_id")
-    private Long wardId;
-
-    @Column(name = "ward_name")
-    private String wardName;
+    @Column(name = "ward_code")
+    private Long wardCode;
 
     @Column(name = "address_detail")
     private String addressDetail;
 
-    @Column(name = "role_id")
-    private Long roleID;
+    @Column(name = "role_code")
+    private String roleCode;
 
     @Column(name = "class_id")
     private Long classID;

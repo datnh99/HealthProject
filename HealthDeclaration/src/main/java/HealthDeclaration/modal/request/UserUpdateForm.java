@@ -12,11 +12,9 @@ public class UserUpdateForm {
     private boolean gender;
     private String phoneNumber;
     private String parentPhoneNumber;
-    private Long provinceId;
-    private Long districtId;
-    private Long wardId;
-    private String provinceName;
-    private String districtName;
-    private String wardName;
+    private Long provinceCode;
+    private Long districtCode;
+    private Long wardCode;
+    private String roleCode;
     private String addressDetail;
 }

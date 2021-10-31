@@ -19,4 +19,6 @@ public class UserFormSearch {
     String districtName;
 
     String provinceName;
+
+    Long classID;
 }

@@ -1,12 +1,13 @@
 package HealthDeclaration.service;
 
-import HealthDeclaration.modal.dto.ProvinceDto;
 import HealthDeclaration.modal.request.ProvinceAddRequest;
 
 import java.util.List;
 
 public interface IProvinceService {
-    List<ProvinceDto> getAll();
+    List<ProvinceDTO> getAll();
 
     void add(List<ProvinceAddRequest> list);
+
+    List<ProvinceDTO> getByName(String provinceName);
 }

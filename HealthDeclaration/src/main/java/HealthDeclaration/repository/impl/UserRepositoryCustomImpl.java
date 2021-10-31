@@ -2,9 +2,7 @@ package HealthDeclaration.repository.impl;
 
 import HealthDeclaration.common.base.repository.BaseRepository;
 import HealthDeclaration.common.utils.ObjectUtils;
-import HealthDeclaration.form.ClassFormSearch;
 import HealthDeclaration.form.UserFormSearch;
-import HealthDeclaration.modal.dto.ClassDto;
 import HealthDeclaration.modal.dto.UserDto;
 import HealthDeclaration.repository.IUserRepositoryCustom;
 import lombok.extern.log4j.Log4j2;
@@ -22,35 +20,40 @@ import java.util.Map;
 public class UserRepositoryCustomImpl extends BaseRepository implements IUserRepositoryCustom {
 
     @Override
-    public List<UserDto> searchTeacherByName(String teacherName, Long roleID, int pageIndex, int pageSize) {
-        TypedQuery<UserDto> query = this.buildSearchTeacher(teacherName , roleID, UserDto.class);
+    public List<UserDto> searchTeacherByName(String teacherName, String roleCode, int pageIndex, int pageSize) {
+        TypedQuery<UserDto> query = this.buildSearchTeacher(teacherName , roleCode, UserDto.class);
         query.setFirstResult((pageIndex - 1) * pageSize).setMaxResults(pageSize);
         return query.getResultList();
     }
 
     @Override
-    public List<UserDto> searchUserToManagement(UserFormSearch formSearch, Long roleID, int pageIndex, int pageSize) {
-        TypedQuery<UserDto> query = this.buildSearchUserToManagement(formSearch , roleID, UserDto.class, false);
+    public List<UserDto> searchStudentToManagement(UserFormSearch formSearch, int pageIndex, int pageSize) {
+        TypedQuery<UserDto> query = this.buildSearchStudentToManagement(formSearch, UserDto.class, false);
         query.setFirstResult((pageIndex - 1) * pageSize).setMaxResults(pageSize);
         return query.getResultList();
     }
 
     @Override
-    public Long countSearchUserToManagement(UserFormSearch formSearch, Long roleID) {
-        TypedQuery<Long> query = this.buildSearchUserToManagement(formSearch , roleID, Long.class, true);
+    public Long countSearchUserToManagement(UserFormSearch formSearch) {
+        TypedQuery<Long> query = this.buildSearchStudentToManagement(formSearch, Long.class, true);
         return query.getSingleResult();
     }
 
-    private <T> TypedQuery<T> buildSearchUserToManagement(UserFormSearch formSearch, Long roleID, Class<T> clazz, Boolean count) {
+    private <T> TypedQuery<T> buildSearchStudentToManagement(UserFormSearch formSearch, Class<T> clazz, Boolean count) {
         StringBuilder sql = new StringBuilder();
         if(count) {
             sql.append("select count(u.id) "
                     + "from User u "
                     + " where 1=1 and u.deleted = false ");
         } else {
-            sql.append("select new HealthDeclaration.modal.dto.UserDto(u.id, u.username, u.fullName, u.dob, u.gender, u.phoneNumber, " +
-                    " u.parentPhoneNumber, u.provinceId, u.provinceName, u.districtId, u.districtName, u.wardId, u.wardName, u.addressDetail ) "
-                    + "from User u "
+            sql.append("select new HealthDeclaration.modal.dto.UserDto(u.id, u.username, u.fullName, u.dob, u.gender," +
+                    " u.phoneNumber, u.parentPhoneNumber, u.provinceCode, prv.name as provinceName, u.districtCode, " +
+                    " dis.name as districtName, u.wardCode, wa.name as wardName, u.addressDetail ) "
+                    + " from User u "
+                    + " Join Province prv ON prv.code = u.provinceCode "
+                    + " Join District dis ON dis.code = u.districtCode "
+                    + " Join Ward wa ON wa.code = u.wardCode "
+                    + " Join Class cl ON cl.id = u.classID "
                     + " where 1=1 and u.deleted = false ");
         }
         Map<String, Object> params = new HashMap<>();
@@ -63,20 +66,20 @@ public class UserRepositoryCustomImpl extends BaseRepository implements IUserRep
             params.put("gender",  formSearch.getGenderSearch());
         }
         if (!ObjectUtils.isNullorEmpty(formSearch.getDistrictName())) {
-            sql.append(" and LOWER(u.districtName) like :district ");
-            params.put("district",  "%" + formSearch.getDistrictName().toLowerCase() + "%");
+            sql.append(" and LOWER(dis.name) like :districtName ");
+            params.put("districtName",  "%" + formSearch.getDistrictName().toLowerCase() + "%");
         }
         if (!ObjectUtils.isNullorEmpty(formSearch.getProvinceName())) {
-            sql.append(" and LOWER(u.provinceName) like :provinceName ");
+            sql.append(" and LOWER(prv.name) like :provinceName ");
             params.put("provinceName",  "%" + formSearch.getProvinceName().toLowerCase() + "%");
         }
         if (!ObjectUtils.isNullorEmpty(formSearch.getWardName())) {
-            sql.append(" and LOWER(u.wardName) like :wardName ");
+            sql.append(" and LOWER(wa.name) like :wardName ");
             params.put("wardName", "%" + formSearch.getWardName().toLowerCase() + "%");
         }
-        if (!ObjectUtils.isNullorEmpty(roleID)) {
-            sql.append(" and u.roleID = :roleID");
-            params.put("roleID", roleID);
+        if (!ObjectUtils.isNullorEmpty(formSearch.getClassID())) {
+            sql.append(" and cl.id = :classID");
+            params.put("classID", formSearch.getClassID());
         }
         if(!count) {
             sql.append(" ORDER BY u.fullName ASC");
@@ -84,7 +87,7 @@ public class UserRepositoryCustomImpl extends BaseRepository implements IUserRep
         return super.createQuery(sql.toString(), params, clazz);
     }
 
-    private <T> TypedQuery<T> buildSearchTeacher(String teacherName, Long roleID, Class<T> clazz) {
+    private <T> TypedQuery<T> buildSearchTeacher(String teacherName, String roleCode, Class<T> clazz) {
         StringBuilder sql = new StringBuilder();
         sql.append("select new HealthDeclaration.modal.dto.UserDto(u.id, u.username, u.fullName) "
                     + "from User u "
@@ -94,9 +97,9 @@ public class UserRepositoryCustomImpl extends BaseRepository implements IUserRep
             sql.append(" and LOWER(u.fullName) like :teacherName ");
             params.put("teacherName", "%" + teacherName.toLowerCase() + "%");
         }
-        if (!ObjectUtils.isNullorEmpty(roleID)) {
-            sql.append(" and u.roleID = :roleID");
-            params.put("roleID", roleID);
+        if (!ObjectUtils.isNullorEmpty(roleCode)) {
+            sql.append(" and u.roleCode = :roleCode");
+            params.put("roleCode", roleCode);
         }
         sql.append(" ORDER BY u.fullName ASC");
         return super.createQuery(sql.toString(), params, clazz);

@@ -1,7 +1,6 @@
 package HealthDeclaration.service.serviceImpl;
 
 import HealthDeclaration.common.base.service.BaseService;
-import HealthDeclaration.modal.dto.ProvinceDto;
 import HealthDeclaration.modal.entity.Province;
 import HealthDeclaration.modal.request.ProvinceAddRequest;
 import HealthDeclaration.repository.IProvinceRepository;
@@ -15,10 +14,10 @@ import java.util.List;
 @Service
 public class IProvinceServiceImpl extends BaseService implements IProvinceService {
     @Autowired
-    IProvinceRepository repository;
+    private IProvinceRepository repository;
 
     @Override
-    public List<ProvinceDto> getAll() {
+    public List<ProvinceDTO> getAll() {
         return repository.getAll();
     }
 
@@ -37,5 +36,10 @@ public class IProvinceServiceImpl extends BaseService implements IProvinceServic
             p.setPhoneCode(list.get(i).getPhone_code());
             repository.save(p);
         }
+    }
+
+    @Override
+    public List<ProvinceDTO> getByName(String provinceName) {
+        return repository.getByName("%" + provinceName + "%");
     }
 }

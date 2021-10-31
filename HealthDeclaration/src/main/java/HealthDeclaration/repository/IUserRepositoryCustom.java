@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface IUserRepositoryCustom {
 
-    List<UserDto> searchTeacherByName(String teacherName, Long roleID, int pageIndex, int pageSize);
+    List<UserDto> searchTeacherByName(String teacherName, String roleCode, int pageIndex, int pageSize);
 
-    List<UserDto> searchUserToManagement(UserFormSearch formSearch, Long roleID, int pageIndex, int pageSize);
+    List<UserDto> searchStudentToManagement(UserFormSearch formSearch, int pageIndex, int pageSize);
 
-    Long countSearchUserToManagement(UserFormSearch formSearch, Long id);
+    Long countSearchUserToManagement(UserFormSearch formSearch);
 }

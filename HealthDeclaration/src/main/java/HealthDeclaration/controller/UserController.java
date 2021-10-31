@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import HealthDeclaration.common.response.utils.ResponseUtils;
+import HealthDeclaration.form.UserAddForm;
 import HealthDeclaration.form.UserFormSearch;
 import HealthDeclaration.modal.dto.UserDto;
 import HealthDeclaration.modal.entity.User;
@@ -79,25 +80,26 @@ public class UserController {
 		return ResponseUtils.buildResponseMessage(true, responseMessage);
 	}
 
-	@PostMapping("/search-user-to-management")
-	private ResponseEntity searchUserToManagement(@RequestBody UserFormSearch formSearch,
-			@Param("pageIndex") int pageIndex, @Param("pageSize") int pageSize) {
-		ResponseMessage responseMessage = new ResponseMessage();
-		try {
-			responseMessage.setSuccess(true);
-			List<UserDto> result = service.searchUserToManagement(formSearch, pageIndex, pageSize);
-			Long total = service.countSearchUserToManagement(formSearch);
-			Map<String, Object> results = new HashMap<>();
-			results.put("items", result);
-			results.put("total", total);
-			responseMessage.setData(results);
-		} catch (Exception e) {
-			log.error(e);
-			responseMessage.setSuccess(false);
-			return ResponseUtils.buildResponseMessage(false, responseMessage);
-		}
-		return ResponseUtils.buildResponseMessage(true, responseMessage);
-	}
+    @PostMapping("/search-student-to-management")
+    private ResponseEntity searchStudentToManagement(@RequestBody UserFormSearch formSearch,
+                                               @Param("pageIndex") int pageIndex,
+                                               @Param("pageSize") int pageSize) {
+        ResponseMessage responseMessage = new ResponseMessage();
+        try{
+            responseMessage.setSuccess(true);
+            List<UserDto> result = service.searchStudentToManagement(formSearch, pageIndex, pageSize);
+            Long total = service.countSearchUserToManagement(formSearch);
+            Map<String, Object> results = new HashMap<>();
+            results.put("items", result);
+            results.put("total", total);
+            responseMessage.setData(results);
+        } catch (Exception e) {
+            log.error(e);
+            responseMessage.setSuccess(false);
+            return ResponseUtils.buildResponseMessage(false, responseMessage);
+        }
+        return ResponseUtils.buildResponseMessage(true, responseMessage);
+    }
 
 	@PutMapping("/update")
 	public ResponseEntity updateClass(@RequestBody UserUpdateForm updateForm) {
@@ -140,4 +142,20 @@ public class UserController {
 		}
 		return ResponseUtils.buildResponseMessage(true, responseMessage);
 	}
+    @PostMapping("/add-new-student")
+    private ResponseEntity addNewStudent(@RequestBody UserAddForm userAddForm) {
+        ResponseMessage responseMessage = new ResponseMessage();
+        try{
+            User user = service.addNewStudent(userAddForm);
+            Map<String, Object> results = new HashMap<>();
+            results.put("items", user);
+            responseMessage.setSuccess(true);
+            responseMessage.setData(results);
+        } catch (Exception e) {
+            log.error(e);
+            responseMessage.setSuccess(false);
+            return ResponseUtils.buildResponseMessage(false, responseMessage);
+        }
+        return ResponseUtils.buildResponseMessage(true, responseMessage);
+    }
 }

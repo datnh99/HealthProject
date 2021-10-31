@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Service
 public class ClassServiceImpl extends BaseService implements IClassService {
     @Autowired
-    IClassRepository repository;
+    IClassRepository classRepository;
 
     @Autowired
     IClassRepositoryCustom classRepositoryCustom;
@@ -32,7 +32,7 @@ public class ClassServiceImpl extends BaseService implements IClassService {
 
     @Override
     public List<ClassDto> getClasses() {
-        List<Class> list = repository.findAll();
+        List<Class> list = classRepository.findAll();
         List<ClassDto> classes = list.stream().map(s -> mapToClassDto(s)).collect(Collectors.toList());
         return classes;
     }
@@ -63,9 +63,9 @@ public class ClassServiceImpl extends BaseService implements IClassService {
         clazz.setModifiedBy(username);
         clazz.setModifiedTime(new Date());
         clazz.setName(c.getClassName());
-        clazz.setTeacherId(c.getTeacherId());
+        clazz.setTeacherUsername(c.getTeacherUsername());
         clazz.setDeleted(false);
-        return repository.save(clazz);
+        return classRepository.save(clazz);
     }
 
     @Override
@@ -73,22 +73,33 @@ public class ClassServiceImpl extends BaseService implements IClassService {
         if(!checkClassNameNotExist(c.getClassName())) {
             throw new IllegalArgumentException("That class name already exist!");
         }
-        Class clazz = repository.getById(c.getId());
+        Class clazz = classRepository.getById(c.getId());
         clazz.setModifiedBy(getLoggedInUsername());
         clazz.setModifiedTime(new Date());
         clazz.setName(c.getClassName());
-        clazz.setTeacherId(c.getTeacherID());
+        clazz.setTeacherUsername(c.getTeacherUsername());
         System.out.println(clazz);
-        return repository.save(clazz);
+        return classRepository.save(clazz);
     }
 
     @Override
     public void deleteClass(Long id) {
-        Class clazz = repository.getById(id);
+        Class clazz = classRepository.getById(id);
         clazz.setModifiedBy(getLoggedInUsername());
         clazz.setCreatedTime(new Date());
         clazz.setDeleted(true);
-        repository.save(clazz);
+        classRepository.save(clazz);
+    }
+
+    @Override
+    public List<ClassDto> searchClassesByName(String className) {
+        List<ClassDto> classDtoList = classRepository.searchClassesByName("%" + className + "%");
+        return classDtoList;
+    }
+
+    @Override
+    public Class getByTeacherUser(String username) {
+        return classRepository.getByTeacherName(username);
     }
 
     private ClassDto mapToClassDto(Class c) {
@@ -102,7 +113,7 @@ public class ClassServiceImpl extends BaseService implements IClassService {
     }
 
     private boolean checkClassNameNotExist(String className) {
-        Class clazz = repository.getByClassName(className);
+        Class clazz = classRepository.getByClassName(className);
         return ObjectUtils.isNullorEmpty(clazz);
     }
 }

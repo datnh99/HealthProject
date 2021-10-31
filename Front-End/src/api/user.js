@@ -13,7 +13,7 @@ function searchTeacherByName(teacherName, pageIndex) {
   );
 }
 
-function searchUserDetail(formSearch, pageIndex) {
+function searchUser(formSearch, pageIndex) {
   return axios.post(
     `${API_USER}/search-user-to-management?pageIndex=${pageIndex}&pageSize=${pageSize}`,
     formSearch
@@ -31,7 +31,7 @@ function addNewUser(formAddNew) {
 export default {
   getAllUser,
   searchTeacherByName,
-  searchUserDetail,
+  searchUser,
   addNewUser,
 getUserByUsername
 };

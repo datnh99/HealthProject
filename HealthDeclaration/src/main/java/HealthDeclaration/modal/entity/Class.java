@@ -16,5 +16,5 @@ public class Class extends BaseEntity {
     private String name;
 
     @Column(name = "teacher_id")
-    private Long teacherId;
+    private String teacherUsername;
 }

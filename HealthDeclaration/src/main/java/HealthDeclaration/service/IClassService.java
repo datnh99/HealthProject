@@ -20,4 +20,8 @@ public interface IClassService {
     Class updateClass(ClassUpdateForm c);
 
     void deleteClass(Long id);
+
+    List<ClassDto> searchClassesByName(String className);
+
+    Class getByTeacherUser(String username);
 }

@@ -27,4 +27,9 @@ public class ClassDto {
         this.teacherAccount = teacherAccount;
         this.teacherName = teacherName;
     }
+
+    public ClassDto(Long id, String className) {
+        this.id = id;
+        this.className = className;
+    }
 }

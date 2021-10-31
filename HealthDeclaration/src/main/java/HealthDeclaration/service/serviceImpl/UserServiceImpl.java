@@ -4,25 +4,29 @@ import HealthDeclaration.common.base.service.BaseService;
 import HealthDeclaration.common.utils.ObjectUtils;
 import HealthDeclaration.common.utils.StringUtils;
 import HealthDeclaration.constants.RoleConstant;
+import HealthDeclaration.form.UserAddForm;
 import HealthDeclaration.form.UserFormSearch;
 import HealthDeclaration.modal.dto.UserDto;
+import HealthDeclaration.modal.entity.Class;
 import HealthDeclaration.modal.entity.Role;
 import HealthDeclaration.modal.entity.User;
 import HealthDeclaration.modal.request.UserChangePassForm;
 import HealthDeclaration.modal.request.UserUpdateForm;
 import HealthDeclaration.repository.IUserRepository;
 import HealthDeclaration.repository.IUserRepositoryCustom;
+import HealthDeclaration.service.IClassService;
 import HealthDeclaration.service.IRoleService;
 import HealthDeclaration.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserServiceImpl extends BaseService implements IUserService {
     @Autowired
     IUserRepository repository;
@@ -33,6 +37,9 @@ public class UserServiceImpl extends BaseService implements IUserService {
     @Autowired
     private IRoleService roleService;
 
+    @Autowired
+    private IClassService classService;
+
     @Override
     public List<User> getAll() {
         return repository.findAll();
@@ -42,11 +49,6 @@ public class UserServiceImpl extends BaseService implements IUserService {
     public User getByUsername(String username) {
         return repository.getByUsername(username);
     }
-
-//    @Override
-//    public User getByTen(String username) {
-//        return repository.getByTen(username);
-//    }
 
     @Override
     public User add(User user) {
@@ -63,12 +65,10 @@ public class UserServiceImpl extends BaseService implements IUserService {
         user.setGender(updateForm.isGender());
         user.setPhoneNumber(updateForm.getPhoneNumber());
         user.setParentPhoneNumber(updateForm.getParentPhoneNumber());
-        user.setProvinceId(updateForm.getProvinceId());
-        user.setDistrictId(updateForm.getDistrictId());
-        user.setWardId(updateForm.getWardId());
-        user.setProvinceName(updateForm.getProvinceName());
-        user.setDistrictName(updateForm.getDistrictName());
-        user.setWardName(updateForm.getWardName());
+        user.setProvinceCode(updateForm.getProvinceCode());
+        user.setDistrictCode(updateForm.getDistrictCode());
+        user.setWardCode(updateForm.getWardCode());
+        user.setRoleCode(updateForm.getRoleCode());
         user.setAddressDetail(updateForm.getAddressDetail());
         repository.save(user);
         return true;
@@ -88,13 +88,9 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
     @Override
     public List<UserDto> searchTeacherByName(String teacherName, int pPageIndex, int pageSize) {
-//        int pageIndex = pPageIndex-1;
-//        pageIndex = pageIndex > 0 ? pageIndex : 0;
-//        Pageable pageable = PageRequest.of(pageIndex, pageSize);
         Role teacherRole = roleService.getByCode(RoleConstant.ROLE_GIAO_VIEN_CHU_NHIEM);
         if(!ObjectUtils.isNullorEmpty(teacherRole)) {
-//            return repository.searchTeacherByName(teacherName, teacherRole.getId());
-            return userRepositoryCustom.searchTeacherByName(teacherName, teacherRole.getId() , pPageIndex, pageSize);
+            return userRepositoryCustom.searchTeacherByName(teacherName, teacherRole.getRoleCode() , pPageIndex, pageSize);
         }
         return null;
     }
@@ -121,16 +117,9 @@ public class UserServiceImpl extends BaseService implements IUserService {
     }
 
     @Override
-    public List<UserDto> searchUserToManagement(UserFormSearch formSearch, int pageIndex, int pageSize) {
-        // Get role of user
-        String userRole = repository.getUserRoleByUsername(getLoggedInUsername());
-        Long roleID = null;
+    public List<UserDto> searchStudentToManagement(UserFormSearch formSearch, int pageIndex, int pageSize) {
+        Class clazz = classService.getByTeacherUser(getLoggedInUsername());
 
-        // If role teacher ==> search hoc sinh
-        if(userRole.equalsIgnoreCase(RoleConstant.ROLE_GIAO_VIEN_CHU_NHIEM)) {
-            Role studentRole = roleService.getByCode(RoleConstant.ROLE_HOC_SINH);
-            roleID = studentRole.getId();
-        }
         if(!ObjectUtils.isNullorEmpty(formSearch.getGender())) {
             String gender = StringUtils.removeAccent(formSearch.getGender()).toLowerCase();
             if(gender.equalsIgnoreCase("nam")) {
@@ -141,20 +130,17 @@ public class UserServiceImpl extends BaseService implements IUserService {
                 return null;
             }
         }
-        return userRepositoryCustom.searchUserToManagement(formSearch, roleID, pageIndex, pageSize);
+        if(!ObjectUtils.isNullorEmpty(clazz)) {
+            formSearch.setClassID(clazz.getId());
+        }
+        return userRepositoryCustom.searchStudentToManagement(formSearch, pageIndex, pageSize);
     }
 
     @Override
     public Long countSearchUserToManagement(UserFormSearch formSearch) {
-        // Get role of user
-        String userRole = repository.getUserRoleByUsername(getLoggedInUsername());
-        Long roleID = null;
 
-        // If role teacher ==> search hoc sinh
-        if(userRole.equalsIgnoreCase(RoleConstant.ROLE_GIAO_VIEN_CHU_NHIEM)) {
-            Role studentRole = roleService.getByCode(RoleConstant.ROLE_HOC_SINH);
-            roleID = studentRole.getId();
-        }
+        Class clazz = classService.getByTeacherUser(getLoggedInUsername());
+
         if(!ObjectUtils.isNullorEmpty(formSearch.getGender())) {
             String gender = StringUtils.removeAccent(formSearch.getGender()).toLowerCase();
             if(gender.equalsIgnoreCase("nam")) {
@@ -165,7 +151,73 @@ public class UserServiceImpl extends BaseService implements IUserService {
                 return null;
             }
         }
-        return userRepositoryCustom.countSearchUserToManagement(formSearch, roleID);
+
+        if(!ObjectUtils.isNullorEmpty(clazz)) {
+            formSearch.setClassID(clazz.getId());
+        }
+        return userRepositoryCustom.countSearchUserToManagement(formSearch);
+    }
+
+    @Override
+    public User addNewStudent(UserAddForm userAddForm) {
+        User user = new User();
+        user.setCreatedBy("hieppv4");
+        user.setCreatedTime(new Date());
+        user.setModifiedBy("hieppv4");
+        user.setModifiedTime(new Date());
+        user.setDeleted(false);
+        if(!ObjectUtils.isNullorEmpty(userAddForm.getFullName())) {
+            user.setFullName(userAddForm.getFullName());
+        } else {
+            throw new IllegalArgumentException("Full name can not be blank!");
+        }
+        user.setDob(userAddForm.getDob());
+        user.setGender(userAddForm.getGender());
+        user.setPhoneNumber(userAddForm.getPhoneNumber());
+        user.setParentPhoneNumber(userAddForm.getParentPhoneNumber());
+        user.setProvinceCode(userAddForm.getProvinceCode());
+        user.setDistrictCode(userAddForm.getDistrictCode());
+        user.setWardCode(userAddForm.getWardCode());
+        user.setAddressDetail(userAddForm.getAddressDetail());
+        Role role = roleService.getByCode(RoleConstant.ROLE_HOC_SINH);
+        if(!ObjectUtils.isNullorEmpty(role)) {
+            user.setRoleCode(role.getRoleCode());
+        }
+        String username = getNewAccountWithFullName(userAddForm.getFullName());
+        if(!ObjectUtils.isNullorEmpty(username)) {
+            user.setUsername(username);
+        } else {
+            throw new IllegalArgumentException("Fail in create account!");
+        }
+        user.setPassword(userAddForm.getPassword());
+        user.setClassID(userAddForm.getClassID());
+        return repository.save(user);
+    }
+
+    private String getNewAccountWithFullName(String fullName) {
+        String account = null;
+        List<String> list = Arrays.asList(fullName.split(" "));
+        int sizeName = list.size();
+        if( sizeName > 1) {
+            account = list.get(sizeName - 1);
+            for (int i = 0 ; i < sizeName - 1; i++) {
+                account = account + list.get(i).substring(0, 1);
+            }
+        }
+        account = account.toLowerCase();
+        List<String> accList =  repository.getLastAccountByAccount(account + "%");
+        if(ObjectUtils.isNullorEmpty(accList)) {
+            return account;
+        }
+        for (int i = accList.size() - 1; i >= 0; i--) {
+            String accountInList = accList.get(i);
+            accountInList = accountInList.replace(account, "");
+            if(StringUtils.isNumeric(accountInList)) {
+                account = account + (Integer.valueOf(accountInList) + 1);
+                break;
+            }
+        }
+        return account;
     }
 
 }

@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class ClassAddForm {
     private String className;
-    private Long teacherId;
+    private String teacherUsername;
 }

@@ -1,27 +1,33 @@
 import axios from "axios";
-const API_LOCATION = `https://provinces.open-api.vn/api`;
-const config = {
-  Authorization: null,
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
-  "Content-Type": "application/json",
-  "X-Requested-With": "XMLHttpRequest",
-};
+import config from "../config/index";
+const API_PROVINCE = `${config.apiUrl}/api/province`;
+const API_DISTRICT = `${config.apiUrl}/api/district`;
+const API_WARD = `${config.apiUrl}/api/ward`;
+const pageSize = 10;
 
 function getAllProvince() {
-  return axios.get(`${API_LOCATION}/p/`, config);
+  return axios.get(`${API_PROVINCE}/`);
 }
 
-function getDistrictInProvince(provinceCode) {
-  return axios.get(`${API_LOCATION}/p/${provinceCode}?depth=2`, config);
+function getProvinceByName(provinceName) {
+  return axios.get(`${API_PROVINCE}/get-by-name?provinceName=${provinceName}`);
 }
 
-function getWardInDistrict(districtCode) {
-  return axios.get(`${API_LOCATION}/w/${districtCode}?depth=2`, config);
+function getDistrictInProvince(provinceCode, districtName) {
+  return axios.get(
+    `${API_DISTRICT}/get-district-by-province?provinceCode=${provinceCode}&districtName=${districtName}`
+  );
+}
+
+function getWardInDistrict(districtCode, wardName) {
+  return axios.get(
+    `${API_WARD}/get-ward-by-district?districtCode=${districtCode}&wardName=${wardName}`
+  );
 }
 
 export default {
   getAllProvince,
+  getProvinceByName,
   getDistrictInProvince,
   getWardInDistrict,
 };

@@ -2,6 +2,7 @@ package HealthDeclaration.service.serviceImpl;
 
 import HealthDeclaration.common.utils.ObjectUtils;
 import HealthDeclaration.form.WardAddForm;
+import HealthDeclaration.modal.dto.WardDTO;
 import HealthDeclaration.modal.entity.District;
 import HealthDeclaration.modal.entity.Ward;
 import HealthDeclaration.repository.IWardRepository;
@@ -39,5 +40,10 @@ public class IWardServiceImpl implements IWardService {
                 wardRepository.save(ward);
             });
         }
+    }
+
+    @Override
+    public List<WardDTO> getWardByDistrictCodeAndWardName(Long districtCode, String wardName) {
+        return wardRepository.getWardByDistrictCodeAndWardName(districtCode, "%" + wardName + "%");
     }
 }
