@@ -13,6 +13,12 @@ function searchTeacherByName(teacherName, pageIndex) {
   );
 }
 
+function searchTeacherFreeByName(teacherName) {
+  return axios.get(
+    `${API_USER}/search-teacher-free-by-name?teacherName=${teacherName}`
+  );
+}
+
 function searchUser(formSearch, pageIndex) {
   return axios.post(
     `${API_USER}/search-user-to-management?pageIndex=${pageIndex}&pageSize=${pageSize}`,
@@ -32,6 +38,7 @@ function addNewStudent(formAddNew) {
 export default {
   getAllUser,
   searchTeacherByName,
+  searchTeacherFreeByName,
   searchUser,
   addNewUser,
   getUserByUsername,

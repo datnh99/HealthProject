@@ -22,7 +22,7 @@ public interface IClassRepository extends JpaRepository<Class, Long>, CrudReposi
     List<ClassDto> searchClassesByName(@Param("className") String className);
 
     @Query(value = "Select cl FROM Class cl where cl.deleted = false AND cl.teacherUsername = :teacher")
-    Class getByTeacherName(@Param("teacher") String username);
+    List<Class> getByTeacherName(@Param("teacher") String username);
 
     @Query(value = "Select cl FROM Class cl where cl.id = :id")
     Class getClassById(@Param("id") Long id);

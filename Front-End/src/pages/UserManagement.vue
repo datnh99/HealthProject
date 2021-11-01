@@ -1037,6 +1037,7 @@ export default {
       };
       UserRepository.addNewStudent(formAddData)
         .then((response) => {
+          console.log('response', response);
           if (response.data.success === true) {
             this.$notification.success({
               message: "Thêm mới học sinh thành công!",

@@ -54,7 +54,11 @@ public class ClassServiceImpl extends BaseService implements IClassService {
     @Override
     public Class addClass(ClassAddForm c) {
         if(!checkClassNameNotExist(c.getClassName())) {
-            throw new IllegalArgumentException("That class name already exist!");
+            throw new IllegalArgumentException("Tên lớp học này đã tồn tại!");
+        }
+        List<Class> clazzList = classRepository.getByTeacherName(c.getTeacherUsername());
+        if(!ObjectUtils.isNullorEmpty(clazzList)) {
+            throw new IllegalArgumentException("Giáo viên này đã là chủ nhiệm của một lớp khác!");
         }
         Class clazz = new Class();
         String username = getLoggedInUsername();
@@ -70,10 +74,16 @@ public class ClassServiceImpl extends BaseService implements IClassService {
 
     @Override
     public Class updateClass(ClassUpdateForm c) {
-        if(!checkClassNameNotExist(c.getClassName())) {
-            throw new IllegalArgumentException("That class name already exist!");
-        }
         Class clazz = classRepository.getClassById(c.getId());
+        if(!clazz.getName().equalsIgnoreCase(c.getClassName())) {
+            if(!checkClassNameNotExist(c.getClassName())) {
+                throw new IllegalArgumentException("Tên lớp học này đã tồn tại!");
+            }
+        }
+        List<Class> clazzList = classRepository.getByTeacherName(c.getTeacherUsername());
+        if(!ObjectUtils.isNullorEmpty(clazzList)) {
+            throw new IllegalArgumentException("Giáo viên này đã là chủ nhiệm của một lớp khác!");
+        }
         if(!ObjectUtils.isNullorEmpty(c.getIsActive())) {
             clazz.setDeleted(c.getIsActive());
         }
@@ -101,7 +111,7 @@ public class ClassServiceImpl extends BaseService implements IClassService {
     }
 
     @Override
-    public Class getByTeacherUser(String username) {
+    public List<Class> getByTeacherUser(String username) {
         return classRepository.getByTeacherName(username);
     }
 

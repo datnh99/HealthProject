@@ -125,7 +125,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
             throw new IllegalArgumentException("You don't have permission to see that data!");
         }
         if(roleCodeOFUser.get(0).equalsIgnoreCase(RoleConstant.ROLE_GIAO_VIEN_CHU_NHIEM)) {
-            Class clazz = classService.getByTeacherUser(getLoggedInUsername());
+            List<Class> clazzList = classService.getByTeacherUser(getLoggedInUsername());
 
             if (!ObjectUtils.isNullorEmpty(formSearch.getGender())) {
                 String gender = StringUtils.removeAccent(formSearch.getGender()).toLowerCase();
@@ -137,8 +137,8 @@ public class UserServiceImpl extends BaseService implements IUserService {
                     return null;
                 }
             }
-            if (!ObjectUtils.isNullorEmpty(clazz)) {
-                formSearch.setClassID(clazz.getId());
+            if (!ObjectUtils.isNullorEmpty(clazzList)) {
+                formSearch.setClassID(clazzList.get(clazzList.size() - 1).getId());
             }
             resultList = userRepositoryCustom.searchStudentToManagement(formSearch, pageIndex, pageSize);
         } else if (roleCodeOFUser.get(0).equalsIgnoreCase(RoleConstant.ROLE_HIEU_TRUONG)) {
@@ -156,13 +156,18 @@ public class UserServiceImpl extends BaseService implements IUserService {
         } else {
             throw new IllegalArgumentException("You don't have permission to see that data!");
         }
+        if(!ObjectUtils.isNullorEmpty(resultList)) {
+            for(int i = 0 ; i < resultList.size() ; i++) {
+                resultList.get(i).setIndex(pageSize * (pageIndex - 1) + i + 1);
+            };
+        }
         return resultList;
     }
 
     @Override
     public Long countSearchUserToManagement(UserFormSearch formSearch) {
 
-        Class clazz = classService.getByTeacherUser(getLoggedInUsername());
+        List<Class> clazzList = classService.getByTeacherUser(getLoggedInUsername());
 
         if(!ObjectUtils.isNullorEmpty(formSearch.getGender())) {
             String gender = StringUtils.removeAccent(formSearch.getGender()).toLowerCase();
@@ -175,8 +180,8 @@ public class UserServiceImpl extends BaseService implements IUserService {
             }
         }
 
-        if(!ObjectUtils.isNullorEmpty(clazz)) {
-            formSearch.setClassID(clazz.getId());
+        if(!ObjectUtils.isNullorEmpty(clazzList)) {
+            formSearch.setClassID(clazzList.get(clazzList.size() - 1).getId());
         }
         return userRepositoryCustom.countSearchUserToManagement(formSearch);
     }
@@ -215,6 +220,11 @@ public class UserServiceImpl extends BaseService implements IUserService {
         user.setPassword(userAddForm.getPassword());
         user.setClassID(userAddForm.getClassID());
         return repository.save(user);
+    }
+
+    @Override
+    public List<UserDto> searchTeacherFreeByName(String teacherName) {
+        return repository.getTeacherFreeByName(RoleConstant.ROLE_GIAO_VIEN_CHU_NHIEM, "%" + teacherName + "%");
     }
 
     private String getNewAccountWithFullName(String fullName) {

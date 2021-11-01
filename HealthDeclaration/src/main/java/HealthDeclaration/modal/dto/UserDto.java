@@ -12,7 +12,7 @@ import java.util.Date;
 public class UserDto {
 
     private String thua;
-
+    private int index;
     private Long id;
     private String userName;
     private String fullName;

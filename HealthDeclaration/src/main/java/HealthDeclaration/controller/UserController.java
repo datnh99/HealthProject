@@ -80,6 +80,23 @@ public class UserController {
 		return ResponseUtils.buildResponseMessage(true, responseMessage);
 	}
 
+	@GetMapping("/search-teacher-free-by-name")
+	private ResponseEntity searchTeacherFreeByName(@Param("teacherName") String teacherName) {
+		ResponseMessage responseMessage = new ResponseMessage();
+		try {
+			responseMessage.setSuccess(true);
+			List<UserDto> result = service.searchTeacherFreeByName(teacherName);
+			Map<String, Object> results = new HashMap<>();
+			results.put("items", result);
+			responseMessage.setData(results);
+		} catch (Exception e) {
+			log.error(e);
+			responseMessage.setSuccess(false);
+			return ResponseUtils.buildResponseMessage(false, responseMessage);
+		}
+		return ResponseUtils.buildResponseMessage(true, responseMessage);
+	}
+
     @PostMapping("/search-user-to-management")
     private ResponseEntity searchUserToManagement(@RequestBody UserFormSearch formSearch,
                                                @Param("pageIndex") int pageIndex,

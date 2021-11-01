@@ -34,4 +34,6 @@ public interface IUserService {
     Long countSearchUserToManagement(UserFormSearch formSearch);
 
     User addNewStudent(UserAddForm userAddForm);
+
+    List<UserDto> searchTeacherFreeByName(String teacherName);
 }

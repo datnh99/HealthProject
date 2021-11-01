@@ -197,68 +197,79 @@
               Hủy
             </a-button>
           </template>
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8"
-              >Tên lớp
-              <span class="red">*</span>
-            </a-col>
-            <a-col :span="16">
-              <a-textarea
-                v-model="editForm.className"
-                :auto-size="{ minRows: 1, maxRows: 5 }"
-                :min="0"
-                class="full-width--i"
-              />
-              <span v-if="errors.className" class="red">
-                {{ errors.className }}
-              </span>
-            </a-col>
-          </a-row>
 
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8">
-              Giáo viên chủ nhiệm
-            </a-col>
-            <a-col :span="16">
-              <a-select
-                v-model="editForm.teacherUsername"
-                class="filter-select"
-                allow-clear
-                style="width: 100%"
-                @search="fetchTeacher"
-              >
-                <a-select-option
-                  v-for="item in teacherList"
-                  :key="item.userName"
-                  :value="item.userName"
-                >
-                  {{ item.fullName }}
-                </a-select-option>
-              </a-select>
-            </a-col>
-          </a-row>
+          <a-spin :spinning="loadingModal">
+            <a-icon
+              type="loading"
+              slot="indicator"
+              style="font-size: 24px"
+              spin
+            />
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8"
+                >Tên lớp
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-textarea
+                  v-model="editForm.className"
+                  :auto-size="{ minRows: 1, maxRows: 5 }"
+                  :min="0"
+                  class="full-width--i"
+                />
+                <span v-if="errors.className" class="red">
+                  {{ errors.className }}
+                </span>
+              </a-col>
+            </a-row>
 
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8"
-              >Trạng thái
-              <span class="red">*</span>
-            </a-col>
-            <a-col :span="16">
-              <a-select
-                v-model="editForm.isActive"
-                class="filter-select"
-                style="width: 100%"
-              >
-                <a-select-option
-                  v-for="item in statusList"
-                  :key="item.key"
-                  :value="item.value"
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8">
+                Giáo viên chủ nhiệm
+              </a-col>
+              <a-col :span="16">
+                <a-select
+                  v-model="editForm.teacherUsername"
+                  class="filter-select"
+                  show-search
+                  placeholder="~Chọn~"
+                  allow-clear
+                  style="width: 100%"
+                  @search="fetchTeacherFree"
                 >
-                  {{ item.key }}
-                </a-select-option>
-              </a-select>
-            </a-col>
-          </a-row>
+                  <a-select-option
+                    v-for="item in teacherList"
+                    :key="item.userName"
+                    :value="item.userName"
+                  >
+                    {{ item.fullName }}
+                  </a-select-option>
+                </a-select>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8"
+                >Trạng thái
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-select
+                  v-model="editForm.isActive"
+                  class="filter-select"
+                  style="width: 100%"
+                >
+                  <a-select-option
+                    v-for="item in statusList"
+                    :key="item.key"
+                    :value="item.value"
+                  >
+                    {{ item.key }}
+                  </a-select-option>
+                </a-select>
+              </a-col>
+            </a-row>
+          </a-spin>
         </a-modal>
 
         <!-- Add modal -->
@@ -287,45 +298,57 @@
               Hủy
             </a-button>
           </template>
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8"
-              >Tên lớp
-              <span class="red">*</span>
-            </a-col>
-            <a-col :span="16">
-              <a-textarea
-                v-model="addForm.className"
-                :auto-size="{ minRows: 1, maxRows: 5 }"
-                :min="0"
-                class="full-width--i"
-              />
-              <span v-if="errors.className" class="red">
-                {{ errors.className }}
-              </span>
-            </a-col>
-          </a-row>
 
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8">
-              Giáo viên chủ nhiệm
-            </a-col>
-            <a-col :span="16">
-              <a-select
-                v-model="addForm.teacherUsername"
-                class="filter-select"
-                style="width: 100%"
-                @search="fetchTeacher"
-              >
-                <a-select-option
-                  v-for="item in teacherList"
-                  :key="item.userName"
-                  :value="item.userName"
+          <a-spin :spinning="loadingModal">
+            <a-icon
+              type="loading"
+              slot="indicator"
+              style="font-size: 24px"
+              spin
+            />
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8"
+                >Tên lớp
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-textarea
+                  v-model="addForm.className"
+                  :auto-size="{ minRows: 1, maxRows: 5 }"
+                  :min="0"
+                  class="full-width--i"
+                />
+                <span v-if="errors.className" class="red">
+                  {{ errors.className }}
+                </span>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8">
+                Giáo viên chủ nhiệm
+              </a-col>
+              <a-col :span="16">
+                <a-select
+                  v-model="addForm.teacherUsername"
+                  class="filter-select"
+                  style="width: 100%"
+                  show-search
+                  allow-clear
+                  placeholder="~Chọn~"
+                  @search="fetchTeacherFree"
                 >
-                  {{ item.fullName }}
-                </a-select-option>
-              </a-select>
-            </a-col>
-          </a-row>
+                  <a-select-option
+                    v-for="item in teacherList"
+                    :key="item.userName"
+                    :value="item.userName"
+                  >
+                    {{ item.fullName }}
+                  </a-select-option>
+                </a-select>
+              </a-col>
+            </a-row>
+          </a-spin>
         </a-modal>
       </div>
     </div>
@@ -373,6 +396,7 @@ export default {
       selectedItem: null,
       searchText: "",
       searchInput: null,
+      teacherOfClassSelected: null,
       searchedColumn: "",
       statusList: [
         {
@@ -480,7 +504,7 @@ export default {
   },
   created() {
     this.searchClass();
-    this.fetchTeacher("");
+    this.fetchTeacherFree("");
   },
   methods: {
     paginate(current = 1) {
@@ -525,11 +549,18 @@ export default {
       this.searchText = "";
     },
     async handleEditItemBtnClick(item) {
-      this.fetchTeacher("");
       this.selectedItem = item;
       this.editForm.id = item.id;
       this.editForm.className = item.className;
-      this.editForm.teacherUsername = item.teacherAccount;
+      // this.editForm.teacherUsername = item.teacherAccount;
+      if (item.teacherAccount) {
+        this.teacherOfClassSelected = {
+          userName: item.teacherAccount,
+          fullName: item.teacherName
+        };
+        this.editForm.teacherUsername = item.teacherAccount;
+      }
+      this.fetchTeacherFree("");
       this.editForm.isActive = item.isActive;
       this.showModal = {
         edit: true,
@@ -538,12 +569,14 @@ export default {
     closeEditForm() {
       this.selectedItem = null;
       this.closeModal();
+      this.teacherOfClassSelected = null;
     },
     closeModal() {
       this.showModal = { ...defaultModalState };
       this.errors = { ...defaultInputErrors };
       this.editForm = { ...defaultForm };
       this.addForm = { ...defaultForm };
+      this.teacherOfClassSelected = null;
     },
     saveEditClass() {
       this.loadingModal = true;
@@ -582,6 +615,7 @@ export default {
         });
     },
     openAddForm() {
+      this.fetchTeacherFree("");
       this.showModal = {
         add: true,
       };
@@ -599,6 +633,7 @@ export default {
       };
       ClassRepository.addNewClass(formEditData)
         .then((response) => {
+          console.log('response', response);
           if (response.data.success === true) {
             this.$notification.success({
               message: "Thêm mới thành công!",
@@ -613,7 +648,8 @@ export default {
             this.loadingModal = false;
           }
         })
-        .catch(() => {
+        .catch((e) => {
+          console.log('e ===>', e);
           this.$notification.error({
             message: "Tên lớp học đã tồn tại!",
           });
@@ -636,9 +672,14 @@ export default {
       }
       return isValid;
     },
-    fetchTeacher(teacherName) {
-      UserRepository.searchTeacherByName(teacherName, 1).then((res) => {
+    async fetchTeacherFree(teacherName) {
+      this.loadingModal = true;
+      await UserRepository.searchTeacherFreeByName(teacherName, 1).then((res) => {
         this.teacherList = res.data.data.items;
+        if (this.teacherOfClassSelected) {
+          this.teacherList.push(this.teacherOfClassSelected);
+        }
+        this.loadingModal = false;
       });
     },
     deleteSubItemBtnClick(item) {

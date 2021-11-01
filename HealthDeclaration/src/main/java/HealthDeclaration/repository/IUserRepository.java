@@ -1,5 +1,6 @@
 package HealthDeclaration.repository;
 
+import HealthDeclaration.modal.dto.UserDto;
 import HealthDeclaration.modal.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,6 +22,17 @@ public interface IUserRepository extends JpaRepository<User, Long>, CrudReposito
     @Query("update User acc set acc.deleted = true where acc.username = :username")
     List<String> deleteByUsername(@Param("username") String username);
 
-    @Query(value = "SELECT u.username FROM User u WHERE u.username LIKE :account ORDER BY u.username ASC")
+    @Query(value = "SELECT u.username FROM User u WHERE u.username LIKE :account AND u.deleted = false ORDER BY u.username ASC")
     List<String> getLastAccountByAccount(@Param("account") String account);
+
+    @Query(value = "SELECT new HealthDeclaration.modal.dto.UserDto(u.id, u.username, u.fullName) FROM User u " +
+            " WHERE u.roleCode = :roleGVCN AND u.fullName like :teacherName AND u.deleted = false " +
+            " AND u.username NOT IN ( " +
+            " SELECT cl.teacherUsername " +
+            " FROM Class cl " +
+            " WHERE cl.deleted = FALSE " +
+            " AND cl.teacherUsername IS NOT NULL " +
+            " AND cl.teacherUsername != '' " +
+            ") ")
+    List<UserDto> getTeacherFreeByName(@Param("roleGVCN") String roleGVCN, @Param("teacherName") String teacherName);
 }

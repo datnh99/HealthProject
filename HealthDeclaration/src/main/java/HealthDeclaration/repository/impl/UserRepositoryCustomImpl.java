@@ -44,6 +44,10 @@ public class UserRepositoryCustomImpl extends BaseRepository implements IUserRep
         if(count) {
             sql.append("select count(u.id) "
                     + "from User u "
+                    + " LEFT JOIN Province prv ON prv.code = u.provinceCode "
+                    + " LEFT JOIN District dis ON dis.code = u.districtCode "
+                    + " LEFT JOIN Ward wa ON wa.code = u.wardCode "
+                    + " LEFT JOIN Class cl ON cl.id = u.classID "
                     + " where 1=1 ");
         } else {
             sql.append("select new HealthDeclaration.modal.dto.UserDto(u.id, u.username, u.fullName, u.dob, u.gender," +
