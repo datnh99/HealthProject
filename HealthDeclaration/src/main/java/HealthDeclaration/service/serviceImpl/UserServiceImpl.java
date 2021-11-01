@@ -139,6 +139,8 @@ public class UserServiceImpl extends BaseService implements IUserService {
             }
             if (!ObjectUtils.isNullorEmpty(clazzList)) {
                 formSearch.setClassID(clazzList.get(clazzList.size() - 1).getId());
+            } else {
+                return null;
             }
             resultList = userRepositoryCustom.searchStudentToManagement(formSearch, pageIndex, pageSize);
         } else if (roleCodeOFUser.get(0).equalsIgnoreCase(RoleConstant.ROLE_HIEU_TRUONG)) {

@@ -3,10 +3,10 @@ import CONFIG from "../config/index";
 import Vue from "vue";
 const API_LOGIN = `${CONFIG.apiUrl}`;
 
-export  function checkPermission(objectTypeCode, view) {
+export function checkPermission(objectTypeCode, view) {
   if (objectTypeCode) {
     const accessRole = CONFIG.DISPLAY_SCREEN_MAP[objectTypeCode];
-    const userRole = Vue.$cookies.get("roleCode");
+    const userRole = Vue.$cookies.get("role");
     if (userRole && accessRole.includes(userRole)) {
       return true;
     }

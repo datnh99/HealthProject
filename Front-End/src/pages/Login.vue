@@ -10,31 +10,44 @@
             body-classes="px-lg-5 py-lg-5"
             class="border-0"
           >
-            <template>
-              <form role="form" class="form-login">
-                <base-input
-                  v-model="username"
-                  class="mb-3"
-                  placeholder="Email"
-                  addon-left-icon="ni ni-email-83"
-                >
-                </base-input>
-                <base-input
-                  v-model="password"
-                  type="password"
-                  placeholder="Password"
-                  addon-left-icon="ni ni-lock-circle-open"
-                >
-                </base-input>
-                <base-checkbox> Remember me </base-checkbox>
-                <span v-if="errorLogin" class="red"> {{ errorLogin }} </span>
-                <div class="text-center">
-                  <base-button type="primary" class="my-4" @click="basicLogin">
-                    Sign In
-                  </base-button>
-                </div>
-              </form>
-            </template>
+            <a-spin :spinning="loading" tip="Đang đăng nhập...">
+              <a-icon
+                type="loading"
+                slot="indicator"
+                style="font-size: 24px"
+                spin
+              />
+              <template class="spin-content">
+                <form role="form" class="form-login">
+                  <base-input
+                    v-model="username"
+                    class="mb-3"
+                    placeholder="Email"
+                    addon-left-icon="ni ni-email-83"
+                  >
+                  </base-input>
+                  <base-input
+                    v-model="password"
+                    type="password"
+                    placeholder="Password"
+                    addon-left-icon="ni ni-lock-circle-open"
+                  >
+                  </base-input>
+                  <base-checkbox> Remember me </base-checkbox>
+                  <span v-if="errorLogin" class="red"> {{ errorLogin }} </span>
+                  <div class="text-center">
+                    <base-button
+                      @loading="loading"
+                      type="primary"
+                      class="my-4"
+                      @click="basicLogin"
+                    >
+                      Sign In
+                    </base-button>
+                  </div>
+                </form>
+              </template>
+            </a-spin>
           </card>
         </div>
       </div>
@@ -96,6 +109,7 @@ export default {
   },
   methods: {
     async basicLogin() {
+      this.loading = true;
       await basicProcessLogins(this.username, this.password)
         .then((res) => {
           if (res) {
@@ -109,16 +123,16 @@ export default {
             Vue.$cookies.set("accessToken", this.userData.token, expiredTime);
             Vue.$cookies.set("username", this.userData.username, expiredTime);
             Vue.$cookies.set("role", userInfo.roleCode, expiredTime);
-
-            // this.$cookies.set("account", this.userData.account);
-            // this.$cookies.set("role", this.userData.role);
             this.$router.push("user");
+            this.loading = false;
           } else {
             this.errorLogin = "Username or password is incorrect!";
+            this.loading = false;
           }
         })
         .catch(() => {
           this.errorLogin = "Username or password is incorrect!";
+          this.loading = false;
         });
     },
   },
@@ -130,5 +144,10 @@ export default {
 }
 .red {
   color: red;
+}
+.spin-content {
+  border: 1px solid #91d5ff;
+  background-color: #e6f7ff;
+  padding: 30px;
 }
 </style>

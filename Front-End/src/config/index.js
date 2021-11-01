@@ -1,19 +1,23 @@
 const config = {
-  apiUrl: 'http://localhost:8181',
-  CLIENT_URL :'http://localhost:8080',
-  SCREEN_CODE : {
-    ROLE_MANAGEMENT : 'ROLE_MANAGEMENT',
-    ADMIN_ACTION : 'ADMIN_ACTION',
-    SYSTEM_CONFIG: 'SYSTEM_CONFIG'
+  apiUrl: "http://localhost:8181",
+  CLIENT_URL: "http://localhost:8080",
+  SCREEN_CODE: {
+    ROLE_MANAGEMENT: "ROLE_MANAGEMENT",
+    ADMIN_ACTION: "ADMIN_ACTION",
+    USER_MANAGEMENT: "USER_MANAGEMENT",
+    CLASS_MANAGEMENT: "CLASS_MANAGEMENT",
+    SYSTEM_CONFIG: "SYSTEM_CONFIG",
   },
-  PERMISSION_SCREEN_MAP : {
-    'UserRoleManagerment' : 'ROLE_MANAGEMENT',
+  PERMISSION_SCREEN_MAP: {
+    UserRoleManagement: "ROLE_MANAGEMENT",
   },
-  LOGIN_URL : 'http://localhost:8080/authenticate',
-  DISPLAY_SCREEN_MAP:{
-    ADMIN_ACTION: "super_admin,teacher",
-    ROLE_MANAGEMENT: "super_admin,teacher",
-    SYSTEM_CONFIG: "super_admin"
-  }
+  LOGIN_URL: "http://localhost:8080/authenticate",
+  DISPLAY_SCREEN_MAP: {
+    ADMIN_ACTION: "HIEU_TRUONG,GIAO_VIEN_CHU_NHIEM",
+    ROLE_MANAGEMENT: "HIEU_TRUONG,GIAO_VIEN_CHU_NHIEM",
+    USER_MANAGEMENT: "HIEU_TRUONG,GIAO_VIEN_CHU_NHIEM",
+    CLASS_MANAGEMENT: "HIEU_TRUONG,GIAO_VIEN_CHU_NHIEM",
+    SYSTEM_CONFIG: "HIEU_TRUONG",
+  },
 };
-export default config
+export default config;
