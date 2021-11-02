@@ -14,7 +14,6 @@
           </div>
         </card>
       </div>
-
       <div class="col-12">
         <card class="card-plain">
           <template slot="header">
@@ -28,7 +27,6 @@
           </div>
         </card>
       </div>
-
     </div>
   </div>
 </template>

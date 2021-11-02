@@ -13,6 +13,7 @@ import NotFound from "@/pages/404.vue";
 import Forbidden from "@/pages/403.vue";
 import CONFIG from "./config/index";
 import { checkLogin } from "./api/processLogin";
+import Declaration from "@/pages/Declaration.vue";
 // import { preloaderFinished } from "./config/preloader";
 
 // import { includes } from "lodash";
@@ -26,6 +27,11 @@ const router = [
     redirect: "dashboard",
     children: [
       {
+        path: "declare",
+        name: "Declaration",
+        component: Declaration
+      },
+      {
         path: "login",
         name: "Login",
         component: Login
@@ -36,25 +42,14 @@ const router = [
         component: Dashboard
       },
       {
-        path: "forbidden",
-        name: "Forbidden",
-        component: Forbidden
-      },
-      {
         path: "class-management",
         name: "ClassManagement",
-        component: ClassManagement,
-        beforeEnter: async (to, from, next) => {
-          await checkLogin(next, CONFIG.SCREEN_CODE.CLASS_MANAGEMENT);
-        },
+        component: ClassManagement
       },
       {
         path: "user-management",
         name: "UserManagement",
-        component: UserManagement,
-        beforeEnter: async (to, from, next) => {
-          await checkLogin(next, CONFIG.SCREEN_CODE.USER_MANAGEMENT);
-        },
+        component: UserManagement
       },
       {
         path: "icons",
@@ -96,5 +91,35 @@ const router = [
     // },
   }
 ];
+
+// const notAuthRoutes = ["login", "Forbidden", "NotFound"];
+// router.afterEach(to => {
+//   preloaderFinished();
+
+//   // return
+//   if (to) {
+//     const token = Vue.$cookies.isKey("accessToken");
+//     if (!includes(notAuthRoutes, to.name) && !token) {
+//       // return window.location.href = `${CONFIG.LOGIN_URL}${encodeURIComponent(window.location.href)}`;
+//       return (window.location.href = `${CONFIG.LOGIN_URL}/#/login`);
+//     } else if (to.name === "login" && token && to.params.shareId) {
+//       return (window.location.href = `${
+//         CONFIG.CLIENT_URL
+//       }/#/article-detail/${window.atob(to.params.shareId)}`);
+
+//       // return router.push('/article-detail'+to.params.shareId);
+//     } else if (to.name === "login" && token) {
+//       return router.push({ name: "landing" });
+//     }
+
+//     if (CONFIG["PERMISSION_SCREEN_MAP"][to.name]) {
+//       const objectTypeCode = CONFIG["PERMISSION_SCREEN_MAP"][to.name];
+//       if (!checkPermission(objectTypeCode, "VIEW")) {
+//         return router.push({ name: "Forbidden" });
+//       }
+//     }
+//   }
+//   VueScrollTo.scrollTo("body");
+// });
 
 export default router;

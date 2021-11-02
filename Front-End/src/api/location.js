@@ -3,10 +3,9 @@ import config from "../config/index";
 const API_PROVINCE = `${config.apiUrl}/api/province`;
 const API_DISTRICT = `${config.apiUrl}/api/district`;
 const API_WARD = `${config.apiUrl}/api/ward`;
-const pageSize = 10;
 
 function getAllProvince() {
-  return axios.get(`${API_PROVINCE}/`);
+  return axios.get(`${API_PROVINCE}/getAll`);
 }
 
 function getProvinceByName(provinceName) {

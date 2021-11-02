@@ -1,10 +1,11 @@
 package HealthDeclaration.modal.entity;
 
-import HealthDeclaration.common.base.entity.BaseEntity;
-import lombok.Data;
+import java.util.Date;
 
 import javax.persistence.Entity;
-import java.util.Date;
+
+import HealthDeclaration.common.base.entity.BaseEntity;
+import lombok.Data;
 
 @Data
 @Entity

@@ -42,7 +42,6 @@
 </template>
 <script>
 import { Card } from "@/components/index";
-
 import BaseButton from "@/components/BaseButton";
 
 export default {
@@ -60,7 +59,7 @@ export default {
   },
 };
 </script>
-<style lang="scss" >
+<style scoped lang="scss" >
 .anticon {
   // margin-right: 6px;
   font-size: 22px;
