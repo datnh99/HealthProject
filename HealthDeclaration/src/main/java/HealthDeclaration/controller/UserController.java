@@ -122,22 +122,24 @@ public class UserController {
 	public ResponseEntity updateClass(@RequestBody UserUpdateForm updateForm) {
 		ResponseMessage responseMessage = new ResponseMessage();
 		try {
-			responseMessage.setSuccess(true);
 			responseMessage.setData(service.update(updateForm));
+			responseMessage.setSuccess(true);
+			responseMessage.setData(true);
 		} catch (Exception e) {
 			responseMessage.setSuccess(false);
+			responseMessage.setData(false);
 			return ResponseUtils.buildResponseMessage(false, responseMessage);
 		}
 		return ResponseUtils.buildResponseMessage(true, responseMessage);
 	}
 
 	@DeleteMapping("/delete")
-	public ResponseEntity delete(@RequestParam Long id) {
+	public ResponseEntity delete(@RequestParam("username") String username) {
 		ResponseMessage responseMessage = new ResponseMessage();
 		try {
+			service.deleteByUsername(username);
 			responseMessage.setSuccess(true);
-			service.delete(id);
-			responseMessage.setData(id);
+			responseMessage.setData(true);
 		} catch (Exception e) {
 			responseMessage.setSuccess(false);
 			responseMessage.setData(false);

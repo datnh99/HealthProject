@@ -10,5 +10,7 @@ public class RoleConstant {
 
     public static final String ROLE_GIAO_VIEN_CHU_NHIEM = "GIAO_VIEN_CHU_NHIEM";
 
+    public static final String ROLE_GIAO_VIEN_BO_MON = "GIAO_VIEN_BO_MON";
+
     public static final String ROLE_HOC_SINH = "HOC_SINH";
 }

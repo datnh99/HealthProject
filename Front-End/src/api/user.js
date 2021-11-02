@@ -25,6 +25,14 @@ function searchUser(formSearch, pageIndex) {
     formSearch
   );
 }
+
+function updateUser(updateForm) {
+  return axios.put(`${API_USER}/update`, updateForm);
+}
+function deleteUser(username) {
+  return axios.delete(`${API_USER}/delete?username=${username}`);
+}
+
 function getUserByUsername(username) {
   return axios.get(`${API_USER}/get-user-by-username?username=${username}`);
 }
@@ -41,6 +49,8 @@ export default {
   searchTeacherFreeByName,
   searchUser,
   addNewUser,
+  updateUser,
+  deleteUser,
   getUserByUsername,
-  addNewStudent
+  addNewStudent,
 };

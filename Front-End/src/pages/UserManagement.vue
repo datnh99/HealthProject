@@ -6,23 +6,14 @@
           <h4 class="card-title">Student Management</h4>
         </template>
 
-        <div class="container cus-header-class">
-          <div class="row justify-content-between">
-            <div class="col-2 button-add-custom">
+        <div class="container">
+          <div class="row">
+            <div class="col-2">
               <base-button type="primary" @click="openAddForm()"
                 >Thêm học sinh</base-button
               >
             </div>
             <div class="col-6"></div>
-            <div class="col-4">
-              <a-pagination
-                v-model="current"
-                show-quick-jumper
-                :default-current="1"
-                :total="totals"
-                @change="paginate"
-              />
-            </div>
           </div>
         </div>
         <div class="table-responsive-class text-left">
@@ -36,7 +27,7 @@
             <a-table
               :data-source="data"
               :columns="columns"
-              :scroll="{ x: 500 }"
+              :scroll="{ x: 1500 }"
               :pagination="false"
             >
               <div
@@ -186,6 +177,15 @@
             </a-table>
           </a-spin>
         </div>
+        <div class="gutter-example pt-md pagnigation-custom">
+          <a-pagination
+            v-model="current"
+            show-quick-jumper
+            :default-current="1"
+            :total="totals"
+            @change="paginate"
+          />
+        </div>
 
         <!-- edit modal -->
         <a-modal
@@ -213,195 +213,211 @@
               Hủy
             </a-button>
           </template>
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8"
-              >Họ và Tên
-              <span class="red">*</span>
-            </a-col>
-            <a-col :span="16">
-              <a-input v-model="editForm.fullName" />
-              <span v-if="errors.fullName" class="red">
-                {{ errors.fullName }}
-              </span>
-            </a-col>
-          </a-row>
 
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8"
-              >Giới tính
-              <span class="red">*</span>
-            </a-col>
-            <a-col :span="16">
-              <a-radio-group
-                v-model="editForm.gender"
-                name="radioGroup"
-                :default-value="1"
-              >
-                <a-radio :value="1">
-                  Male
-                </a-radio>
-                <a-radio :value="0">
-                  Female
-                </a-radio>
-              </a-radio-group>
-            </a-col>
-          </a-row>
+          <a-spin :spinning="loadingModal">
+            <a-icon
+              type="loading"
+              slot="indicator"
+              style="font-size: 24px"
+              spin
+            />
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8"
+                >Họ và Tên
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-input v-model="editForm.fullName" />
+                <span v-if="errors.fullName" class="red">
+                  {{ errors.fullName }}
+                </span>
+              </a-col>
+            </a-row>
 
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8"
-              >Ngày sinh
-              <span class="red">*</span>
-            </a-col>
-            <a-col :span="16">
-              <a-date-picker v-model="editForm.dob">
-                <template slot="renderExtraFooter"> </template>
-              </a-date-picker>
-              <span v-if="errors.dob" class="red">
-                {{ errors.dob }}
-              </span>
-            </a-col>
-          </a-row>
-
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8"
-              >Số điện thoại
-              <span class="red">*</span>
-            </a-col>
-            <a-col :span="16">
-              <a-input v-model="editForm.phoneNumber" />
-              <span v-if="errors.phoneNumber" class="red">
-                {{ errors.phoneNumber }}
-              </span>
-            </a-col>
-          </a-row>
-
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8"
-              >Sđt người thân
-              <span class="red">*</span>
-            </a-col>
-            <a-col :span="16">
-              <a-input v-model="editForm.parentPhoneNumber" />
-              <span v-if="errors.parentPhoneNumber" class="red">
-                {{ errors.parentPhoneNumber }}
-              </span>
-            </a-col>
-          </a-row>
-
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8">
-              Tỉnh
-            </a-col>
-            <a-col :span="16">
-              <a-select
-                v-model="editForm.provinceCode"
-                class="filter-select"
-                style="width: 100%"
-                @search="fetchProvince"
-                @change="fetchDistrict(item.code)"
-              >
-                <a-select-option
-                  v-for="item in provinceList"
-                  :key="item.code"
-                  :value="item.code"
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8"
+                >Giới tính
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-radio-group
+                  v-model="editForm.gender"
+                  name="radioGroup"
+                  :default-value="1"
                 >
-                  {{ item.name }}
-                </a-select-option>
-              </a-select>
-            </a-col>
-          </a-row>
+                  <a-radio :value="1">
+                    Male
+                  </a-radio>
+                  <a-radio :value="0">
+                    Female
+                  </a-radio>
+                </a-radio-group>
+              </a-col>
+            </a-row>
 
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8">
-              Huyện
-            </a-col>
-            <a-col :span="16">
-              <a-select
-                v-model="editForm.districtCode"
-                class="filter-select"
-                :disabled="districtList.length < 1"
-                style="width: 100%"
-                @search="fetchDistrictAfter"
-                @change="fetchWard"
-              >
-                <a-select-option
-                  v-for="item in districtList"
-                  :key="item.districtCode"
-                  :value="item.districtCode"
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8"
+                >Ngày sinh
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-date-picker v-model="editForm.dob">
+                  <template slot="renderExtraFooter"> </template>
+                </a-date-picker>
+                <span v-if="errors.dob" class="red">
+                  {{ errors.dob }}
+                </span>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8"
+                >Số điện thoại
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-input v-model="editForm.phoneNumber" />
+                <span v-if="errors.phoneNumber" class="red">
+                  {{ errors.phoneNumber }}
+                </span>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8"
+                >Sđt người thân
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-input v-model="editForm.parentPhoneNumber" />
+                <span v-if="errors.parentPhoneNumber" class="red">
+                  {{ errors.parentPhoneNumber }}
+                </span>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8">
+                Tỉnh
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-select
+                  v-model="editForm.provinceCode"
+                  class="filter-select"
+                  style="width: 100%"
+                  allow-clear
+                  @search="fetchProvince"
+                  @change="fetchDistrictForModal"
                 >
-                  {{ item.districtName }}
-                </a-select-option>
-              </a-select>
-            </a-col>
-          </a-row>
+                  <a-select-option
+                    v-for="item in provinceList"
+                    :key="item.code"
+                    :value="item.code"
+                  >
+                    {{ item.name }}
+                  </a-select-option>
+                </a-select>
+              </a-col>
+            </a-row>
 
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8">
-              Xã
-            </a-col>
-            <a-col :span="16">
-              <a-select
-                v-model="editForm.wardCode"
-                :disabled="wardList.length < 1"
-                class="filter-select"
-                style="width: 100%"
-                @search="fetchWardAfter"
-              >
-                <a-select-option
-                  v-for="item in wardList"
-                  :key="item.wardCode"
-                  :value="item.wardCode"
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8">
+                Huyện
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-select
+                  v-model="editForm.districtCode"
+                  class="filter-select"
+                  :disabled="districtList.length < 1"
+                  style="width: 100%"
+                  allow-clear
+                  @search="fetchDistrictAfter"
+                  @change="fetchWardForModal"
                 >
-                  {{ item.wardName }}
-                </a-select-option>
-              </a-select>
-            </a-col>
-          </a-row>
+                  <a-select-option
+                    v-for="item in districtList"
+                    :key="item.districtCode"
+                    :value="item.districtCode"
+                  >
+                    {{ item.districtName }}
+                  </a-select-option>
+                </a-select>
+              </a-col>
+            </a-row>
 
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8"
-              >Địa chỉ cụ thể
-              <span class="red">*</span>
-            </a-col>
-            <a-col :span="16">
-              <a-textarea
-                v-model="editForm.addressDetail"
-                :auto-size="{ minRows: 1, maxRows: 5 }"
-                :min="0"
-                class="full-width--i"
-              />
-              <span v-if="errors.addressDetail" class="red">
-                {{ errors.addressDetail }}
-              </span>
-            </a-col>
-          </a-row>
-
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8">
-              Lớp
-            </a-col>
-            <a-col :span="16">
-              <a-select
-                v-model="editForm.classID"
-                class="filter-select"
-                style="width: 100%"
-                @search="fetchClass"
-              >
-                <a-select-option
-                  v-for="item in classList"
-                  :key="item.id"
-                  :value="item.id"
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8">
+                Xã
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-select
+                  v-model="editForm.wardCode"
+                  :disabled="wardList.length < 1"
+                  allow-clear
+                  class="filter-select"
+                  style="width: 100%"
+                  @search="fetchWardAfter"
                 >
-                  {{ item.className }}
-                </a-select-option>
-              </a-select>
-            </a-col>
-          </a-row>
+                  <a-select-option
+                    v-for="item in wardList"
+                    :key="item.wardCode"
+                    :value="item.wardCode"
+                  >
+                    {{ item.wardName }}
+                  </a-select-option>
+                </a-select>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8"
+                >Địa chỉ cụ thể
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-textarea
+                  v-model="editForm.addressDetail"
+                  :auto-size="{ minRows: 1, maxRows: 5 }"
+                  :min="0"
+                  class="full-width--i"
+                />
+                <span v-if="errors.addressDetail" class="red">
+                  {{ errors.addressDetail }}
+                </span>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8">
+                Lớp
+              </a-col>
+              <a-col :span="16">
+                <a-select
+                  v-model="editForm.classID"
+                  class="filter-select"
+                  :disabled="checkShowClass"
+                  style="width: 100%"
+                  @search="fetchClass"
+                >
+                  <a-select-option
+                    v-for="item in classList"
+                    :key="item.id"
+                    :value="item.id"
+                  >
+                    {{ item.className }}
+                  </a-select-option>
+                </a-select>
+              </a-col>
+            </a-row>
+          </a-spin>
         </a-modal>
 
         <!-- Add modal -->
         <a-modal
-          title="Thêm mới người dùng"
+          title="Thêm mới học sinh"
           v-model="showModal.add"
           :maskClosable="false"
           :destroyOnClose="true"
@@ -426,190 +442,399 @@
             </a-button>
           </template>
 
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8"
-              >Họ và Tên
-              <span class="red">*</span>
-            </a-col>
-            <a-col :span="16">
-              <a-input v-model="addForm.fullName" />
-              <span v-if="errors.fullName" class="red">
-                {{ errors.fullName }}
-              </span>
-            </a-col>
-          </a-row>
+          <a-spin :spinning="loadingModal">
+            <a-icon
+              type="loading"
+              slot="indicator"
+              style="font-size: 24px"
+              spin
+            />
 
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8"
-              >Giới tính
-              <span class="red">*</span>
-            </a-col>
-            <a-col :span="16">
-              <a-radio-group
-                v-model="addForm.gender"
-                name="radioGroup"
-                :default-value="1"
-              >
-                <a-radio :value="1">
-                  Male
-                </a-radio>
-                <a-radio :value="0">
-                  Female
-                </a-radio>
-              </a-radio-group>
-            </a-col>
-          </a-row>
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8"
+                >Họ và Tên
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-input v-model="addForm.fullName" />
+                <span v-if="errors.fullName" class="red">
+                  {{ errors.fullName }}
+                </span>
+              </a-col>
+            </a-row>
 
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8"
-              >Ngày sinh
-              <span class="red">*</span>
-            </a-col>
-            <a-col :span="16">
-              <a-date-picker v-model="addForm.dob">
-                <template slot="renderExtraFooter"> </template>
-              </a-date-picker>
-              <span v-if="errors.dob" class="red">
-                {{ errors.dob }}
-              </span>
-            </a-col>
-          </a-row>
-
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8"
-              >Số điện thoại
-              <span class="red">*</span>
-            </a-col>
-            <a-col :span="16">
-              <a-input v-model="addForm.phoneNumber" />
-              <span v-if="errors.phoneNumber" class="red">
-                {{ errors.phoneNumber }}
-              </span>
-            </a-col>
-          </a-row>
-
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8"
-              >Sđt người thân
-              <span class="red">*</span>
-            </a-col>
-            <a-col :span="16">
-              <a-input v-model="addForm.parentPhoneNumber" />
-              <span v-if="errors.parentPhoneNumber" class="red">
-                {{ errors.parentPhoneNumber }}
-              </span>
-            </a-col>
-          </a-row>
-
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8">
-              Tỉnh
-            </a-col>
-            <a-col :span="16">
-              <a-select
-                v-model="addForm.provinceCode"
-                class="filter-select"
-                style="width: 100%"
-                @search="fetchProvince"
-                @change="fetchDistrict"
-              >
-                <a-select-option
-                  v-for="item in provinceList"
-                  :key="item.code"
-                  :value="item.code"
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8"
+                >Giới tính
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-radio-group
+                  v-model="addForm.gender"
+                  name="radioGroup"
+                  :default-value="1"
                 >
-                  {{ item.name }}
-                </a-select-option>
-              </a-select>
-            </a-col>
-          </a-row>
+                  <a-radio :value="1">
+                    Male
+                  </a-radio>
+                  <a-radio :value="0">
+                    Female
+                  </a-radio>
+                </a-radio-group>
+              </a-col>
+            </a-row>
 
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8">
-              Huyện
-            </a-col>
-            <a-col :span="16">
-              <a-select
-                v-model="addForm.districtCode"
-                :disabled="districtList.length < 1"
-                class="filter-select"
-                style="width: 100%"
-                @search="fetchDistrictAfter"
-                @change="fetchWard"
-              >
-                <a-select-option
-                  v-for="item in districtList"
-                  :key="item.districtCode"
-                  :value="item.districtCode"
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8"
+                >Ngày sinh
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-date-picker v-model="addForm.dob">
+                  <template slot="renderExtraFooter"> </template>
+                </a-date-picker>
+                <span v-if="errors.dob" class="red">
+                  {{ errors.dob }}
+                </span>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8"
+                >Số điện thoại
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-input v-model="addForm.phoneNumber" />
+                <span v-if="errors.phoneNumber" class="red">
+                  {{ errors.phoneNumber }}
+                </span>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8"
+                >Sđt người thân
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-input v-model="addForm.parentPhoneNumber" />
+                <span v-if="errors.parentPhoneNumber" class="red">
+                  {{ errors.parentPhoneNumber }}
+                </span>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8">
+                Tỉnh
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-select
+                  v-model="addForm.provinceCode"
+                  class="filter-select"
+                  style="width: 100%"
+                  @search="fetchProvince"
+                  @change="fetchDistrict"
                 >
-                  {{ item.districtName }}
-                </a-select-option>
-              </a-select>
-            </a-col>
-          </a-row>
+                  <a-select-option
+                    v-for="item in provinceList"
+                    :key="item.code"
+                    :value="item.code"
+                  >
+                    {{ item.name }}
+                  </a-select-option>
+                </a-select>
+              </a-col>
+            </a-row>
 
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8">
-              Xã
-            </a-col>
-            <a-col :span="16">
-              <a-select
-                v-model="addForm.wardCode"
-                :disabled="wardList.length < 1"
-                class="filter-select"
-                style="width: 100%"
-                @search="fetchWardAfter"
-              >
-                <a-select-option
-                  v-for="item in wardList"
-                  :key="item.wardCode"
-                  :value="item.wardCode"
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8">
+                Huyện
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-select
+                  v-model="addForm.districtCode"
+                  :disabled="districtList.length < 1"
+                  class="filter-select"
+                  style="width: 100%"
+                  @search="fetchDistrictAfter"
+                  @change="fetchWard"
                 >
-                  {{ item.wardName }}
-                </a-select-option>
-              </a-select>
-            </a-col>
-          </a-row>
+                  <a-select-option
+                    v-for="item in districtList"
+                    :key="item.districtCode"
+                    :value="item.districtCode"
+                  >
+                    {{ item.districtName }}
+                  </a-select-option>
+                </a-select>
+              </a-col>
+            </a-row>
 
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8"
-              >Địa chỉ cụ thể
-              <span class="red">*</span>
-            </a-col>
-            <a-col :span="16">
-              <a-textarea
-                v-model="addForm.addressDetail"
-                :auto-size="{ minRows: 1, maxRows: 5 }"
-                :min="0"
-                class="full-width--i"
-              />
-              <span v-if="errors.addressDetail" class="red">
-                {{ errors.addressDetail }}
-              </span>
-            </a-col>
-          </a-row>
-
-          <a-row :gutter="[24, 16]">
-            <a-col :span="8">
-              Lớp
-            </a-col>
-            <a-col :span="16">
-              <a-select
-                v-model="addForm.classID"
-                class="filter-select"
-                style="width: 100%"
-                @search="fetchClass"
-              >
-                <a-select-option
-                  v-for="item in classList"
-                  :key="item.id"
-                  :value="item.id"
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8">
+                Xã
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-select
+                  v-model="addForm.wardCode"
+                  :disabled="wardList.length < 1"
+                  class="filter-select"
+                  style="width: 100%"
+                  @search="fetchWardAfter"
                 >
-                  {{ item.className }}
-                </a-select-option>
-              </a-select>
-            </a-col>
-          </a-row>
+                  <a-select-option
+                    v-for="item in wardList"
+                    :key="item.wardCode"
+                    :value="item.wardCode"
+                  >
+                    {{ item.wardName }}
+                  </a-select-option>
+                </a-select>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8"
+                >Địa chỉ cụ thể
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-textarea
+                  v-model="addForm.addressDetail"
+                  :auto-size="{ minRows: 1, maxRows: 5 }"
+                  :min="0"
+                  class="full-width--i"
+                />
+                <span v-if="errors.addressDetail" class="red">
+                  {{ errors.addressDetail }}
+                </span>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8">
+                Lớp
+              </a-col>
+              <a-col :span="16">
+                <a-select
+                  v-model="addForm.classID"
+                  class="filter-select"
+                  :disabled="checkShowClass"
+                  style="width: 100%"
+                  @search="fetchClass"
+                >
+                  <a-select-option
+                    v-for="item in classList"
+                    :key="item.id"
+                    :value="item.id"
+                  >
+                    {{ item.className }}
+                  </a-select-option>
+                </a-select>
+              </a-col>
+            </a-row>
+          </a-spin>
+        </a-modal>
+
+        <!-- Add new Teacher modal -->
+        <a-modal
+          title="Thêm mới giáo viên"
+          v-model="showModal.addTeacher"
+          :maskClosable="false"
+          :destroyOnClose="true"
+          :closable="false"
+        >
+          <template slot="footer">
+            <a-button
+              key="submit"
+              type="primary"
+              :loading="loadingModal"
+              @click="addNewTeacher"
+            >
+              Thêm
+            </a-button>
+            <a-button
+              key="cancel"
+              type="secondary"
+              :disabled="loadingModal"
+              @click="closeModal()"
+            >
+              Hủy
+            </a-button>
+          </template>
+
+          <a-spin :spinning="loadingModal">
+            <a-icon
+              type="loading"
+              slot="indicator"
+              style="font-size: 24px"
+              spin
+            />
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8"
+                >Họ và Tên
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-input v-model="addForm.fullName" />
+                <span v-if="errors.fullName" class="red">
+                  {{ errors.fullName }}
+                </span>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8"
+                >Giới tính
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-radio-group
+                  v-model="addForm.gender"
+                  name="radioGroup"
+                  :default-value="1"
+                >
+                  <a-radio :value="1">
+                    Male
+                  </a-radio>
+                  <a-radio :value="0">
+                    Female
+                  </a-radio>
+                </a-radio-group>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8"
+                >Ngày sinh
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-date-picker v-model="addForm.dob">
+                  <template slot="renderExtraFooter"> </template>
+                </a-date-picker>
+                <span v-if="errors.dob" class="red">
+                  {{ errors.dob }}
+                </span>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8"
+                >Số điện thoại
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-input v-model="addForm.phoneNumber" />
+                <span v-if="errors.phoneNumber" class="red">
+                  {{ errors.phoneNumber }}
+                </span>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8">Sđt người thân </a-col>
+              <a-col :span="16">
+                <a-input v-model="addForm.parentPhoneNumber" />
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8">
+                Tỉnh
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-select
+                  v-model="addForm.provinceCode"
+                  class="filter-select"
+                  style="width: 100%"
+                  @search="fetchProvince"
+                  @change="fetchDistrict"
+                >
+                  <a-select-option
+                    v-for="item in provinceList"
+                    :key="item.code"
+                    :value="item.code"
+                  >
+                    {{ item.name }}
+                  </a-select-option>
+                </a-select>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8">
+                Huyện
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-select
+                  v-model="addForm.districtCode"
+                  :disabled="districtList.length < 1"
+                  class="filter-select"
+                  style="width: 100%"
+                  @search="fetchDistrictAfter"
+                  @change="fetchWard"
+                >
+                  <a-select-option
+                    v-for="item in districtList"
+                    :key="item.districtCode"
+                    :value="item.districtCode"
+                  >
+                    {{ item.districtName }}
+                  </a-select-option>
+                </a-select>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8">
+                Xã
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-select
+                  v-model="addForm.wardCode"
+                  :disabled="wardList.length < 1"
+                  class="filter-select"
+                  style="width: 100%"
+                  @search="fetchWardAfter"
+                >
+                  <a-select-option
+                    v-for="item in wardList"
+                    :key="item.wardCode"
+                    :value="item.wardCode"
+                  >
+                    {{ item.wardName }}
+                  </a-select-option>
+                </a-select>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8"
+                >Địa chỉ cụ thể
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-textarea
+                  v-model="addForm.addressDetail"
+                  :auto-size="{ minRows: 1, maxRows: 5 }"
+                  :min="0"
+                  class="full-width--i"
+                />
+                <span v-if="errors.addressDetail" class="red">
+                  {{ errors.addressDetail }}
+                </span>
+              </a-col>
+            </a-row>
+          </a-spin>
         </a-modal>
       </div>
     </div>
@@ -624,6 +849,7 @@ import moment from "moment";
 const defaultModalState = {
   add: false,
   edit: false,
+  addTeacher: false,
 };
 
 const defaultForm = {
@@ -652,7 +878,14 @@ const defaultInputErrors = {
 export default {
   data() {
     return {
+      userInfor: {
+        username: "",
+        roleCode: "",
+        classID: undefined,
+      },
+      checkShowClass: false,
       data: [],
+      loadingModal: false,
       classList: [],
       provinceList: [],
       districtList: [],
@@ -661,7 +894,6 @@ export default {
       current: 1,
       totals: 0,
       loading: false,
-      loadingModal: false,
       formDataSearch: {
         fullName: "",
         genderSearch: "",
@@ -683,13 +915,19 @@ export default {
         {
           title: "Stt",
           dataIndex: "index",
-          width: 50,
+          width: 80,
           key: "index",
+        },
+        {
+          title: "Chức vụ",
+          dataIndex: "roleName",
+          width: 100,
+          key: "roleName",
         },
         {
           title: "Họ và Tên",
           dataIndex: "fullName",
-          width: 160,
+          width: 200,
           key: "fullName",
           scopedSlots: {
             filterDropdown: "filterDropdown",
@@ -710,9 +948,15 @@ export default {
           },
         },
         {
+          title: "Lớp",
+          dataIndex: "className",
+          width: 100,
+          key: "className",
+        },
+        {
           title: "Giới tính",
           dataIndex: "gender",
-          width: 100,
+          width: 140,
           key: "gender",
           scopedSlots: {
             filterDropdown: "filterDropdown",
@@ -734,7 +978,7 @@ export default {
         },
         {
           title: "Ngày sinh",
-          width: 100,
+          width: 150,
           key: "dob",
           scopedSlots: {
             customRender: "dobCustom",
@@ -743,7 +987,7 @@ export default {
         {
           title: "Tài khoản",
           dataIndex: "userName",
-          width: 100,
+          width: 150,
           key: "userName",
           scopedSlots: {
             filterDropdown: "filterDropdown",
@@ -764,15 +1008,15 @@ export default {
           },
         },
         {
-          title: "Địa chỉ cụ thể",
+          title: "Địa chỉ chi tiết",
           dataIndex: "addressDetail",
-          width: 100,
+          width: 200,
           key: "addressDetail",
         },
         {
-          title: "Xã",
+          title: "Phường / Xã",
           dataIndex: "wardName",
-          width: 100,
+          width: 150,
           key: "wardName",
           scopedSlots: {
             filterDropdown: "filterDropdown",
@@ -793,9 +1037,9 @@ export default {
           },
         },
         {
-          title: "Huyện",
+          title: "Quận / Huyện",
           dataIndex: "districtName",
-          width: 100,
+          width: 150,
           key: "districtName",
           scopedSlots: {
             filterDropdown: "filterDropdown",
@@ -816,9 +1060,9 @@ export default {
           },
         },
         {
-          title: "Tỉnh",
+          title: "Tỉnh thành",
           dataIndex: "provinceName",
-          width: 100,
+          width: 150,
           key: "provinceName",
           scopedSlots: {
             filterDropdown: "filterDropdown",
@@ -841,13 +1085,13 @@ export default {
         {
           title: "Số điện thoại",
           dataIndex: "phoneNumber",
-          width: 100,
+          width: 150,
           key: "phoneNumber",
         },
         {
           title: "Sđt nguời thân",
           dataIndex: "parentPhoneNumber",
-          width: 100,
+          width: 150,
           key: "parentPhoneNumber",
         },
         {
@@ -864,8 +1108,41 @@ export default {
     this.searchUser();
     this.fetchProvince("");
     this.fetchClass("");
+    this.getUserInfor();
   },
   methods: {
+    cleaderLocation() {
+      this.districtList = [];
+      this.wardList = [];
+    },
+    getUserInfor() {
+      var username = this.$cookies.get("username");
+      UserRepository.getUserByUsername(username).then((res) => {
+        if (res.data.data) {
+          var classOfTeacher =
+            res.data.data.classID == null || res.data.data.classID == ""
+              ? undefined
+              : res.data.data.classID;
+          this.userInfor = {
+            username: res.data.data.username,
+            roleCode: res.data.data.roleCode,
+            classID: classOfTeacher,
+          };
+          // console.log("this.userInfor ===>", this.userInfor);
+          // console.log("this.editForm ===>", this.editForm);
+          // console.log("this.addForm ===>", this.addForm);
+          this.checkShowClassMethod(this.userInfor);
+        }
+      });
+    },
+    checkShowClassMethod(userInfor) {
+      var parsedobj = JSON.parse(JSON.stringify(userInfor));
+      if (parsedobj.roleCode === "HIEU_TRUONG") {
+        this.checkShowClass = false;
+      } else {
+        this.checkShowClass = true;
+      }
+    },
     checkContainSearchKey(fragment, searchText) {
       if (
         this.removeAccents(fragment).toLowerCase() ===
@@ -907,11 +1184,13 @@ export default {
     paginate(current = 1) {
       this.loading = true;
       this.current = current;
-      UserRepository.searchUser(this.formDataSearch, this.current).then(res => {
-        this.data = res.data.data.items;
-        this.totals = res.data.data.total;
-        this.loading = false;
-      });
+      UserRepository.searchUser(this.formDataSearch, this.current).then(
+        (res) => {
+          this.data = res.data.data.items;
+          this.totals = res.data.data.total;
+          this.loading = false;
+        }
+      );
     },
     searchUser() {
       this.loading = true;
@@ -939,7 +1218,6 @@ export default {
       }
       this.searchUser();
     },
-
     handleReset(dataIndex, clearFilters) {
       if (dataIndex === "fullName") {
         this.formDataSearch.fullName = "";
@@ -957,10 +1235,16 @@ export default {
       this.searchText = "";
     },
     async handleEditItemBtnClick(item) {
-      this.fetchTeacher("");
+      // this.fetchTeacher("");
       this.selectedItem = item;
-      // this.editForm.id = item.id;
-      // this.editForm.fullName = item.fullName;
+      this.editForm = item;
+      this.editForm.gender = item.gender === true ? 1 : 0;
+      if (item.provinceCode) {
+        this.fetchDistrict(item.provinceCode);
+        if (item.districtCode) {
+          this.fetchWard(item.districtCode);
+        }
+      }
       this.showModal = {
         edit: true,
       };
@@ -968,96 +1252,23 @@ export default {
     closeEditForm() {
       this.selectedItem = null;
       this.closeModal();
+      this.cleaderLocation();
     },
     closeModal() {
       this.showModal = { ...defaultModalState };
       this.errors = { ...defaultInputErrors };
       this.editForm = { ...defaultForm };
       this.addForm = { ...defaultForm };
-    },
-    saveEditUser() {
-      this.loadingModal = true;
-      const validation = this.validate();
-      if (!validation) {
-        this.loadingModal = false;
-        return;
-      }
-      var formEditData = {
-        id: this.editForm.id,
-        className: this.editForm.className,
-        teacherID: this.editForm.teacherID,
-      };
-      UserRepository.editClass(formEditData)
-        .then((response) => {
-          if (response.data.success === true) {
-            this.$notification.success({
-              message: "Chỉnh sửa thành công!",
-            });
-            this.paginate();
-            this.closeModal();
-            this.loadingModal = false;
-          } else {
-            this.$notification.error({
-              message: "Chỉnh sửa thất bại!",
-            });
-            this.loadingModal = false;
-          }
-        })
-        .catch(() => {
-          this.$notification.error({
-            message: "Chỉnh sửa thất bại!",
-          });
-          this.loadingModal = false;
-        });
+      this.cleaderLocation();
     },
     openAddForm() {
+      console.log("this.addForm ===>", this.addForm);
+      if (this.userInfor && this.userInfor.classID) {
+        this.addForm.classID = this.userInfor.classID;
+      }
       this.showModal = {
         add: true,
       };
-    },
-    addNewUser() {
-      console.log("this.addForm.provinceId ===> ", this.addForm.provinceCode);
-      this.loadingModal = true;
-      const validation = this.validateAddNewStudent();
-      if (!validation) {
-        this.loadingModal = false;
-        return;
-      }
-      var formAddData = {
-        fullName: this.addForm.fullName,
-        dob: this.addForm.dob,
-        gender: this.addForm.gender,
-        phoneNumber: this.addForm.phoneNumber,
-        parentPhoneNumber: this.addForm.parentPhoneNumber,
-        provinceCode: this.addForm.provinceCode,
-        districtCode: this.addForm.districtCode,
-        wardCode: this.addForm.wardCode,
-        addressDetail: this.addForm.addressDetail,
-        classID: this.addForm.classID
-      };
-      UserRepository.addNewStudent(formAddData)
-        .then((response) => {
-          console.log('response', response);
-          if (response.data.success === true) {
-            this.$notification.success({
-              message: "Thêm mới học sinh thành công!",
-            });
-            this.paginate();
-            this.closeModal();
-            this.loadingModal = false;
-          } else {
-            this.$notification.error({
-              message: "Thêm mới học sinh thất bại!",
-            });
-            this.loadingModal = false;
-          }
-        })
-        .catch(() => {
-          this.$notification.error({
-            message: "Thêm mới học sinh thất bại!",
-          });
-          this.loadingModal = false;
-        });
     },
     validate() {
       let isValid = true;
@@ -1157,11 +1368,14 @@ export default {
       return isValid;
     },
     async fetchProvince(provinceName) {
+      this.loadingModal = true;
       LocationRepository.getProvinceByName(provinceName).then((res) => {
         this.provinceList = res.data.data;
+        this.loadingModal = false;
       });
     },
     fetchDistrict(value) {
+      this.loadingModal = true;
       this.provinceCodeSearch = value;
       LocationRepository.getDistrictInProvince(
         this.provinceCodeSearch,
@@ -1169,41 +1383,122 @@ export default {
       ).then((res) => {
         console.log(res);
         this.districtList = res.data.data;
+        this.loadingModal = false;
+      });
+    },
+    fetchDistrictForModal(value) {
+      this.loadingModal = true;
+      this.provinceCodeSearch = value;
+      LocationRepository.getDistrictInProvince(
+        this.provinceCodeSearch,
+        ""
+      ).then((res) => {
+        console.log(res);
+        this.districtList = res.data.data;
+        this.editForm.districtCode = undefined;
+        this.addForm.districtCode = undefined;
+        this.editForm.wardCode = undefined;
+        this.addForm.wardCode = undefined;
+        this.loadingModal = false;
       });
     },
     fetchDistrictAfter(districtName) {
+      this.loadingModal = true;
       LocationRepository.getDistrictInProvince(
         this.provinceCodeSearch,
         districtName
       ).then((res) => {
         this.districtList = res.data.data;
+        this.loadingModal = false;
       });
     },
     fetchWard(value) {
+      this.loadingModal = true;
       this.districtCodeSearch = value;
       LocationRepository.getWardInDistrict(this.districtCodeSearch, "").then(
         (res) => {
           this.wardList = res.data.data;
+          this.loadingModal = false;
+        }
+      );
+    },
+    fetchWardForModal(value) {
+      this.loadingModal = true;
+      this.districtCodeSearch = value;
+      LocationRepository.getWardInDistrict(this.districtCodeSearch, "").then(
+        (res) => {
+          this.wardList = res.data.data;
+          this.loadingModal = false;
+          this.editForm.wardCode = undefined;
+          this.addForm.wardCode = undefined;
         }
       );
     },
     fetchWardAfter(wardName) {
+      this.loadingModal = true;
       LocationRepository.getWardInDistrict(
         this.districtCodeSearch,
         wardName
       ).then((res) => {
         this.wardList = res.data.data;
+        this.loadingModal = false;
       });
     },
     fetchClass(className) {
+      this.loadingModal = true;
       ClassRepository.searchClassByName(className).then((res) => {
         this.classList = res.data.data.items;
+        this.loadingModal = false;
       });
+    },
+    addNewUser() {
+      console.log("this.addForm.provinceId ===> ", this.addForm.provinceCode);
+      this.loadingModal = true;
+      const validation = this.validateAddNewStudent();
+      if (!validation) {
+        this.loadingModal = false;
+        return;
+      }
+      var formAddData = {
+        fullName: this.addForm.fullName,
+        dob: this.addForm.dob,
+        gender: this.addForm.gender,
+        phoneNumber: this.addForm.phoneNumber,
+        parentPhoneNumber: this.addForm.parentPhoneNumber,
+        provinceCode: this.addForm.provinceCode,
+        districtCode: this.addForm.districtCode,
+        wardCode: this.addForm.wardCode,
+        addressDetail: this.addForm.addressDetail,
+        classID: this.addForm.classID,
+      };
+      UserRepository.addNewStudent(formAddData)
+        .then((response) => {
+          console.log("response", response);
+          if (response.data.success === true) {
+            this.$notification.success({
+              message: "Thêm mới học sinh thành công!",
+            });
+            this.paginate();
+            this.closeModal();
+            this.loadingModal = false;
+          } else {
+            this.$notification.error({
+              message: "Thêm mới học sinh thất bại!",
+            });
+            this.loadingModal = false;
+          }
+        })
+        .catch(() => {
+          this.$notification.error({
+            message: "Thêm mới học sinh thất bại!",
+          });
+          this.loadingModal = false;
+        });
     },
     deleteSubItemBtnClick(item) {
       this.loading = true;
       this.selectedItem = item;
-      UserRepository.deleteClass(this.selectedItem.id)
+      UserRepository.deleteUser(this.selectedItem.userName)
         .then((res) => {
           if (res.data.success === true) {
             this.$notification.success({
@@ -1222,6 +1517,50 @@ export default {
             message: e.response.data.message,
           });
           this.loading = false;
+        });
+    },
+    saveEditUser() {
+      // this.loadingModal = true;
+      const validation = this.validate();
+      if (!validation) {
+        this.loadingModal = false;
+        return;
+      }
+      const editForm = {
+        username: this.editForm.userName,
+        fullName: this.editForm.fullName,
+        gender: this.editForm.gender,
+        dob: this.editForm.dob,
+        phoneNumber: this.editForm.phoneNumber,
+        parentPhoneNumber: this.editForm.parentPhoneNumber,
+        provinceCode: this.editForm.provinceCode,
+        districtCode: this.editForm.districtCode,
+        wardCode: this.editForm.wardCode,
+        addressDetail: this.editForm.addressDetail,
+        classID: this.editForm.classID,
+      };
+      console.log("This.editForm ===>", editForm);
+      UserRepository.updateUser(editForm)
+        .then((response) => {
+          if (response.data.success === true) {
+            this.$notification.success({
+              message: "Chỉnh sửa thành công!",
+            });
+            this.paginate();
+            this.closeModal();
+            this.loadingModal = false;
+          } else {
+            this.$notification.error({
+              message: "Chỉnh sửa thất bại!",
+            });
+            this.loadingModal = false;
+          }
+        })
+        .catch(() => {
+          this.$notification.error({
+            message: "Chỉnh sửa thất bại!",
+          });
+          this.loadingModal = false;
         });
     },
   },

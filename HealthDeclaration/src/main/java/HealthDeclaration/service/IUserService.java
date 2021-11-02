@@ -19,11 +19,11 @@ public interface IUserService {
 
     User add(User user);
 
-    boolean update(UserUpdateForm updateForm);
+    User update(UserUpdateForm updateForm);
 
     void deleteByUsername(String username);
 
-    public void delete(Long id);
+    void delete(Long id);
 
     List<UserDto> searchTeacherByName(String teacherName, int pageIndex, int pageSize);
 

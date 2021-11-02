@@ -14,15 +14,6 @@
               >
             </div>
             <div class="col-6"></div>
-            <div class="col-4">
-              <a-pagination
-                v-model="current"
-                show-quick-jumper
-                :default-current="1"
-                :total="totals"
-                @change="paginate"
-              />
-            </div>
           </div>
         </div>
         <!-- <div class="row">
@@ -169,6 +160,15 @@
               </template>
             </a-table>
           </a-spin>
+        </div>
+        <div class="gutter-example pt-md pagnigation-custom">
+          <a-pagination
+            v-model="current"
+            show-quick-jumper
+            :default-current="1"
+            :total="totals"
+            @change="paginate"
+          />
         </div>
 
         <!-- edit modal -->

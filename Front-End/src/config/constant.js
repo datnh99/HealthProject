@@ -1,4 +1,4 @@
-const CONSTANT = {\
+const CONSTANT = {
     SUPER_ADMIN_ROLE_CODE: 'super_admin',
 };
 

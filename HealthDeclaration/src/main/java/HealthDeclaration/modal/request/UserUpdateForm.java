@@ -7,9 +7,10 @@ import java.util.Date;
 @Data
 public class UserUpdateForm {
     private Long id;
+    private String username;
     private String fullName;
     private Date dob;
-    private boolean gender;
+    private Boolean gender;
     private String phoneNumber;
     private String parentPhoneNumber;
     private Long provinceCode;
@@ -17,4 +18,5 @@ public class UserUpdateForm {
     private Long wardCode;
     private String roleCode;
     private String addressDetail;
+    private Long classID;
 }

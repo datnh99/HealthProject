@@ -57,27 +57,50 @@ public class UserServiceImpl extends BaseService implements IUserService {
     }
 
     @Override
-    public boolean update(UserUpdateForm updateForm) {
-        User user = repository.getById(updateForm.getId());
+    public User update(UserUpdateForm updateForm) {
+        User user = repository.getByUsername(updateForm.getUsername());
         user.setModifiedBy(getLoggedInUsername());
         user.setModifiedTime(new Date());
+        if(ObjectUtils.isNullorEmpty(updateForm.getFullName())) {
+            throw new IllegalArgumentException("Tên người dùng không được để trống!");
+        }
+        if(ObjectUtils.isNullorEmpty(updateForm.getGender())) {
+            throw new IllegalArgumentException("Giới tính không được để trống!");
+        }
+
+        //Convert vietnames name to english name
+        String newFullName = StringUtils.deAccent(updateForm.getFullName());
+        String oldFullName = StringUtils.deAccent(user.getFullName());
+
+        // Compare old name with new name if diffrebce --> set new account
+        if(!oldFullName.equalsIgnoreCase(newFullName)) {
+            user.setUsername(getNewAccountWithFullName(updateForm.getFullName()));
+        }
         user.setFullName(updateForm.getFullName());
         user.setDob(updateForm.getDob());
-        user.setGender(updateForm.isGender());
+        user.setGender(updateForm.getGender());
         user.setPhoneNumber(updateForm.getPhoneNumber());
         user.setParentPhoneNumber(updateForm.getParentPhoneNumber());
         user.setProvinceCode(updateForm.getProvinceCode());
         user.setDistrictCode(updateForm.getDistrictCode());
         user.setWardCode(updateForm.getWardCode());
-        user.setRoleCode(updateForm.getRoleCode());
+        if(!ObjectUtils.isNullorEmpty(updateForm.getRoleCode())) {
+            user.setRoleCode(updateForm.getRoleCode());
+        }
         user.setAddressDetail(updateForm.getAddressDetail());
-        repository.save(user);
-        return true;
+        return repository.save(user);
     }
 
     @Override
     public void deleteByUsername(String username) {
-
+        User user = repository.getByUsername(username);
+        if(!ObjectUtils.isNullorEmpty(user)) {
+            throw new IllegalArgumentException("Không tìm thấy người dùng với tài khoản " + username + "!");
+        }
+        user.setModifiedBy(getLoggedInUsername());
+        user.setModifiedTime(new Date());
+        user.setDeleted(true);
+        repository.save(user);
     }
 
     @Override
@@ -91,7 +114,8 @@ public class UserServiceImpl extends BaseService implements IUserService {
     public List<UserDto> searchTeacherByName(String teacherName, int pPageIndex, int pageSize) {
         Role teacherRole = roleService.getByCode(RoleConstant.ROLE_GIAO_VIEN_CHU_NHIEM);
         if(!ObjectUtils.isNullorEmpty(teacherRole)) {
-            return userRepositoryCustom.searchTeacherByName(teacherName, teacherRole.getRoleCode() , pPageIndex, pageSize);
+            return userRepositoryCustom.searchTeacherByName(teacherName,
+                    teacherRole.getRoleCode(), pPageIndex, pageSize);
         }
         return null;
     }
@@ -168,23 +192,43 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
     @Override
     public Long countSearchUserToManagement(UserFormSearch formSearch) {
+        List<String> roleCodeOFUser = getLoggedInUserRoles();
+        if(ObjectUtils.isNullorEmpty(roleCodeOFUser)) {
+            throw new IllegalArgumentException("You don't have permission to see that data!");
+        }
+        if(roleCodeOFUser.get(0).equalsIgnoreCase(RoleConstant.ROLE_GIAO_VIEN_CHU_NHIEM)) {
+            List<Class> clazzList = classService.getByTeacherUser(getLoggedInUsername());
 
-        List<Class> clazzList = classService.getByTeacherUser(getLoggedInUsername());
-
-        if(!ObjectUtils.isNullorEmpty(formSearch.getGender())) {
-            String gender = StringUtils.removeAccent(formSearch.getGender()).toLowerCase();
-            if(gender.equalsIgnoreCase("nam")) {
-                formSearch.setGenderSearch(true);
-            } else if (gender.equalsIgnoreCase("nu")) {
-                formSearch.setGenderSearch(false);
+            if (!ObjectUtils.isNullorEmpty(formSearch.getGender())) {
+                String gender = StringUtils.removeAccent(formSearch.getGender()).toLowerCase();
+                if (gender.equalsIgnoreCase("nam")) {
+                    formSearch.setGenderSearch(true);
+                } else if (gender.equalsIgnoreCase("nu")) {
+                    formSearch.setGenderSearch(false);
+                } else {
+                    return null;
+                }
+            }
+            if (!ObjectUtils.isNullorEmpty(clazzList)) {
+                formSearch.setClassID(clazzList.get(clazzList.size() - 1).getId());
             } else {
                 return null;
             }
+        } else if (roleCodeOFUser.get(0).equalsIgnoreCase(RoleConstant.ROLE_HIEU_TRUONG)) {
+            if (!ObjectUtils.isNullorEmpty(formSearch.getGender())) {
+                String gender = StringUtils.removeAccent(formSearch.getGender()).toLowerCase();
+                if (gender.equalsIgnoreCase("nam")) {
+                    formSearch.setGenderSearch(true);
+                } else if (gender.equalsIgnoreCase("nu")) {
+                    formSearch.setGenderSearch(false);
+                } else {
+                    return null;
+                }
+            }
+        } else {
+            throw new IllegalArgumentException("You don't have permission to see that data!");
         }
 
-        if(!ObjectUtils.isNullorEmpty(clazzList)) {
-            formSearch.setClassID(clazzList.get(clazzList.size() - 1).getId());
-        }
         return userRepositoryCustom.countSearchUserToManagement(formSearch);
     }
 
@@ -226,11 +270,13 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
     @Override
     public List<UserDto> searchTeacherFreeByName(String teacherName) {
-        return repository.getTeacherFreeByName(RoleConstant.ROLE_GIAO_VIEN_CHU_NHIEM, "%" + teacherName + "%");
+        return repository.getTeacherFreeByName(RoleConstant.ROLE_GIAO_VIEN_CHU_NHIEM,
+                RoleConstant.ROLE_GIAO_VIEN_BO_MON, "%" + teacherName + "%");
     }
 
     private String getNewAccountWithFullName(String fullName) {
         String account = null;
+        fullName = StringUtils.deAccent(fullName);
         List<String> list = Arrays.asList(fullName.split(" "));
         int sizeName = list.size();
         if( sizeName > 1) {
@@ -247,7 +293,9 @@ public class UserServiceImpl extends BaseService implements IUserService {
         for (int i = accList.size() - 1; i >= 0; i--) {
             String accountInList = accList.get(i);
             accountInList = accountInList.replace(account, "");
-            if(StringUtils.isNumeric(accountInList)) {
+            if (ObjectUtils.isNullorEmpty(accountInList)) {
+                account = account + "1";
+            } else if (StringUtils.isNumeric(accountInList)) {
                 account = account + (Integer.valueOf(accountInList) + 1);
                 break;
             }
