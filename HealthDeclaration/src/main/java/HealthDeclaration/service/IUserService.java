@@ -36,4 +36,10 @@ public interface IUserService {
     User addNewStudent(UserAddForm userAddForm);
 
     List<UserDto> searchTeacherFreeByName(String teacherName);
+
+    List<UserDto> searchTeacherToManagement(UserFormSearch formSearch, int pageIndex, int pageSize);
+
+    Long countSearchTeacherToManagement(UserFormSearch formSearch);
+
+    User addNewTeacher(UserAddForm userAddForm);
 }

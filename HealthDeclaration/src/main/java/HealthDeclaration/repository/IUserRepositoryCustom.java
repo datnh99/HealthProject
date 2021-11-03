@@ -12,4 +12,8 @@ public interface IUserRepositoryCustom {
     List<UserDto> searchStudentToManagement(UserFormSearch formSearch, int pageIndex, int pageSize);
 
     Long countSearchUserToManagement(UserFormSearch formSearch);
+
+    List<UserDto> searchTeacherToManagement(UserFormSearch formSearch, int pageIndex, int pageSize, String studentRole);
+
+    Long countSearchTeacherToManagement(UserFormSearch formSearch, String roleHocSinh);
 }

@@ -145,40 +145,25 @@ public class UserServiceImpl extends BaseService implements IUserService {
         if(ObjectUtils.isNullorEmpty(roleCodeOFUser)) {
             throw new IllegalArgumentException("You don't have permission to see that data!");
         }
-        if(roleCodeOFUser.get(0).equalsIgnoreCase(RoleConstant.ROLE_GIAO_VIEN_CHU_NHIEM)) {
-            List<Class> clazzList = classService.getByTeacherUser(getLoggedInUsername());
+        List<Class> clazzList = classService.getByTeacherUser(getLoggedInUsername());
 
-            if (!ObjectUtils.isNullorEmpty(formSearch.getGender())) {
-                String gender = StringUtils.removeAccent(formSearch.getGender()).toLowerCase();
-                if (gender.equalsIgnoreCase("nam")) {
-                    formSearch.setGenderSearch(true);
-                } else if (gender.equalsIgnoreCase("nu")) {
-                    formSearch.setGenderSearch(false);
-                } else {
-                    return null;
-                }
-            }
-            if (!ObjectUtils.isNullorEmpty(clazzList)) {
-                formSearch.setClassID(clazzList.get(clazzList.size() - 1).getId());
+        if (!ObjectUtils.isNullorEmpty(formSearch.getGender())) {
+            String gender = StringUtils.removeAccent(formSearch.getGender()).toLowerCase();
+            if (gender.equalsIgnoreCase("nam")) {
+                formSearch.setGenderSearch(true);
+            } else if (gender.equalsIgnoreCase("nu")) {
+                formSearch.setGenderSearch(false);
             } else {
                 return null;
             }
-            resultList = userRepositoryCustom.searchStudentToManagement(formSearch, pageIndex, pageSize);
-        } else if (roleCodeOFUser.get(0).equalsIgnoreCase(RoleConstant.ROLE_HIEU_TRUONG)) {
-            if (!ObjectUtils.isNullorEmpty(formSearch.getGender())) {
-                String gender = StringUtils.removeAccent(formSearch.getGender()).toLowerCase();
-                if (gender.equalsIgnoreCase("nam")) {
-                    formSearch.setGenderSearch(true);
-                } else if (gender.equalsIgnoreCase("nu")) {
-                    formSearch.setGenderSearch(false);
-                } else {
-                    return null;
-                }
-            }
-            resultList = userRepositoryCustom.searchStudentToManagement(formSearch, pageIndex, pageSize);
-        } else {
-            throw new IllegalArgumentException("You don't have permission to see that data!");
         }
+        if (!ObjectUtils.isNullorEmpty(clazzList)) {
+            formSearch.setClassID(clazzList.get(clazzList.size() - 1).getId());
+        } else {
+            return null;
+        }
+        resultList = userRepositoryCustom.searchStudentToManagement(formSearch, pageIndex, pageSize);
+
         if(!ObjectUtils.isNullorEmpty(resultList)) {
             for(int i = 0 ; i < resultList.size() ; i++) {
                 resultList.get(i).setIndex(pageSize * (pageIndex - 1) + i + 1);
@@ -268,6 +253,84 @@ public class UserServiceImpl extends BaseService implements IUserService {
     public List<UserDto> searchTeacherFreeByName(String teacherName) {
         return repository.getTeacherFreeByName(RoleConstant.ROLE_GIAO_VIEN_CHU_NHIEM,
                 RoleConstant.ROLE_GIAO_VIEN_BO_MON, "%" + teacherName + "%");
+    }
+
+    @Override
+    public List<UserDto> searchTeacherToManagement(UserFormSearch formSearch, int pageIndex, int pageSize) {
+        List<String> roleCodeOFUser = getLoggedInUserRoles();
+        List<UserDto> resultList = new ArrayList<>();
+        if(ObjectUtils.isNullorEmpty(roleCodeOFUser)
+                || (!roleCodeOFUser.get(0).equalsIgnoreCase(RoleConstant.ROLE_HIEU_TRUONG)
+                && !roleCodeOFUser.get(0).equalsIgnoreCase(RoleConstant.ROLE_HIEU_PHO))) {
+            throw new IllegalArgumentException("You don't have permission to see that data!");
+        }
+
+        if (!ObjectUtils.isNullorEmpty(formSearch.getGender())) {
+            String gender = StringUtils.removeAccent(formSearch.getGender()).toLowerCase();
+            if (gender.equalsIgnoreCase("nam")) {
+                formSearch.setGenderSearch(true);
+            } else if (gender.equalsIgnoreCase("nu")) {
+                formSearch.setGenderSearch(false);
+            } else {
+                return null;
+            }
+        }
+        resultList = userRepositoryCustom.searchTeacherToManagement(formSearch, pageIndex, pageSize, RoleConstant.ROLE_HOC_SINH);
+
+        if(!ObjectUtils.isNullorEmpty(resultList)) {
+            for(int i = 0 ; i < resultList.size() ; i++) {
+                resultList.get(i).setIndex(pageSize * (pageIndex - 1) + i + 1);
+            };
+        }
+        return resultList;
+    }
+
+    @Override
+    public Long countSearchTeacherToManagement(UserFormSearch formSearch) {
+
+        if (!ObjectUtils.isNullorEmpty(formSearch.getGender())) {
+            String gender = StringUtils.removeAccent(formSearch.getGender()).toLowerCase();
+            if (gender.equalsIgnoreCase("nam")) {
+                formSearch.setGenderSearch(true);
+            } else if (gender.equalsIgnoreCase("nu")) {
+                formSearch.setGenderSearch(false);
+            } else {
+                return null;
+            }
+        }
+        return userRepositoryCustom.countSearchTeacherToManagement(formSearch, RoleConstant.ROLE_HOC_SINH);
+    }
+
+    @Override
+    public User addNewTeacher(UserAddForm userAddForm) {
+        User user = new User();
+        user.setCreatedBy(getLoggedInUsername());
+        user.setCreatedTime(new Date());
+        user.setModifiedBy(getLoggedInUsername());
+        user.setModifiedTime(new Date());
+        if(!ObjectUtils.isNullorEmpty(userAddForm.getFullName())) {
+            user.setFullName(userAddForm.getFullName());
+        } else {
+            throw new IllegalArgumentException("Full name can not be blank!");
+        }
+        user.setDob(userAddForm.getDob());
+        user.setGender(userAddForm.getGender());
+        user.setPhoneNumber(userAddForm.getPhoneNumber());
+        user.setParentPhoneNumber(userAddForm.getParentPhoneNumber());
+        user.setProvinceCode(userAddForm.getProvinceCode());
+        user.setDistrictCode(userAddForm.getDistrictCode());
+        user.setWardCode(userAddForm.getWardCode());
+        user.setAddressDetail(userAddForm.getAddressDetail());
+        user.setRoleCode(userAddForm.getRoleCode());
+        String username = getNewAccountWithFullName(userAddForm.getFullName());
+        if(!ObjectUtils.isNullorEmpty(username)) {
+            user.setUsername(username);
+        } else {
+            throw new IllegalArgumentException("Fail in create account!");
+        }
+        user.setPassword(userAddForm.getPassword());
+        user.setClassID(userAddForm.getClassID());
+        return repository.save(user);
     }
 
     private String getNewAccountWithFullName(String fullName) {

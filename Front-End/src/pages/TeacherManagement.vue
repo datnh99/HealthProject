@@ -8,9 +8,9 @@
 
         <div class="container">
           <div class="row">
-            <div >
+            <div>
               <base-button type="primary" @click="openAddForm()"
-                >Thêm học sinh</base-button
+                >Thêm giáo viên</base-button
               >
             </div>
           </div>
@@ -256,6 +256,28 @@
 
             <a-row :gutter="[24, 16]">
               <a-col :span="8"
+                >Chức vụ
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-select
+                  v-model="editForm.roleCode"
+                  class="filter-select"
+                  style="width: 100%"
+                >
+                  <a-select-option
+                    v-for="item in roleList"
+                    :key="item.roleCode"
+                    :value="item.roleCode"
+                  >
+                    {{ item.roleName }}
+                  </a-select-option>
+                </a-select>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8"
                 >Ngày sinh
                 <span class="red">*</span>
               </a-col>
@@ -283,10 +305,7 @@
             </a-row>
 
             <a-row :gutter="[24, 16]">
-              <a-col :span="8"
-                >Sđt người thân
-                <span class="red">*</span>
-              </a-col>
+              <a-col :span="8">Sđt người thân </a-col>
               <a-col :span="16">
                 <a-input v-model="editForm.parentPhoneNumber" />
                 <span v-if="errors.parentPhoneNumber" class="red">
@@ -372,10 +391,7 @@
             </a-row>
 
             <a-row :gutter="[24, 16]">
-              <a-col :span="8"
-                >Địa chỉ cụ thể
-                <span class="red">*</span>
-              </a-col>
+              <a-col :span="8">Địa chỉ cụ thể </a-col>
               <a-col :span="16">
                 <a-textarea
                   v-model="editForm.addressDetail"
@@ -394,7 +410,7 @@
         <!-- Add new Teacher modal -->
         <a-modal
           title="Thêm mới giáo viên"
-          v-model="showModal.addTeacher"
+          v-model="showModal.add"
           :maskClosable="false"
           :destroyOnClose="true"
           :closable="false"
@@ -456,6 +472,28 @@
                     Female
                   </a-radio>
                 </a-radio-group>
+              </a-col>
+            </a-row>
+
+            <a-row :gutter="[24, 16]">
+              <a-col :span="8"
+                >Chức vụ
+                <span class="red">*</span>
+              </a-col>
+              <a-col :span="16">
+                <a-select
+                  v-model="addForm.roleCode"
+                  class="filter-select"
+                  style="width: 100%"
+                >
+                  <a-select-option
+                    v-for="item in roleList"
+                    :key="item.roleCode"
+                    :value="item.roleCode"
+                  >
+                    {{ item.roleName }}
+                  </a-select-option>
+                </a-select>
               </a-col>
             </a-row>
 
@@ -568,10 +606,7 @@
             </a-row>
 
             <a-row :gutter="[24, 16]">
-              <a-col :span="8"
-                >Địa chỉ cụ thể
-                <span class="red">*</span>
-              </a-col>
+              <a-col :span="8">Địa chỉ cụ thể </a-col>
               <a-col :span="16">
                 <a-textarea
                   v-model="addForm.addressDetail"
@@ -594,25 +629,26 @@
 import UserRepository from "../api/user.js";
 import ClassRepository from "../api/class.js";
 import LocationRepository from "../api/location.js";
+import RoleRepository from "../api/role.js";
 import moment from "moment";
 
 const defaultModalState = {
   add: false,
   edit: false,
-  addTeacher: false,
 };
 
 const defaultForm = {
   id: undefined,
   fullName: "",
-  dob: "2000-01-01",
   gender: 1,
+  roleCode: undefined,
+  dob: "2000-01-01",
   phoneNumber: "",
   parentPhoneNumber: "",
   provinceCode: undefined,
   districtCode: undefined,
   wardCode: undefined,
-  addressDetail: ""
+  addressDetail: "",
 };
 
 const requiredError = "Không được để trống thông tin này!";
@@ -620,6 +656,7 @@ const requiredError = "Không được để trống thông tin này!";
 const defaultInputErrors = {
   fullName: "",
   gender: "",
+  roleCode: "",
   phoneNumber: "",
   parentPhoneNumber: "",
 };
@@ -631,8 +668,8 @@ export default {
         username: "",
         roleCode: "",
       },
-      checkShowClass: false,
       data: [],
+      roleList: [],
       loadingModal: false,
       classList: [],
       provinceList: [],
@@ -648,7 +685,7 @@ export default {
         wardName: "",
         districtName: "",
         provinceName: "",
-        userName: ""
+        userName: "",
       },
       provinceCodeSearch: undefined,
       districtCodeSearch: undefined,
@@ -695,12 +732,6 @@ export default {
               }, 0);
             }
           },
-        },
-        {
-          title: "Lớp",
-          dataIndex: "className",
-          width: 100,
-          key: "className",
         },
         {
           title: "Giới tính",
@@ -854,12 +885,20 @@ export default {
     };
   },
   created() {
-    this.searchUser();
+    this.searchTeacher();
     this.fetchProvince("");
     this.fetchClass("");
     this.getUserInfor();
+    this.getRoleList();
   },
   methods: {
+    getRoleList() {
+      RoleRepository.getRoleNotStudent().then((res) => {
+        if (res.data.success) {
+          this.roleList = res.data.data.items;
+        }
+      });
+    },
     cleaderLocation() {
       this.districtList = [];
       this.wardList = [];
@@ -872,20 +911,8 @@ export default {
             username: res.data.data.username,
             roleCode: res.data.data.roleCode,
           };
-          // console.log("this.userInfor ===>", this.userInfor);
-          // console.log("this.editForm ===>", this.editForm);
-          // console.log("this.addForm ===>", this.addForm);
-          this.checkShowClassMethod(this.userInfor);
         }
       });
-    },
-    checkShowClassMethod(userInfor) {
-      var parsedobj = JSON.parse(JSON.stringify(userInfor));
-      if (parsedobj.roleCode === "HIEU_TRUONG") {
-        this.checkShowClass = false;
-      } else {
-        this.checkShowClass = true;
-      }
     },
     checkContainSearchKey(fragment, searchText) {
       if (
@@ -928,7 +955,7 @@ export default {
     paginate(current = 1) {
       this.loading = true;
       this.current = current;
-      UserRepository.searchUser(this.formDataSearch, this.current).then(
+      UserRepository.searchTeacher(this.formDataSearch, this.current).then(
         (res) => {
           this.data = res.data.data.items;
           this.totals = res.data.data.total;
@@ -936,7 +963,7 @@ export default {
         }
       );
     },
-    searchUser() {
+    searchTeacher() {
       this.loading = true;
       if (this.formDataSearch.genderSearch === null) {
         this.data = [];
@@ -944,7 +971,7 @@ export default {
         this.loading = false;
         return;
       }
-      UserRepository.searchUser(this.formDataSearch, 1).then((res) => {
+      UserRepository.searchTeacher(this.formDataSearch, 1).then((res) => {
         this.data = res.data.data.items;
         this.totals = res.data.data.total;
         this.current = 1;
@@ -975,7 +1002,7 @@ export default {
       } else if (dataIndex === "userName") {
         this.formDataSearch.userName = selectedKeys[0];
       }
-      this.searchUser();
+      this.searchTeacher();
     },
     handleReset(dataIndex, clearFilters) {
       if (dataIndex === "fullName") {
@@ -992,7 +1019,7 @@ export default {
         this.formDataSearch.userName = "";
       }
       clearFilters();
-      this.searchUser();
+      this.searchTeacher();
       this.searchText = "";
     },
     async handleEditItemBtnClick(item) {
@@ -1023,7 +1050,6 @@ export default {
       this.cleaderLocation();
     },
     openAddForm() {
-      console.log("this.addForm ===>", this.addForm);
       this.showModal = {
         add: true,
       };
@@ -1035,6 +1061,10 @@ export default {
         this.errors.fullName = requiredError;
         isValid = false;
       }
+      if (this.editForm.roleCode == "" || this.editForm.roleCode == null) {
+        this.errors.roleCode = requiredError;
+        isValid = false;
+      }
       if (
         this.editForm.phoneNumber == "" ||
         this.editForm.phoneNumber == null
@@ -1042,13 +1072,6 @@ export default {
         this.errors.phoneNumber = requiredError;
         isValid = false;
       }
-    //   if (
-    //     this.editForm.parentPhoneNumber == "" ||
-    //     this.editForm.parentPhoneNumber == null
-    //   ) {
-    //     this.errors.parentPhoneNumber = requiredError;
-    //     isValid = false;
-    //   }
       if (
         this.editForm.provinceCode == "" ||
         this.editForm.provinceCode == null
@@ -1067,13 +1090,6 @@ export default {
         this.errors.wardCode = requiredError;
         isValid = false;
       }
-    //   if (
-    //     this.editForm.addressDetail == "" ||
-    //     this.editForm.addressDetail == null
-    //   ) {
-    //     this.errors.addressDetail = requiredError;
-    //     isValid = false;
-    //   }
       return isValid;
     },
     validateAddNewTeacher() {
@@ -1083,17 +1099,14 @@ export default {
         this.errors.fullName = requiredError;
         isValid = false;
       }
+      if (this.addForm.roleCode == "" || this.addForm.roleCode == null) {
+        this.errors.roleCode = requiredError;
+        isValid = false;
+      }
       if (this.addForm.phoneNumber == "" || this.addForm.phoneNumber == null) {
         this.errors.phoneNumber = requiredError;
         isValid = false;
       }
-    //   if (
-    //     this.addForm.parentPhoneNumber == "" ||
-    //     this.addForm.parentPhoneNumber == null
-    //   ) {
-    //     this.errors.parentPhoneNumber = requiredError;
-    //     isValid = false;
-    //   }
       if (
         this.addForm.provinceCode == "" ||
         this.addForm.provinceCode == null
@@ -1198,7 +1211,7 @@ export default {
       });
     },
     addNewTeacher() {
-      this.loadingModal = true;
+      //   this.loadingModal = true;
       const validation = this.validateAddNewTeacher();
       if (!validation) {
         this.loadingModal = false;
@@ -1208,13 +1221,15 @@ export default {
         fullName: this.addForm.fullName,
         gender: this.addForm.gender,
         dob: this.addForm.dob,
+        roleCode: this.addForm.roleCode,
         phoneNumber: this.addForm.phoneNumber,
         parentPhoneNumber: this.addForm.parentPhoneNumber,
         provinceCode: this.addForm.provinceCode,
         districtCode: this.addForm.districtCode,
         wardCode: this.addForm.wardCode,
-        addressDetail: this.addForm.addressDetail
+        addressDetail: this.addForm.addressDetail,
       };
+      console.log("formAddData ===>", formAddData);
       UserRepository.addNewTeacher(formAddData)
         .then((response) => {
           console.log("response", response);
@@ -1246,12 +1261,12 @@ export default {
         .then((res) => {
           if (res.data.success === true) {
             this.$notification.success({
-              message: "Xóa học sinh thành công!",
+              message: "Xóa giáo viên thành công!",
             });
             this.paginate();
           } else {
             this.$notification.error({
-              message: "Xóa học sinh thất bại!",
+              message: "Xóa giáo viên thất bại!",
             });
             this.loading = false;
           }
@@ -1280,9 +1295,8 @@ export default {
         provinceCode: this.editForm.provinceCode,
         districtCode: this.editForm.districtCode,
         wardCode: this.editForm.wardCode,
-        addressDetail: this.editForm.addressDetail
+        addressDetail: this.editForm.addressDetail,
       };
-      console.log("This.editForm ===>", editForm);
       UserRepository.updateUser(editForm)
         .then((response) => {
           if (response.data.success === true) {

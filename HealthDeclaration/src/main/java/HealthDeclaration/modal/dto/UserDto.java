@@ -61,4 +61,26 @@ public class UserDto {
         this.classID = classID;
         this.className = className;
     }
+
+    public UserDto(Long id, String userName, String fullName, Date dob, Boolean gender, String phoneNumber,
+                   String parentPhoneNumber, Long provinceCode, String provinceName, Long districtCode,
+                   String districtName, Long wardCode, String wardName, String addressDetail, String roleCode,
+                   String roleName) {
+        this.id = id;
+        this.userName = userName;
+        this.fullName = fullName;
+        this.dob = dob;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+        this.parentPhoneNumber = parentPhoneNumber;
+        this.provinceCode = provinceCode;
+        this.provinceName = provinceName;
+        this.districtCode = districtCode;
+        this.districtName = districtName;
+        this.wardCode = wardCode;
+        this.wardName = wardName;
+        this.addressDetail = addressDetail;
+        this.roleCode = roleCode;
+        this.roleName = roleName;
+    }
 }

@@ -2,6 +2,8 @@ package HealthDeclaration.form;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -23,4 +25,6 @@ public class UserFormSearch {
     String provinceName;
 
     Long classID;
+
+    String roleCode;
 }

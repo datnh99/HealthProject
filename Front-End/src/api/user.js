@@ -26,6 +26,13 @@ function searchUser(formSearch, pageIndex) {
   );
 }
 
+function searchTeacher(formSearch, pageIndex) {
+  return axios.post(
+    `${API_USER}/search-teacher-to-management?pageIndex=${pageIndex}&pageSize=${pageSize}`,
+    formSearch
+  );
+}
+
 function updateUser(updateForm) {
   return axios.put(`${API_USER}/update`, updateForm);
 }
@@ -42,15 +49,20 @@ function addNewUser(formAddNew) {
 function addNewStudent(formAddNew) {
   return axios.post(`${API_USER}/add-new-student`, formAddNew);
 }
+function addNewTeacher(formAddNew) {
+  return axios.post(`${API_USER}/add-new-teacher`, formAddNew);
+}
 
 export default {
   getAllUser,
   searchTeacherByName,
   searchTeacherFreeByName,
   searchUser,
+  searchTeacher,
   addNewUser,
   updateUser,
   deleteUser,
   getUserByUsername,
   addNewStudent,
+  addNewTeacher
 };

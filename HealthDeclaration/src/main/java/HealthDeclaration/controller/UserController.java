@@ -118,6 +118,27 @@ public class UserController {
         return ResponseUtils.buildResponseMessage(true, responseMessage);
     }
 
+	@PostMapping("/search-teacher-to-management")
+	private ResponseEntity searchTeacherToManagement(@RequestBody UserFormSearch formSearch,
+												  @Param("pageIndex") int pageIndex,
+												  @Param("pageSize") int pageSize) {
+		ResponseMessage responseMessage = new ResponseMessage();
+		try{
+			responseMessage.setSuccess(true);
+			List<UserDto> result = service.searchTeacherToManagement(formSearch, pageIndex, pageSize);
+			Long total = service.countSearchTeacherToManagement(formSearch);
+			Map<String, Object> results = new HashMap<>();
+			results.put("items", result);
+			results.put("total", total);
+			responseMessage.setData(results);
+		} catch (Exception e) {
+			log.error(e);
+			responseMessage.setSuccess(false);
+			return ResponseUtils.buildResponseMessage(false, responseMessage);
+		}
+		return ResponseUtils.buildResponseMessage(true, responseMessage);
+	}
+
 	@PutMapping("/update")
 	public ResponseEntity updateClass(@RequestBody UserUpdateForm updateForm) {
 		ResponseMessage responseMessage = new ResponseMessage();
@@ -161,6 +182,7 @@ public class UserController {
 		}
 		return ResponseUtils.buildResponseMessage(true, responseMessage);
 	}
+
     @PostMapping("/add-new-student")
     private ResponseEntity addNewStudent(@RequestBody UserAddForm userAddForm) {
         ResponseMessage responseMessage = new ResponseMessage();
@@ -177,4 +199,21 @@ public class UserController {
         }
         return ResponseUtils.buildResponseMessage(true, responseMessage);
     }
+
+	@PostMapping("/add-new-teacher")
+	private ResponseEntity addNewTeacher(@RequestBody UserAddForm userAddForm) {
+		ResponseMessage responseMessage = new ResponseMessage();
+		try{
+			User user = service.addNewTeacher(userAddForm);
+			Map<String, Object> results = new HashMap<>();
+			results.put("items", user);
+			responseMessage.setSuccess(true);
+			responseMessage.setData(results);
+		} catch (Exception e) {
+			log.error(e);
+			responseMessage.setSuccess(false);
+			return ResponseUtils.buildResponseMessage(false, responseMessage);
+		}
+		return ResponseUtils.buildResponseMessage(true, responseMessage);
+	}
 }
