@@ -10,6 +10,8 @@ import lombok.*;
 public class UserFormSearch {
     String fullName;
 
+    String userName;
+
     String gender;
 
     Boolean genderSearch;

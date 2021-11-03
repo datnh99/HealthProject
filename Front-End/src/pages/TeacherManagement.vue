@@ -388,255 +388,6 @@
                 </span>
               </a-col>
             </a-row>
-
-            <a-row :gutter="[24, 16]">
-              <a-col :span="8">
-                Lớp
-              </a-col>
-              <a-col :span="16">
-                <a-select
-                  v-model="editForm.classID"
-                  class="filter-select"
-                  :disabled="checkShowClass"
-                  style="width: 100%"
-                  @search="fetchClass"
-                >
-                  <a-select-option
-                    v-for="item in classList"
-                    :key="item.id"
-                    :value="item.id"
-                  >
-                    {{ item.className }}
-                  </a-select-option>
-                </a-select>
-              </a-col>
-            </a-row>
-          </a-spin>
-        </a-modal>
-
-        <!-- Add modal -->
-        <a-modal
-          title="Thêm mới học sinh"
-          v-model="showModal.add"
-          :maskClosable="false"
-          :destroyOnClose="true"
-          :closable="false"
-        >
-          <template slot="footer">
-            <a-button
-              key="submit"
-              type="primary"
-              :loading="loadingModal"
-              @click="addNewUser"
-            >
-              Thêm
-            </a-button>
-            <a-button
-              key="cancel"
-              type="secondary"
-              :disabled="loadingModal"
-              @click="closeModal()"
-            >
-              Hủy
-            </a-button>
-          </template>
-
-          <a-spin :spinning="loadingModal">
-            <a-icon
-              type="loading"
-              slot="indicator"
-              style="font-size: 24px"
-              spin
-            />
-
-            <a-row :gutter="[24, 16]">
-              <a-col :span="8"
-                >Họ và Tên
-                <span class="red">*</span>
-              </a-col>
-              <a-col :span="16">
-                <a-input v-model="addForm.fullName" />
-                <span v-if="errors.fullName" class="red">
-                  {{ errors.fullName }}
-                </span>
-              </a-col>
-            </a-row>
-
-            <a-row :gutter="[24, 16]">
-              <a-col :span="8"
-                >Giới tính
-                <span class="red">*</span>
-              </a-col>
-              <a-col :span="16">
-                <a-radio-group
-                  v-model="addForm.gender"
-                  name="radioGroup"
-                  :default-value="1"
-                >
-                  <a-radio :value="1">
-                    Male
-                  </a-radio>
-                  <a-radio :value="0">
-                    Female
-                  </a-radio>
-                </a-radio-group>
-              </a-col>
-            </a-row>
-
-            <a-row :gutter="[24, 16]">
-              <a-col :span="8"
-                >Ngày sinh
-                <span class="red">*</span>
-              </a-col>
-              <a-col :span="16">
-                <a-date-picker v-model="addForm.dob">
-                  <template slot="renderExtraFooter"> </template>
-                </a-date-picker>
-                <span v-if="errors.dob" class="red">
-                  {{ errors.dob }}
-                </span>
-              </a-col>
-            </a-row>
-
-            <a-row :gutter="[24, 16]">
-              <a-col :span="8"
-                >Số điện thoại
-                <span class="red">*</span>
-              </a-col>
-              <a-col :span="16">
-                <a-input v-model="addForm.phoneNumber" />
-                <span v-if="errors.phoneNumber" class="red">
-                  {{ errors.phoneNumber }}
-                </span>
-              </a-col>
-            </a-row>
-
-            <a-row :gutter="[24, 16]">
-              <a-col :span="8"
-                >Sđt người thân
-                <span class="red">*</span>
-              </a-col>
-              <a-col :span="16">
-                <a-input v-model="addForm.parentPhoneNumber" />
-                <span v-if="errors.parentPhoneNumber" class="red">
-                  {{ errors.parentPhoneNumber }}
-                </span>
-              </a-col>
-            </a-row>
-
-            <a-row :gutter="[24, 16]">
-              <a-col :span="8">
-                Tỉnh
-                <span class="red">*</span>
-              </a-col>
-              <a-col :span="16">
-                <a-select
-                  v-model="addForm.provinceCode"
-                  class="filter-select"
-                  style="width: 100%"
-                  @search="fetchProvince"
-                  @change="fetchDistrict"
-                >
-                  <a-select-option
-                    v-for="item in provinceList"
-                    :key="item.code"
-                    :value="item.code"
-                  >
-                    {{ item.name }}
-                  </a-select-option>
-                </a-select>
-              </a-col>
-            </a-row>
-
-            <a-row :gutter="[24, 16]">
-              <a-col :span="8">
-                Huyện
-                <span class="red">*</span>
-              </a-col>
-              <a-col :span="16">
-                <a-select
-                  v-model="addForm.districtCode"
-                  :disabled="districtList.length < 1"
-                  class="filter-select"
-                  style="width: 100%"
-                  @search="fetchDistrictAfter"
-                  @change="fetchWard"
-                >
-                  <a-select-option
-                    v-for="item in districtList"
-                    :key="item.districtCode"
-                    :value="item.districtCode"
-                  >
-                    {{ item.districtName }}
-                  </a-select-option>
-                </a-select>
-              </a-col>
-            </a-row>
-
-            <a-row :gutter="[24, 16]">
-              <a-col :span="8">
-                Xã
-                <span class="red">*</span>
-              </a-col>
-              <a-col :span="16">
-                <a-select
-                  v-model="addForm.wardCode"
-                  :disabled="wardList.length < 1"
-                  class="filter-select"
-                  style="width: 100%"
-                  @search="fetchWardAfter"
-                >
-                  <a-select-option
-                    v-for="item in wardList"
-                    :key="item.wardCode"
-                    :value="item.wardCode"
-                  >
-                    {{ item.wardName }}
-                  </a-select-option>
-                </a-select>
-              </a-col>
-            </a-row>
-
-            <a-row :gutter="[24, 16]">
-              <a-col :span="8"
-                >Địa chỉ cụ thể
-                <span class="red">*</span>
-              </a-col>
-              <a-col :span="16">
-                <a-textarea
-                  v-model="addForm.addressDetail"
-                  :auto-size="{ minRows: 1, maxRows: 5 }"
-                  :min="0"
-                  class="full-width--i"
-                />
-                <span v-if="errors.addressDetail" class="red">
-                  {{ errors.addressDetail }}
-                </span>
-              </a-col>
-            </a-row>
-
-            <a-row :gutter="[24, 16]">
-              <a-col :span="8">
-                Lớp
-              </a-col>
-              <a-col :span="16">
-                <a-select
-                  v-model="addForm.classID"
-                  class="filter-select"
-                  :disabled="checkShowClass"
-                  style="width: 100%"
-                  @search="fetchClass"
-                >
-                  <a-select-option
-                    v-for="item in classList"
-                    :key="item.id"
-                    :value="item.id"
-                  >
-                    {{ item.className }}
-                  </a-select-option>
-                </a-select>
-              </a-col>
-            </a-row>
           </a-spin>
         </a-modal>
 
@@ -861,8 +612,7 @@ const defaultForm = {
   provinceCode: undefined,
   districtCode: undefined,
   wardCode: undefined,
-  addressDetail: "",
-  classID: undefined,
+  addressDetail: ""
 };
 
 const requiredError = "Không được để trống thông tin này!";
@@ -880,7 +630,6 @@ export default {
       userInfor: {
         username: "",
         roleCode: "",
-        classID: undefined,
       },
       checkShowClass: false,
       data: [],
@@ -1119,14 +868,9 @@ export default {
       var username = this.$cookies.get("username");
       UserRepository.getUserByUsername(username).then((res) => {
         if (res.data.data) {
-          var classOfTeacher =
-            res.data.data.classID == null || res.data.data.classID == ""
-              ? undefined
-              : res.data.data.classID;
           this.userInfor = {
             username: res.data.data.username,
             roleCode: res.data.data.roleCode,
-            classID: classOfTeacher,
           };
           // console.log("this.userInfor ===>", this.userInfor);
           // console.log("this.editForm ===>", this.editForm);
@@ -1280,9 +1024,6 @@ export default {
     },
     openAddForm() {
       console.log("this.addForm ===>", this.addForm);
-      if (this.userInfor && this.userInfor.classID) {
-        this.addForm.classID = this.userInfor.classID;
-      }
       this.showModal = {
         add: true,
       };
@@ -1301,13 +1042,13 @@ export default {
         this.errors.phoneNumber = requiredError;
         isValid = false;
       }
-      if (
-        this.editForm.parentPhoneNumber == "" ||
-        this.editForm.parentPhoneNumber == null
-      ) {
-        this.errors.parentPhoneNumber = requiredError;
-        isValid = false;
-      }
+    //   if (
+    //     this.editForm.parentPhoneNumber == "" ||
+    //     this.editForm.parentPhoneNumber == null
+    //   ) {
+    //     this.errors.parentPhoneNumber = requiredError;
+    //     isValid = false;
+    //   }
       if (
         this.editForm.provinceCode == "" ||
         this.editForm.provinceCode == null
@@ -1326,16 +1067,16 @@ export default {
         this.errors.wardCode = requiredError;
         isValid = false;
       }
-      if (
-        this.editForm.addressDetail == "" ||
-        this.editForm.addressDetail == null
-      ) {
-        this.errors.addressDetail = requiredError;
-        isValid = false;
-      }
+    //   if (
+    //     this.editForm.addressDetail == "" ||
+    //     this.editForm.addressDetail == null
+    //   ) {
+    //     this.errors.addressDetail = requiredError;
+    //     isValid = false;
+    //   }
       return isValid;
     },
-    validateAddNewStudent() {
+    validateAddNewTeacher() {
       let isValid = true;
       this.errors = { ...defaultInputErrors };
       if (this.addForm.fullName == "" || this.addForm.fullName == null) {
@@ -1346,13 +1087,13 @@ export default {
         this.errors.phoneNumber = requiredError;
         isValid = false;
       }
-      if (
-        this.addForm.parentPhoneNumber == "" ||
-        this.addForm.parentPhoneNumber == null
-      ) {
-        this.errors.parentPhoneNumber = requiredError;
-        isValid = false;
-      }
+    //   if (
+    //     this.addForm.parentPhoneNumber == "" ||
+    //     this.addForm.parentPhoneNumber == null
+    //   ) {
+    //     this.errors.parentPhoneNumber = requiredError;
+    //     isValid = false;
+    //   }
       if (
         this.addForm.provinceCode == "" ||
         this.addForm.provinceCode == null
@@ -1369,17 +1110,6 @@ export default {
       }
       if (this.addForm.wardCode == "" || this.addForm.wardCode == null) {
         this.errors.wardCode = requiredError;
-        isValid = false;
-      }
-      if (
-        this.addForm.addressDetail == "" ||
-        this.addForm.addressDetail == null
-      ) {
-        this.errors.addressDetail = requiredError;
-        isValid = false;
-      }
-      if (this.addForm.classID == "" || this.addForm.classID == null) {
-        this.errors.classID = requiredError;
         isValid = false;
       }
       return isValid;
@@ -1410,7 +1140,6 @@ export default {
         this.provinceCodeSearch,
         ""
       ).then((res) => {
-        console.log(res);
         this.districtList = res.data.data;
         this.editForm.districtCode = undefined;
         this.addForm.districtCode = undefined;
@@ -1468,53 +1197,9 @@ export default {
         this.loadingModal = false;
       });
     },
-    addNewUser() {
-      console.log("this.addForm.provinceId ===> ", this.addForm.provinceCode);
-      this.loadingModal = true;
-      const validation = this.validateAddNewStudent();
-      if (!validation) {
-        this.loadingModal = false;
-        return;
-      }
-      var formAddData = {
-        fullName: this.addForm.fullName,
-        dob: this.addForm.dob,
-        gender: this.addForm.gender,
-        phoneNumber: this.addForm.phoneNumber,
-        parentPhoneNumber: this.addForm.parentPhoneNumber,
-        provinceCode: this.addForm.provinceCode,
-        districtCode: this.addForm.districtCode,
-        wardCode: this.addForm.wardCode,
-        addressDetail: this.addForm.addressDetail,
-        classID: this.addForm.classID,
-      };
-      UserRepository.addNewStudent(formAddData)
-        .then((response) => {
-          console.log("response", response);
-          if (response.data.success === true) {
-            this.$notification.success({
-              message: "Thêm mới học sinh thành công!",
-            });
-            this.paginate();
-            this.closeModal();
-            this.loadingModal = false;
-          } else {
-            this.$notification.error({
-              message: "Thêm mới học sinh thất bại!",
-            });
-            this.loadingModal = false;
-          }
-        })
-        .catch(() => {
-          this.$notification.error({
-            message: "Thêm mới học sinh thất bại!",
-          });
-          this.loadingModal = false;
-        });
-    },
     addNewTeacher() {
       this.loadingModal = true;
-      const validation = this.validateAddNewStudent();
+      const validation = this.validateAddNewTeacher();
       if (!validation) {
         this.loadingModal = false;
         return;
@@ -1595,8 +1280,7 @@ export default {
         provinceCode: this.editForm.provinceCode,
         districtCode: this.editForm.districtCode,
         wardCode: this.editForm.wardCode,
-        addressDetail: this.editForm.addressDetail,
-        classID: this.editForm.classID,
+        addressDetail: this.editForm.addressDetail
       };
       console.log("This.editForm ===>", editForm);
       UserRepository.updateUser(editForm)

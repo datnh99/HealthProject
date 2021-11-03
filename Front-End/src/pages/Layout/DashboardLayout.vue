@@ -31,6 +31,15 @@
           <p>لوحة القيادة</p>
         </template>
       </sidebar-link>
+      <sidebar-link to="/teacher-management">
+        <i class="tim-icons icon-single-02"></i>
+        <template v-if="!isRTL">
+          <p>Teacher Management</p>
+        </template>
+        <template v-else>
+          <p>لوحة القيادة</p>
+        </template>
+      </sidebar-link>
       <sidebar-link to="/icons">
         <i class="tim-icons icon-atom"></i>
         <template v-if="!isRTL">

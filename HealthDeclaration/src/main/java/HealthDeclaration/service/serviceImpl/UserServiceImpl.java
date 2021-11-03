@@ -272,7 +272,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
     private String getNewAccountWithFullName(String fullName) {
         String account = null;
-        fullName = StringUtils.deAccent(fullName);
+        fullName = StringUtils.convertVietnameseToEnglish(fullName);
         List<String> list = Arrays.asList(fullName.split(" "));
         int sizeName = list.size();
         if( sizeName > 1) {
