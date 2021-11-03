@@ -13,12 +13,14 @@ public class HealthAddForm {
 	private String phoneNumber;
 	private String healthInsuranceId;
 	private String email;
-	private String provinceCode;
-	private String districtCode;
+	private Long provinceCode;
+	private Long districtCode;
+	private Long wardCode;
 	private String addressDetail;
-	private String wardCode;
 	private String inconstantNote;
 	private Boolean closeToPatient;
 	private Boolean closeToCountry;
 	private Boolean closeToRiskingPeople;
+	private Boolean sicking;
+
 }

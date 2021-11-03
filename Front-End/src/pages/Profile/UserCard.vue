@@ -6,8 +6,18 @@
       <div class="block block-three"></div>
       <div class="block block-four"></div>
       <a href="#">
-        <img v-if="!user.gender" class="avatar" src="../../assets/img/anime6.png" alt="..." />
-        <img v-else class="avatar" src="../../assets/img/anime3.png" alt="..." />
+        <img
+          v-if="!user.gender"
+          class="avatar"
+          src="../../assets/img/anime6.png"
+          alt="..."
+        />
+        <img
+          v-else
+          class="avatar"
+          src="../../assets/img/anime3.png"
+          alt="..."
+        />
 
         <h5 class="title">{{ user.fullName }}</h5>
       </a>
@@ -26,7 +36,7 @@
         <b>Quản lý QR</b>
       </div>
       <div class="col-4">
-        <base-button type="success" icon size="lg">
+        <base-button type="success" @click="goToReport()" icon size="lg">
           <a-icon style type="file-add" />
         </base-button>
         <b>Khai báo</b>
@@ -55,6 +65,11 @@ export default {
       default: () => {
         return {};
       },
+    },
+  },
+  methods: {
+    goToReport() {
+      this.$router.push("declare");
     },
   },
 };

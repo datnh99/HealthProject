@@ -8,11 +8,9 @@
         <a-form :form="form" @submit="handleSubmit">
           <a-row type="flex">
             <a-col class="gutter-box" flex="1 1 200px">
-              <a-form-item
-                label="Họ và tên"
-                has-feedback
-              >
+              <a-form-item label="Họ và tên" has-feedback>
                 <a-input
+                  :disabled="true"
                   v-decorator="[
                     'studentName',
                     {
@@ -29,11 +27,8 @@
                 </a-input>
               </a-form-item>
             </a-col>
-                <a-col class="gutter-box" flex="1 1 200px">
-              <a-form-item
-                label="CMND/CCCD"
-                has-feedback
-              >
+            <!-- <a-col class="gutter-box" flex="1 1 200px">
+              <a-form-item label="CMND/CCCD" has-feedback>
                 <a-input
                   v-decorator="[
                     'verificationId',
@@ -47,6 +42,107 @@
                     },
                   ]"
                   placeholder="Nhập..."
+                >
+                </a-input>
+              </a-form-item>
+            </a-col> -->
+            <a-col class="gutter-box" flex="1 1 200px">
+              <a-form-item label="Giới tính" has-feedback>
+                <a-select
+                  v-decorator="[
+                    'gender',
+                    {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Bạn chưa chọn giới tính!',
+                        },
+                      ],
+                    },
+                  ]"
+                  placeholder="Chọn giới tính"
+                >
+                  <a-select-option key="true" :value="true">
+                    Nam
+                  </a-select-option>
+                  <a-select-option key="false" :value="false">
+                    Nữ
+                  </a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col class="gutter-box" flex="1 1 200px">
+              <a-form-item label="Ngày sinh" has-feedback>
+                <a-date-picker
+                  v-decorator="[
+                    'dateOfBirth',
+                    {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Bạn chưa chọn ngày sinh!',
+                        },
+                      ],
+                    },
+                  ]"
+                  placeholder="Chọn ngày sinh"
+                >
+                </a-date-picker>
+              </a-form-item>
+            </a-col>
+          </a-row>
+          <a-row type="flex">
+            <a-col class="gutter-box" flex="1 1 200px">
+              <a-form-item label="Điện thoại" has-feedback>
+                <a-input
+                  v-decorator="[
+                    'phoneNumber',
+                    {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Bạn chưa nhập số điện thoại',
+                        },
+                      ],
+                    },
+                  ]"
+                  placeholder="Nhập số điện thoại..."
+                >
+                </a-input>
+              </a-form-item>
+            </a-col>
+            <a-col class="gutter-box" flex="1 1 200px">
+              <a-form-item label="Số thẻ bảo hiểm y tế" has-feedback>
+                <a-input
+                  v-decorator="[
+                    'healthInsuranceId',
+                    {
+                      rules: [
+                        {
+                          required: false,
+                        },
+                      ],
+                    },
+                  ]"
+                  placeholder="Nhập số thẻ"
+                >
+                </a-input>
+              </a-form-item>
+            </a-col>
+            <a-col class="gutter-box" flex="1 1 200px">
+              <a-form-item label="Email" has-feedback>
+                <a-input
+                  v-decorator="[
+                    'email',
+                    {
+                      rules: [
+                        {
+                          required: false,
+                        },
+                      ],
+                    },
+                  ]"
+                  placeholder="Nhập email"
                 >
                 </a-input>
               </a-form-item>
@@ -157,16 +253,121 @@
             </a-col>
           </a-row>
 
-          <a-form-item v-bind="tailFormItemLayout">
-            <a-checkbox
-              v-decorator="['agreement', { valuePropName: 'checked' }]"
+          <a-card title="">
+            <!-- <a slot="extra" href="#">More</a> -->
+            <a-form-item
+              label="Trong vòng 14 ngày qua, Anh/Chị có đến khu vực tỉnh thành phố, quốc gia/vùng lãnh thổ nào (Có thể đi nhiều nơi)"
             >
-              I have read the
-              <a href=""> agreement </a>
-            </a-checkbox>
-          </a-form-item>
+              <a-radio-group
+                v-decorator="[
+                  'contactToPlace',
+                  {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Bạn chưa nhập địa chỉ',
+                      },
+                    ],
+                  },
+                ]"
+              >
+                <a-radio :value="true"> Có </a-radio>
+                <a-radio :value="false"> Không </a-radio>
+              </a-radio-group>
+            </a-form-item>
+          </a-card>
+          <a-card title="" :style="{ marginTop: '16px' }">
+            <a-form-item
+              label="Trong vòng 14 ngày qua, Anh/Chị có thấy xuất hiện ít nhất  trong các dấu hiệu: sốt, ho, khó thở, viêm phổi, đau họng, mệt mỏi, thay đổi vị giác không?"
+            >
+              <a-radio-group
+                v-decorator="[
+                  'sicking',
+                  {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Bạn chưa chọn',
+                      },
+                    ],
+                  },
+                ]"
+              >
+                <a-radio :value="true"> Có </a-radio>
+                <a-radio :value="false"> Không </a-radio>
+              </a-radio-group>
+            </a-form-item>
+          </a-card>
+          <a-card
+            title="Trong vòng 14 ngày qua, Anh/Chị có tiếp xúc với:"
+            :style="{ marginTop: '16px' }"
+          >
+            <a-card title="" :style="{ marginTop: '16px' }">
+              <a-form-item label="Người bệnh hoặc nghi ngờ mắc bệnh Covid-19">
+                <a-radio-group
+                  v-decorator="[
+                    'closeToRiskingPeople',
+                    {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Bạn chưa chọn',
+                        },
+                      ],
+                    },
+                  ]"
+                >
+                  <a-radio :value="true"> Có </a-radio>
+                  <a-radio :value="false"> Không </a-radio>
+                </a-radio-group>
+              </a-form-item>
+            </a-card>
+            <a-card title="" :style="{ marginTop: '16px' }">
+              <a-form-item label="Người từ nước có bệnh Covid-19">
+                <a-radio-group
+                  v-decorator="[
+                    'closeToCountry',
+                    {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Bạn chưa chọn',
+                        },
+                      ],
+                    },
+                  ]"
+                >
+                  <a-radio :value="true"> Có </a-radio>
+                  <a-radio :value="false"> Không </a-radio>
+                </a-radio-group>
+              </a-form-item>
+            </a-card>
+            <a-card title="" :style="{ marginTop: '16px' }">
+              <a-form-item
+                label="Người bệnh có biểu hiện sốt, ho, khó, thở, viêm phổi"
+              >
+                <a-radio-group
+                  v-decorator="[
+                    'contactToPlace',
+                    {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Bạn chưa chọn',
+                        },
+                      ],
+                    },
+                  ]"
+                >
+                  <a-radio :value="true"> Có </a-radio>
+                  <a-radio :value="false"> Không </a-radio>
+                </a-radio-group>
+              </a-form-item>
+            </a-card>
+          </a-card>
+
           <a-form-item v-bind="tailFormItemLayout">
-            <a-button type="primary" html-type="submit"> Register </a-button>
+            <a-button type="primary" html-type="submit"> Gửi tờ khai </a-button>
           </a-form-item>
         </a-form>
       </div>
@@ -176,7 +377,8 @@
 <script>
 import { Card } from "@/components/index";
 import LocationRepository from "../api/location.js";
-
+import UserRepository from "../api/user.js";
+import HealthRepository from "../api/healthReport.js";
 export default {
   components: {
     Card,
@@ -190,6 +392,7 @@ export default {
       },
       confirmDirty: false,
       autoCompleteResult: [],
+      userDetail: {},
       // formItemLayout: {
       //   labelCol: {
       //     xs: { span: 24 },
@@ -219,9 +422,29 @@ export default {
   },
   created() {
     this.fetchProvince();
+    this.getUserDetail();
   },
   mounted: {},
   methods: {
+    getUserDetail() {
+      UserRepository.getUserByUsername(this.$cookies.get("username")).then(
+        (res) => {
+          this.userDetail = res.data.data;
+          this.form.setFieldsValue({
+            studentName: this.userDetail.fullName,
+            gender: this.userDetail.gender,
+            dateOfBirth: this.userDetail.dob,
+            phoneNumber: this.userDetail.phoneNumber,
+            provinceCode: this.userDetail.provinceCode,
+            districtCode: this.userDetail.districtCode,
+            wardCode: this.userDetail.wardCode,
+            addressDetail: this.userDetail.addressDetail,
+          });
+          this.fetchDistrict(this.userDetail.provinceCode);
+          this.fetchWard(this.userDetail.districtCode);
+        }
+      );
+    },
     onChangeProvince(value) {
       this.fetchedData.listDistrict = [];
       this.fetchedData.listWard = [];
@@ -254,8 +477,23 @@ export default {
       this.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
           console.log("Received values of form: ", values);
+          this.submitHealthReport(values);
         }
       });
+    },
+    submitHealthReport(form) {
+      HealthRepository.add(form)
+        .then((res) => {
+          this.$notification.success({
+            message: "Khai báo y tế thành công!",
+          });
+        })
+        .catch((err) => {
+          this.$notification.console.error();
+          ({
+            message: "Khai báo y tế thất bại!",
+          });
+        });
     },
     handleConfirmBlur(e) {
       const value = e.target.value;
