@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IRoleRepository extends JpaRepository<Role, Long> {
 
-    @Query(value = "select r FROM Role r where r.roleCode = :roleCode and r.deleted = false")
+    @Query(value = "select r FROM Role r where r.roleCode = :roleCode ")
     Role findByCode(@Param("roleCode") String code);
 }

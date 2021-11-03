@@ -42,7 +42,7 @@ public class ClassRepositoryCustomImpl extends BaseRepository implements IClassR
                 "ON u.username = cl.teacherUsername "
                 + " where 1=1 ");
         } else {
-            sql.append("select new HealthDeclaration.modal.dto.ClassDto(cl.id, cl.name, u.id, u.username, u.fullName, cl.deleted) "
+            sql.append("select new HealthDeclaration.modal.dto.ClassDto(cl.id, cl.name, u.id, u.username, u.fullName) "
                     + "from Class cl LEFT join User u " +
                     "ON u.username = cl.teacherUsername "
                     + " where 1=1 ");

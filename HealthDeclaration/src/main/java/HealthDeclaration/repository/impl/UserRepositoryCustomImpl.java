@@ -98,7 +98,7 @@ public class UserRepositoryCustomImpl extends BaseRepository implements IUserRep
         StringBuilder sql = new StringBuilder();
         sql.append("select new HealthDeclaration.modal.dto.UserDto(u.id, u.username, u.fullName) "
                     + "from User u "
-                    + " where 1=1 and u.deleted = false ");
+                    + " where 1=1 ");
         Map<String, Object> params = new HashMap<>();
         if (!ObjectUtils.isNullorEmpty(teacherName)) {
             sql.append(" and LOWER(u.fullName) like :teacherName ");

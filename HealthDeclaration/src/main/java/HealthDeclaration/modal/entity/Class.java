@@ -1,5 +1,6 @@
 package HealthDeclaration.modal.entity;
 
+import HealthDeclaration.common.base.constant.BaseEntityConstant;
 import HealthDeclaration.common.base.entity.BaseEntity;
 import lombok.*;
 
@@ -12,6 +13,7 @@ import javax.persistence.*;
 @ToString
 @Entity
 public class Class extends BaseEntity {
+
     @Column(name = "name")
     private String name;
 

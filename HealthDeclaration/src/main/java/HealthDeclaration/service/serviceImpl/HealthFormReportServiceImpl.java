@@ -28,7 +28,6 @@ public class HealthFormReportServiceImpl extends BaseService implements IHealthF
         report.setCreatedTime(new Date());
         report.setModifiedBy(getLoggedInUsername());
         report.setModifiedTime(new Date());
-        report.setDeleted(false);
         //
         report.setDiChuyen(formReportAdd.getDiChuyen());
         report.setDauHieuCovid(formReportAdd.getDauHieuCovid());
@@ -55,8 +54,8 @@ public class HealthFormReportServiceImpl extends BaseService implements IHealthF
     }
 
     @Override
-    public boolean delete(Long id) {
-        return false;
+    public void delete(Long id) {
+        repository.deleteById(id);
     }
 
     @Override

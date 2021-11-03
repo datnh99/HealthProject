@@ -1,5 +1,6 @@
 package HealthDeclaration.modal.entity;
 
+import HealthDeclaration.common.base.constant.BaseEntityConstant;
 import HealthDeclaration.common.base.entity.BaseEntity;
 import lombok.*;
 
@@ -13,6 +14,9 @@ import javax.persistence.Entity;
 @ToString
 @Entity
 public class District extends BaseEntity {
+
+    @Column(name = "deleted",nullable = true)
+    private Boolean deleted;
 
     @Column(name = "name")
     private String name;

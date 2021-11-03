@@ -99,15 +99,12 @@ public class UserServiceImpl extends BaseService implements IUserService {
         }
         user.setModifiedBy(getLoggedInUsername());
         user.setModifiedTime(new Date());
-        user.setDeleted(true);
         repository.save(user);
     }
 
     @Override
     public void delete(Long id) {
-        User user = repository.getById(id);
-        user.setDeleted(true);
-        repository.save(user);
+        repository.deleteById(id);
     }
 
     @Override
@@ -235,11 +232,10 @@ public class UserServiceImpl extends BaseService implements IUserService {
     @Override
     public User addNewStudent(UserAddForm userAddForm) {
         User user = new User();
-        user.setCreatedBy("hieppv4");
+        user.setCreatedBy(getLoggedInUsername());
         user.setCreatedTime(new Date());
-        user.setModifiedBy("hieppv4");
+        user.setModifiedBy(getLoggedInUsername());
         user.setModifiedTime(new Date());
-        user.setDeleted(false);
         if(!ObjectUtils.isNullorEmpty(userAddForm.getFullName())) {
             user.setFullName(userAddForm.getFullName());
         } else {

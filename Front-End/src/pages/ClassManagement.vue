@@ -119,19 +119,6 @@
                   {{ text }}
                 </template>
               </template>
-              <template #isActiveCustom="item">
-                <a-button
-                  v-if="item.isActive == false"
-                  type="primary"
-                  shape="round"
-                  size="small"
-                >
-                  Đang hoạt động
-                </a-button>
-                <a-button v-else type="danger" shape="round" size="small">
-                  Ngừng hoạt động
-                </a-button>
-              </template>
               <template #action="item">
                 <a-dropdown>
                   <a-menu slot="overlay">
@@ -247,28 +234,6 @@
                 </a-select>
               </a-col>
             </a-row>
-
-            <a-row :gutter="[24, 16]">
-              <a-col :span="8"
-                >Trạng thái
-                <span class="red">*</span>
-              </a-col>
-              <a-col :span="16">
-                <a-select
-                  v-model="editForm.isActive"
-                  class="filter-select"
-                  style="width: 100%"
-                >
-                  <a-select-option
-                    v-for="item in statusList"
-                    :key="item.key"
-                    :value="item.value"
-                  >
-                    {{ item.key }}
-                  </a-select-option>
-                </a-select>
-              </a-col>
-            </a-row>
           </a-spin>
         </a-modal>
 
@@ -367,7 +332,6 @@ const defaultForm = {
   id: undefined,
   className: "",
   teacherUsername: undefined,
-  isActive: undefined,
 };
 
 const requiredError = "This field can't blank";
@@ -436,14 +400,6 @@ export default {
                 this.searchInput.focus();
               }, 0);
             }
-          },
-        },
-        {
-          title: "Trạng thái",
-          width: 100,
-          key: "isActive",
-          scopedSlots: {
-            customRender: "isActiveCustom",
           },
         },
         {
@@ -561,7 +517,6 @@ export default {
         this.editForm.teacherUsername = item.teacherAccount;
       }
       this.fetchTeacherFree("");
-      this.editForm.isActive = item.isActive;
       this.showModal = {
         edit: true,
       };
@@ -589,7 +544,6 @@ export default {
         id: this.editForm.id,
         className: this.editForm.className,
         teacherUsername: this.editForm.teacherUsername,
-        isActive: this.editForm.isActive,
       };
       ClassRepository.editClass(formEditData)
         .then((response) => {

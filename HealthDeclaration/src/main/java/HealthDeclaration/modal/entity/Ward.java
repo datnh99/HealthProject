@@ -14,6 +14,9 @@ import javax.persistence.Entity;
 @Entity
 public class Ward extends BaseEntity {
 
+    @Column(name = "deleted",nullable = true)
+    private Boolean deleted;
+
     @Column(name = "name")
     private String name;
 

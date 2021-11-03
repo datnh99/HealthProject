@@ -68,7 +68,6 @@ public class ClassServiceImpl extends BaseService implements IClassService {
         clazz.setModifiedTime(new Date());
         clazz.setName(c.getClassName());
         clazz.setTeacherUsername(c.getTeacherUsername());
-        clazz.setDeleted(false);
         return classRepository.save(clazz);
     }
 
@@ -84,9 +83,6 @@ public class ClassServiceImpl extends BaseService implements IClassService {
         if(!ObjectUtils.isNullorEmpty(clazzList)) {
             throw new IllegalArgumentException("Giáo viên này đã là chủ nhiệm của một lớp khác!");
         }
-        if(!ObjectUtils.isNullorEmpty(c.getIsActive())) {
-            clazz.setDeleted(c.getIsActive());
-        }
         clazz.setModifiedBy(getLoggedInUsername());
         clazz.setModifiedTime(new Date());
         clazz.setName(c.getClassName());
@@ -97,11 +93,7 @@ public class ClassServiceImpl extends BaseService implements IClassService {
 
     @Override
     public void deleteClass(Long id) {
-        Class clazz = classRepository.getClassById(id);
-        clazz.setModifiedBy(getLoggedInUsername());
-        clazz.setCreatedTime(new Date());
-        clazz.setDeleted(true);
-        classRepository.save(clazz);
+        classRepository.deleteById(id);
     }
 
     @Override

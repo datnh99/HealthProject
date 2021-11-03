@@ -134,10 +134,10 @@ public class UserController {
 	}
 
 	@DeleteMapping("/delete")
-	public ResponseEntity delete(@RequestParam("username") String username) {
+	public ResponseEntity delete(@RequestParam("id") Long id) {
 		ResponseMessage responseMessage = new ResponseMessage();
 		try {
-			service.deleteByUsername(username);
+			service.delete(id);
 			responseMessage.setSuccess(true);
 			responseMessage.setData(true);
 		} catch (Exception e) {

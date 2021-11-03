@@ -30,8 +30,5 @@ public class BaseEntity {
 	
 	@Column(name = BaseEntityConstant.COLUMN_MODIFIED_TIME,nullable = false)
 	private Date modifiedTime;
-
-	@Column(name = BaseEntityConstant.COLUMN_DELETED,nullable = true)
-	private Boolean deleted;
 	
 }

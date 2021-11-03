@@ -15,13 +15,13 @@ import java.util.List;
 @Repository
 public interface IClassRepository extends JpaRepository<Class, Long>, CrudRepository<Class, Long> {
 
-    @Query(value = "Select cl FROM Class cl where cl.deleted = false AND  cl.name = :className")
+    @Query(value = "Select cl FROM Class cl where cl.name = :className")
     Class getByClassName(@Param("className") String className);
 
     @Query(value = "Select new HealthDeclaration.modal.dto.ClassDto(cl.id, cl.name) FROM Class cl where cl.name like :className")
     List<ClassDto> searchClassesByName(@Param("className") String className);
 
-    @Query(value = "Select cl FROM Class cl where cl.deleted = false AND cl.teacherUsername = :teacher")
+    @Query(value = "Select cl FROM Class cl where cl.teacherUsername = :teacher")
     List<Class> getByTeacherName(@Param("teacher") String username);
 
     @Query(value = "Select cl FROM Class cl where cl.id = :id")

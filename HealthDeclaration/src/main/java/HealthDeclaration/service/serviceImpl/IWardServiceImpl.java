@@ -1,5 +1,6 @@
 package HealthDeclaration.service.serviceImpl;
 
+import HealthDeclaration.common.base.service.BaseService;
 import HealthDeclaration.common.utils.ObjectUtils;
 import HealthDeclaration.form.WardAddForm;
 import HealthDeclaration.modal.dto.WardDTO;
@@ -15,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class IWardServiceImpl implements IWardService {
+public class IWardServiceImpl extends BaseService implements IWardService {
 
     @Autowired
     private IWardRepository wardRepository;
@@ -26,8 +27,8 @@ public class IWardServiceImpl implements IWardService {
         if(!ObjectUtils.isNullorEmpty(formList)) {
             formList.forEach(element -> {
                 Ward ward = new Ward();
-                ward.setCreatedBy("hieppv4");
-                ward.setModifiedBy("hieppv4");
+                ward.setCreatedBy(getLoggedInUsername());
+                ward.setModifiedBy(getLoggedInUsername());
                 ward.setCreatedTime(new Date());
                 ward.setModifiedTime(new Date());
                 ward.setDeleted(false);

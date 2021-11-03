@@ -29,8 +29,8 @@ function searchUser(formSearch, pageIndex) {
 function updateUser(updateForm) {
   return axios.put(`${API_USER}/update`, updateForm);
 }
-function deleteUser(username) {
-  return axios.delete(`${API_USER}/delete?username=${username}`);
+function deleteUser(id) {
+  return axios.delete(`${API_USER}/delete?id=${id}`);
 }
 
 function getUserByUsername(username) {

@@ -11,7 +11,7 @@ import java.util.List;
 public interface IHealthFormReportService {
     HealthFormReport add(HealthFormReportAdd formReportAdd);
 
-    boolean delete(Long id);
+    void delete(Long id);
 
     List<HealthFormDto> searchHealthFormReport(Long userId, int pageIndex, int pageSize);
 

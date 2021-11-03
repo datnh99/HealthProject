@@ -8,12 +8,11 @@
 
         <div class="container">
           <div class="row">
-            <div class="col-2">
+            <div >
               <base-button type="primary" @click="openAddForm()"
                 >Thêm học sinh</base-button
               >
             </div>
-            <div class="col-6"></div>
           </div>
         </div>
         <div class="table-responsive-class text-left">
@@ -118,7 +117,7 @@
                       >
                         <template slot="title">
                           <span
-                            >Ban có chắc chắn muốn xóa lớp học này không?</span
+                            >Ban có chắc chắn muốn xóa học sinh này không?</span
                           ><br />
                         </template>
                         Xóa
@@ -1208,7 +1207,11 @@ export default {
       if (dataIndex === "fullName") {
         this.formDataSearch.fullName = selectedKeys[0];
       } else if (dataIndex === "gender") {
-        this.formDataSearch.genderSearch = selectedKeys[0];
+        if (selectedKeys[0] == "Nam" || selectedKeys[0] == "nam") {
+          this.formDataSearch.genderSearch = true;
+        } else {
+          this.formDataSearch.genderSearch = false;
+        }
       } else if (dataIndex === "wardName") {
         this.formDataSearch.wardName = selectedKeys[0];
       } else if (dataIndex === "districtName") {
@@ -1498,16 +1501,16 @@ export default {
     deleteSubItemBtnClick(item) {
       this.loading = true;
       this.selectedItem = item;
-      UserRepository.deleteUser(this.selectedItem.userName)
+      UserRepository.deleteUser(this.selectedItem.id)
         .then((res) => {
           if (res.data.success === true) {
             this.$notification.success({
-              message: "Xóa lớp học thành công!",
+              message: "Xóa học sinh thành công!",
             });
             this.paginate();
           } else {
             this.$notification.error({
-              message: "Xóa lớp học thất bại!",
+              message: "Xóa học sinh thất bại!",
             });
             this.loading = false;
           }

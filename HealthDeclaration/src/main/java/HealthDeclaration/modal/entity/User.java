@@ -1,5 +1,6 @@
 package HealthDeclaration.modal.entity;
 
+import HealthDeclaration.common.base.constant.BaseEntityConstant;
 import HealthDeclaration.common.base.entity.BaseEntity;
 import lombok.*;
 

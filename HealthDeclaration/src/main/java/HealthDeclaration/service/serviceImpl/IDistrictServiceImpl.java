@@ -26,8 +26,8 @@ public class IDistrictServiceImpl extends BaseService implements IDistrictServic
         if(!ObjectUtils.isNullorEmpty(formList)) {
             formList.forEach(element -> {
                 District district = new District();
-                district.setCreatedBy("hieppv4");
-                district.setModifiedBy("hieppv4");
+                district.setCreatedBy(getLoggedInUsername());
+                district.setModifiedBy(getLoggedInUsername());
                 district.setCreatedTime(new Date());
                 district.setModifiedTime(new Date());
                 district.setDeleted(false);

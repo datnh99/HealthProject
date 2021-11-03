@@ -2,8 +2,10 @@ package HealthDeclaration.modal.entity;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
+import HealthDeclaration.common.base.constant.BaseEntityConstant;
 import HealthDeclaration.common.base.entity.BaseEntity;
 import lombok.Data;
 @Data

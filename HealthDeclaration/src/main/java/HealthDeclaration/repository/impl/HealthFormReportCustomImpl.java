@@ -38,11 +38,11 @@ public class HealthFormReportCustomImpl extends BaseRepository implements IHealt
         StringBuilder sql = new StringBuilder();
         Map<String, Object> params = new HashMap<>();
         if (count) {
-            sql.append("select count(hfr.id) from HealthFormReport hfr where hfr.deleted = false ");
+            sql.append("select count(hfr.id) from HealthFormReport hfr where  1 = 1 ");
         } else {
             sql.append("select new HealthDeclaration.modal.dto.HealthFormDto(hfr.id, hfr.createdTime, hfr.userId, hfr.reportType, hfr.status) "
                     + "from HealthFormReport hfr "
-                    + "where 1=1 AND hfr.deleted = false ");
+                    + "where 1=1 ");
         }
         if (userId != null ) {
             sql.append("and hfr.userId = :userId ");

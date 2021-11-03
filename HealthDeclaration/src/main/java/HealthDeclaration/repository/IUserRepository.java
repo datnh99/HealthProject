@@ -20,20 +20,18 @@ public interface IUserRepository extends JpaRepository<User, Long>, CrudReposito
     @Query("select r.roleCode from User u join Role r ON r.roleCode = u.roleCode WHERE u.username = :username")
     String getUserRoleByUsername(@Param("username") String username);
 
-    @Query("update User acc set acc.deleted = true where acc.username = :username")
-    List<String> deleteByUsername(@Param("username") String username);
-
     @Query(value = "SELECT u.username FROM User u WHERE u.username LIKE :account ORDER BY u.username ASC")
     List<String> getLastAccountByAccount(@Param("account") String account);
 
     @Query(value = "SELECT new HealthDeclaration.modal.dto.UserDto(u.id, u.username, u.fullName) FROM User u " +
-            " WHERE (u.roleCode = :roleGVCN OR u.roleCode = :roleGVBM) AND u.fullName like :teacherName AND u.deleted = false " +
+            " WHERE (u.roleCode = :roleGVCN OR u.roleCode = :roleGVBM) AND u.fullName like :teacherName " +
             " AND u.username NOT IN ( " +
             " SELECT cl.teacherUsername " +
             " FROM Class cl " +
-            " WHERE cl.deleted = FALSE " +
-            " AND cl.teacherUsername IS NOT NULL " +
+            " WHERE cl.teacherUsername IS NOT NULL " +
             " AND cl.teacherUsername != '' " +
             ") ")
-    List<UserDto> getTeacherFreeByName(@Param("roleGVCN") String roleGVCN, @Param("roleGVBM") String roleGVBM, @Param("teacherName") String teacherName);
+    List<UserDto> getTeacherFreeByName(@Param("roleGVCN") String roleGVCN,
+                                       @Param("roleGVBM") String roleGVBM,
+                                       @Param("teacherName") String teacherName);
 }
