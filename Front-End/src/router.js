@@ -24,7 +24,7 @@ const router = [
     children: [
       {
         path: "home-page",
-        name: "User Profile",
+        name: "Trang chủ",
         component: UserProfile
       },
       {
@@ -34,7 +34,7 @@ const router = [
       },
       {
         path: "login",
-        name: "Login",
+        name: "Dăng nhập",
         component: Login
       },
       {
@@ -49,7 +49,7 @@ const router = [
       },
       {
         path: "class-management",
-        name: "ClassManagement",
+        name: "Quản lý lớp học",
         component: ClassManagement,
         beforeEnter: async (to, from, next) => {
           await checkLogin(next, CONFIG.SCREEN_CODE.CLASS_MANAGEMENT);
@@ -57,7 +57,7 @@ const router = [
       },
       {
         path: "user-management",
-        name: "UserManagement",
+        name: "Quản lý học sinh",
         component: UserManagement,
         beforeEnter: async (to, from, next) => {
           await checkLogin(next, CONFIG.SCREEN_CODE.USER_MANAGEMENT);
@@ -65,7 +65,7 @@ const router = [
       },
       {
         path: "teacher-management",
-        name: "TeacherManagement",
+        name: "Quản lý giáo viên",
         component: TeacherManagement
       },
       {

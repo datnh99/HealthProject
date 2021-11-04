@@ -145,7 +145,6 @@ public class UserServiceImpl extends BaseService implements IUserService {
         if(ObjectUtils.isNullorEmpty(roleCodeOFUser)) {
             throw new IllegalArgumentException("You don't have permission to see that data!");
         }
-        List<Class> clazzList = classService.getByTeacherUser(getLoggedInUsername());
 
         if (!ObjectUtils.isNullorEmpty(formSearch.getGender())) {
             String gender = StringUtils.removeAccent(formSearch.getGender()).toLowerCase();
@@ -156,11 +155,6 @@ public class UserServiceImpl extends BaseService implements IUserService {
             } else {
                 return null;
             }
-        }
-        if (!ObjectUtils.isNullorEmpty(clazzList)) {
-            formSearch.setClassID(clazzList.get(clazzList.size() - 1).getId());
-        } else {
-            return null;
         }
         resultList = userRepositoryCustom.searchStudentToManagement(formSearch, pageIndex, pageSize);
 

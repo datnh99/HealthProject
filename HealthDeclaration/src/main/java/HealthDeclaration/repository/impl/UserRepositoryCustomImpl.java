@@ -2,6 +2,7 @@ package HealthDeclaration.repository.impl;
 
 import HealthDeclaration.common.base.repository.BaseRepository;
 import HealthDeclaration.common.utils.ObjectUtils;
+import HealthDeclaration.constants.RoleConstant;
 import HealthDeclaration.form.UserFormSearch;
 import HealthDeclaration.modal.dto.UserDto;
 import HealthDeclaration.repository.IUserRepositoryCustom;
@@ -69,7 +70,7 @@ public class UserRepositoryCustomImpl extends BaseRepository implements IUserRep
             sql.append("select new HealthDeclaration.modal.dto.UserDto(u.id, u.username, u.fullName, u.dob, u.gender," +
                     " u.phoneNumber, u.parentPhoneNumber, u.provinceCode, prv.name as provinceName, u.districtCode, " +
                     " dis.name as districtName, u.wardCode, wa.name as wardName, u.addressDetail, u.roleCode, " +
-                    " rl.roleName, u.classID, cl.name ) "
+                    " rl.roleName, u.classID, cl.name, cl.teacherUsername ) "
                     + " from User u "
                     + " LEFT JOIN Province prv ON prv.code = u.provinceCode "
                     + " LEFT JOIN District dis ON dis.code = u.districtCode "
@@ -79,6 +80,10 @@ public class UserRepositoryCustomImpl extends BaseRepository implements IUserRep
                     + " where 1=1 ");
         }
         Map<String, Object> params = new HashMap<>();
+
+        sql.append(" and u.roleCode = :roleCode ");
+        params.put("roleCode", RoleConstant.ROLE_HOC_SINH);
+
         if (!ObjectUtils.isNullorEmpty(formSearch.getFullName())) {
             sql.append(" and LOWER(u.fullName) like :studentName ");
             params.put("studentName", "%" + formSearch.getFullName().toLowerCase() + "%");

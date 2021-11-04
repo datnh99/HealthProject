@@ -6,14 +6,51 @@
           <h4 class="card-title">Student Management</h4>
         </template>
 
-        <div class="container">
-          <div class="row">
-            <div >
-              <base-button type="primary" @click="openAddForm()"
-                >Thêm học sinh</base-button
-              >
-            </div>
-          </div>
+        <div class="header-filter-custom text-left">
+          <a-form>
+            <a-row type="flex" justify="space-between">
+              <a-col class="gutter-box" :span="4">
+                <a-form-item label="Lớp" has-feedback>
+                  <a-select
+                    v-model="formDataSearch.classID"
+                    class="filter-select"
+                    :disabled="checkShowClass"
+                    placeholder="~Chọn lớp học~"
+                    style="width: 100%"
+                    @search="fetchClass"
+                    @change="searchUser"
+                  >
+                    <a-select-option
+                      v-for="item in classList"
+                      :key="item.id"
+                      :value="item.id"
+                    >
+                      {{ item.className }}
+                    </a-select-option>
+                  </a-select>
+                </a-form-item>
+              </a-col>
+              <a-col class="gutter-box" :span="4">
+                <a-form-item label="Giáo viên chủ nhiệm" has-feedback>
+                  <span v-if="teacherInfo && teacherInfo.fullName">
+                    {{ teacherInfo.fullName }}
+                  </span>
+                </a-form-item>
+              </a-col>
+              <a-col class="gutter-box" :span="4">
+                <a-form-item label="Sĩ số" has-feedback>
+                  <span v-if="totals">
+                    {{ totals }}
+                  </span>
+                </a-form-item>
+              </a-col>
+              <a-col class="gutter-box custom-button-header" :span="4">
+                <base-button type="primary" @click="openAddForm()"
+                  >Thêm học sinh</base-button
+                >
+              </a-col>
+            </a-row>
+          </a-form>
         </div>
         <div class="table-responsive-class text-left">
           <a-spin :spinning="loading">
@@ -879,9 +916,11 @@ export default {
     return {
       userInfor: {
         username: "",
+        fullName: "",
         roleCode: "",
         classID: undefined,
       },
+      teacherInfo: "",
       checkShowClass: false,
       data: [],
       loadingModal: false,
@@ -899,7 +938,8 @@ export default {
         wardName: "",
         districtName: "",
         provinceName: "",
-        userName: ""
+        userName: "",
+        classID: undefined,
       },
       provinceCodeSearch: undefined,
       districtCodeSearch: undefined,
@@ -1117,6 +1157,7 @@ export default {
     },
     getUserInfor() {
       var username = this.$cookies.get("username");
+      var roleCode = this.$cookies.get("role");
       UserRepository.getUserByUsername(username).then((res) => {
         if (res.data.data) {
           var classOfTeacher =
@@ -1125,19 +1166,20 @@ export default {
               : res.data.data.classID;
           this.userInfor = {
             username: res.data.data.username,
+            fullName: res.data.data.fullName,
             roleCode: res.data.data.roleCode,
             classID: classOfTeacher,
           };
-          // console.log("this.userInfor ===>", this.userInfor);
-          // console.log("this.editForm ===>", this.editForm);
-          // console.log("this.addForm ===>", this.addForm);
           this.checkShowClassMethod(this.userInfor);
         }
       });
     },
     checkShowClassMethod(userInfor) {
       var parsedobj = JSON.parse(JSON.stringify(userInfor));
-      if (parsedobj.roleCode === "HIEU_TRUONG") {
+      if (
+        parsedobj.roleCode === "HIEU_TRUONG" ||
+        parsedobj.roleCode === "HIEU_PHO"
+      ) {
         this.checkShowClass = false;
       } else {
         this.checkShowClass = true;
@@ -1184,6 +1226,7 @@ export default {
     paginate(current = 1) {
       this.loading = true;
       this.current = current;
+
       UserRepository.searchUser(this.formDataSearch, this.current).then(
         (res) => {
           this.data = res.data.data.items;
@@ -1200,17 +1243,36 @@ export default {
         this.loading = false;
         return;
       }
-      UserRepository.searchUser(this.formDataSearch, 1).then((res) => {
-        this.data = res.data.data.items;
-        this.totals = res.data.data.total;
-        this.current = 1;
+      if (
+        this.userInfor &&
+        this.userInfor.roleCode === "GIAO_VIEN_CHU_NHIEM" &&
+        this.userInfor.classID
+      ) {
+        this.formDataSearch.classID = this.userInfor.classID;
+      }
+      if (this.formDataSearch.classID) {
+        UserRepository.searchUser(this.formDataSearch, 1)
+          .then((res) => {
+            if (res.data.success) {
+              this.data = res.data.data.items;
+              this.totals = res.data.data.total;
+              this.teacherInfo = res.data.data.teacher;
+              this.current = 1;
+              this.loading = false;
+            } else {
+              this.loading = false;
+            }
+          })
+          .catch(() => {
+            this.loading = false;
+          });
+      } else {
         this.loading = false;
-      });
+      }
     },
     handleSearch(selectedKeys, dataIndex) {
       this.searchText = selectedKeys[0];
       this.searchedColumn = dataIndex;
-      console.log("dataIndex", dataIndex);
       if (dataIndex === "fullName") {
         this.formDataSearch.fullName = selectedKeys[0];
       } else if (dataIndex === "gender") {
@@ -1279,7 +1341,6 @@ export default {
       this.cleaderLocation();
     },
     openAddForm() {
-      console.log("this.addForm ===>", this.addForm);
       if (this.userInfor && this.userInfor.classID) {
         this.addForm.classID = this.userInfor.classID;
       }
@@ -1398,7 +1459,6 @@ export default {
         this.provinceCodeSearch,
         ""
       ).then((res) => {
-        console.log(res);
         this.districtList = res.data.data;
         this.loadingModal = false;
       });
@@ -1410,7 +1470,6 @@ export default {
         this.provinceCodeSearch,
         ""
       ).then((res) => {
-        console.log(res);
         this.districtList = res.data.data;
         this.editForm.districtCode = undefined;
         this.addForm.districtCode = undefined;
@@ -1469,7 +1528,6 @@ export default {
       });
     },
     addNewUser() {
-      console.log("this.addForm.provinceId ===> ", this.addForm.provinceCode);
       this.loadingModal = true;
       const validation = this.validateAddNewStudent();
       if (!validation) {
@@ -1490,7 +1548,6 @@ export default {
       };
       UserRepository.addNewStudent(formAddData)
         .then((response) => {
-          console.log("response", response);
           if (response.data.success === true) {
             this.$notification.success({
               message: "Thêm mới học sinh thành công!",
@@ -1528,11 +1585,10 @@ export default {
         provinceCode: this.addForm.provinceCode,
         districtCode: this.addForm.districtCode,
         wardCode: this.addForm.wardCode,
-        addressDetail: this.addForm.addressDetail
+        addressDetail: this.addForm.addressDetail,
       };
       UserRepository.addNewTeacher(formAddData)
         .then((response) => {
-          console.log("response", response);
           if (response.data.success === true) {
             this.$notification.success({
               message: "Thêm mới giáo viên thành công!",
@@ -1598,7 +1654,6 @@ export default {
         addressDetail: this.editForm.addressDetail,
         classID: this.editForm.classID,
       };
-      console.log("This.editForm ===>", editForm);
       UserRepository.updateUser(editForm)
         .then((response) => {
           if (response.data.success === true) {
@@ -1647,9 +1702,17 @@ export default {
 .ant-pagination {
   float: right;
 }
-
+/* .header-cus {
+  float: left;
+} */
 .cus-header-class {
   margin: none !important;
   padding: none !important;
+}
+.header-filter-custom {
+  width: 70%;
+}
+.custom-button-header {
+  margin-top: 20px;
 }
 </style>

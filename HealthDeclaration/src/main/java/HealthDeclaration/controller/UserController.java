@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import HealthDeclaration.common.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
@@ -106,9 +107,14 @@ public class UserController {
             responseMessage.setSuccess(true);
             List<UserDto> result = service.searchUserToManagement(formSearch, pageIndex, pageSize);
             Long total = service.countSearchUserToManagement(formSearch);
+			User teacher = null;
+			if (!ObjectUtils.isNullorEmpty(result)) {
+				teacher = service.getByUsername(result.get(0).getTeacherUsername());
+			}
             Map<String, Object> results = new HashMap<>();
             results.put("items", result);
             results.put("total", total);
+			results.put("teacher", teacher);
             responseMessage.setData(results);
         } catch (Exception e) {
             log.error(e);

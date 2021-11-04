@@ -31,6 +31,7 @@ public class UserDto {
     private Long wardCode;
     private String wardName;
     private String addressDetail;
+    private String teacherUsername;
 
     public UserDto(Long id, String userName, String fullName) {
         this.id = id;
@@ -41,7 +42,7 @@ public class UserDto {
     public UserDto(Long id, String userName, String fullName, Date dob, Boolean gender, String phoneNumber,
                    String parentPhoneNumber, Long provinceCode, String provinceName, Long districtCode,
                    String districtName, Long wardCode, String wardName, String addressDetail, String roleCode,
-                   String roleName, Long classID, String className) {
+                   String roleName, Long classID, String className, String teacherUsername) {
         this.id = id;
         this.userName = userName;
         this.fullName = fullName;
@@ -60,6 +61,7 @@ public class UserDto {
         this.roleName = roleName;
         this.classID = classID;
         this.className = className;
+        this.teacherUsername = teacherUsername;
     }
 
     public UserDto(Long id, String userName, String fullName, Date dob, Boolean gender, String phoneNumber,

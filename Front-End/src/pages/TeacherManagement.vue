@@ -6,7 +6,7 @@
           <h4 class="card-title">Student Management</h4>
         </template>
 
-        <div class="container">
+        <div class="container" v-if="userInfor.roleCode === 'HIEU_TRUONG'">
           <div class="row">
             <div>
               <base-button type="primary" @click="openAddForm()"
@@ -102,7 +102,7 @@
                 </template>
               </template>
               <template #action="item">
-                <a-dropdown>
+                <a-dropdown :disabled="userInfor.roleCode !== 'HIEU_TRUONG'">
                   <a-menu slot="overlay">
                     <a-menu-item key="1" @click="handleEditItemBtnClick(item)">
                       Sửa
@@ -1211,7 +1211,7 @@ export default {
       });
     },
     addNewTeacher() {
-      //   this.loadingModal = true;
+      this.loadingModal = true;
       const validation = this.validateAddNewTeacher();
       if (!validation) {
         this.loadingModal = false;
@@ -1229,10 +1229,8 @@ export default {
         wardCode: this.addForm.wardCode,
         addressDetail: this.addForm.addressDetail,
       };
-      console.log("formAddData ===>", formAddData);
       UserRepository.addNewTeacher(formAddData)
         .then((response) => {
-          console.log("response", response);
           if (response.data.success === true) {
             this.$notification.success({
               message: "Thêm mới giáo viên thành công!",
