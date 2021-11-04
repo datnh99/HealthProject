@@ -123,7 +123,7 @@ export default {
             Vue.$cookies.set("accessToken", this.userData.token, expiredTime);
             Vue.$cookies.set("username", this.userData.username, expiredTime);
             Vue.$cookies.set("role", userInfo.roleCode, expiredTime);
-            this.$router.push("user");
+            this.$router.push("home-page");
             this.loading = false;
           } else {
             this.errorLogin = "Username or password is incorrect!";

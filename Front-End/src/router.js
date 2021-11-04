@@ -20,8 +20,13 @@ const router = [
   {
     path: "/",
     component: DashboardLayout,
-    redirect: "dashboard",
+    redirect: "/home-page",
     children: [
+      {
+        path: "home-page",
+        name: "User Profile",
+        component: UserProfile
+      },
       {
         path: "declare",
         name: "Declaration",
@@ -74,11 +79,6 @@ const router = [
         component: Notifications
       },
       {
-        path: "user",
-        name: "User Profile",
-        component: UserProfile
-      },
-      {
         path: "table",
         name: "Table List",
         component: TableList
@@ -88,8 +88,13 @@ const router = [
         name: "Typography",
         component: Typography
       },
+      // {
+      //   path: ":catchAll(.*)",
+      //   name: "NotFound",
+      //   component: NotFound
+      // },
       {
-        path: ":catchAll(.*)",
+        path: "*",
         name: "NotFound",
         component: NotFound
       }

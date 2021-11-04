@@ -21,7 +21,7 @@ export default {
   name: "403",
   data() {
     return {
-      clientUrl: `${CONFIG.CLIENT_URL}/#/dashboard`,
+      clientUrl: `${CONFIG.CLIENT_URL}/#/home-page`,
     };
   },
 };
