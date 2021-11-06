@@ -6,47 +6,32 @@
       <!-- <mobile-menu slot="content"></mobile-menu> -->
       <sidebar-link to="/home-page">
         <i class="tim-icons icon-single-02"></i>
-        <template v-if="!isRTL">
+        <template>
           <p>Trang chủ</p>
-        </template>
-        <template v-else>
-          <p>ملف تعريفي للمستخدم</p>
         </template>
       </sidebar-link>
       <sidebar-link to="/dashboard">
         <i class="tim-icons icon-chart-pie-36"></i>
-        <template v-if="!isRTL">
+        <template>
           <p>Dashboard</p>
-        </template>
-        <template v-else>
-          <p>لوحة القيادة</p>
         </template>
       </sidebar-link>
       <sidebar-link to="/class-management">
         <i class="tim-icons icon-bank"></i>
-        <template v-if="!isRTL">
+        <template>
           <p>Quản lý lớp học</p>
-        </template>
-        <template v-else>
-          <p>لوحة القيادة</p>
         </template>
       </sidebar-link>
       <sidebar-link to="/user-management">
         <i class="tim-icons icon-single-02"></i>
-        <template v-if="!isRTL">
+        <template>
           <p>Quản lý học sinh</p>
-        </template>
-        <template v-else>
-          <p>لوحة القيادة</p>
         </template>
       </sidebar-link>
       <sidebar-link to="/teacher-management">
         <i class="tim-icons icon-single-02"></i>
-        <template v-if="!isRTL">
+        <template>
           <p>Quản lý giáo viên</p>
-        </template>
-        <template v-else>
-          <p>لوحة القيادة</p>
         </template>
       </sidebar-link>
     </side-bar>
@@ -86,9 +71,6 @@ export default {
     };
   },
   computed: {
-    isRTL() {
-      return this.$rtl.isRTL;
-    },
     checkToken() {
       if (this.$cookies.get("accessToken")) {
         return true;
@@ -105,5 +87,3 @@ export default {
   }
 };
 </script>
-<style scoped>
-</style>

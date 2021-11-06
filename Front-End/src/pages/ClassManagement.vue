@@ -6,7 +6,7 @@
           <h4 class="card-title">Class Management</h4>
         </template>
 
-        <div class="container cus-header-class">
+        <!-- <div class="container cus-header-class">
           <div class="row justify-content-between">
             <div class="col-2 button-add-custom">
               <base-button type="primary" @click="openAddForm()"
@@ -15,24 +15,18 @@
             </div>
             <div class="col-6"></div>
           </div>
-        </div>
-        <!-- <div class="row">
-          <div class="col-12">
-            <div class="col-4">
-              <base-button type="primary" block>Thêm lớp học</base-button>
-            </div>
-
-            <div class="col-4 gutter-example pt-md pagnigation-custom">
-              <a-pagination
-                v-model="current"
-                show-quick-jumper
-                :default-current="1"
-                :total="totals"
-                @change="paginate"
-              />
-            </div>
-          </div>
         </div> -->
+        <div class="header-filter-custom text-left">
+          <a-form>
+            <a-row type="flex" justify="space-between">
+              <a-col class="gutter-box custom-button-header" :span="4">
+                <base-button type="primary" @click="openAddForm()"
+                  >Thêm lớp học</base-button
+                >
+              </a-col>
+            </a-row>
+          </a-form>
+        </div>
         <div class="table-responsive-class text-left">
           <a-spin :spinning="loading">
             <a-icon

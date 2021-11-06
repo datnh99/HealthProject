@@ -6,7 +6,7 @@
           <h4 class="card-title">Student Management</h4>
         </template>
 
-        <div class="container" v-if="userInfor.roleCode === 'HIEU_TRUONG'">
+        <!-- <div class="container" v-if="userInfor.roleCode === 'HIEU_TRUONG'">
           <div class="row">
             <div>
               <base-button type="primary" @click="openAddForm()"
@@ -14,6 +14,17 @@
               >
             </div>
           </div>
+        </div> -->
+        <div class="header-filter-custom text-left">
+          <a-form>
+            <a-row type="flex" justify="space-between">
+              <a-col class="gutter-box custom-button-header" :span="4">
+                <base-button type="primary" @click="openAddForm()"
+                  >Thêm giáo viên</base-button
+                >
+              </a-col>
+            </a-row>
+          </a-form>
         </div>
         <div class="table-responsive-class text-left">
           <a-spin :spinning="loading">
@@ -188,7 +199,7 @@
 
         <!-- edit modal -->
         <a-modal
-          title="Chỉnh sửa thông tin người dùng"
+          title="Chỉnh sửa thông tin giáo viên"
           v-model="showModal.edit"
           :maskClosable="false"
           :destroyOnClose="true"
@@ -336,6 +347,9 @@
                     {{ item.name }}
                   </a-select-option>
                 </a-select>
+                <span v-if="errors.provinceCode" class="red">
+                  {{ errors.provinceCode }}
+                </span>
               </a-col>
             </a-row>
 
@@ -362,6 +376,9 @@
                     {{ item.districtName }}
                   </a-select-option>
                 </a-select>
+                <span v-if="errors.districtCode" class="red">
+                  {{ errors.districtCode }}
+                </span>
               </a-col>
             </a-row>
 
@@ -387,6 +404,9 @@
                     {{ item.wardName }}
                   </a-select-option>
                 </a-select>
+                <span v-if="errors.wardCode" class="red">
+                  {{ errors.wardCode }}
+                </span>
               </a-col>
             </a-row>
 
@@ -553,6 +573,9 @@
                     {{ item.name }}
                   </a-select-option>
                 </a-select>
+                <span v-if="errors.provinceCode" class="red">
+                  {{ errors.provinceCode }}
+                </span>
               </a-col>
             </a-row>
 
@@ -578,6 +601,9 @@
                     {{ item.districtName }}
                   </a-select-option>
                 </a-select>
+                <span v-if="errors.districtCode" class="red">
+                  {{ errors.districtCode }}
+                </span>
               </a-col>
             </a-row>
 
@@ -602,6 +628,9 @@
                     {{ item.wardName }}
                   </a-select-option>
                 </a-select>
+                <span v-if="errors.wardCode" class="red">
+                  {{ errors.wardCode }}
+                </span>
               </a-col>
             </a-row>
 
@@ -981,7 +1010,6 @@ export default {
     handleSearch(selectedKeys, dataIndex) {
       this.searchText = selectedKeys[0];
       this.searchedColumn = dataIndex;
-      console.log("dataIndex", dataIndex);
       if (dataIndex === "fullName") {
         this.formDataSearch.fullName = selectedKeys[0];
       } else if (dataIndex === "gender") {
@@ -1071,6 +1099,14 @@ export default {
       ) {
         this.errors.phoneNumber = requiredError;
         isValid = false;
+      } else {
+        if (this.editForm.phoneNumber.match(/\d/g).length === 10) {
+          // Phone number okela
+        } else {
+          this.errors.phoneNumber =
+            "Số điện thoại phải có 10 số và bao gồm các số từ 0-9!";
+          isValid = false;
+        }
       }
       if (
         this.editForm.provinceCode == "" ||
@@ -1106,6 +1142,14 @@ export default {
       if (this.addForm.phoneNumber == "" || this.addForm.phoneNumber == null) {
         this.errors.phoneNumber = requiredError;
         isValid = false;
+      } else {
+        if (this.addForm.phoneNumber.match(/\d/g).length === 10) {
+          // Phone number okela
+        } else {
+          this.errors.phoneNumber =
+            "Số điện thoại phải có 10 số và bao gồm các số từ 0-9!";
+          isValid = false;
+        }
       }
       if (
         this.addForm.provinceCode == "" ||
@@ -1141,7 +1185,6 @@ export default {
         this.provinceCodeSearch,
         ""
       ).then((res) => {
-        console.log(res);
         this.districtList = res.data.data;
         this.loadingModal = false;
       });
@@ -1277,7 +1320,7 @@ export default {
         });
     },
     saveEditUser() {
-      // this.loadingModal = true;
+      this.loadingModal = true;
       const validation = this.validate();
       if (!validation) {
         this.loadingModal = false;

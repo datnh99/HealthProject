@@ -2,9 +2,9 @@
   <div class="content">
     <card>
       <template slot="header">
-        <h4 class="card-title">THÔNG TIN KHAI BÁO Y TẾ</h4>
+        <h4 class="card-title">Khai báo y tế</h4>
       </template>
-      <div class="table-responsive text-left">
+      <div class="table-responsive text-left declard-form-cus">
         <a-form :form="form" @submit="handleSubmit">
           <a-row type="flex">
             <a-col class="gutter-box" flex="1 1 200px">
@@ -365,7 +365,7 @@
               </a-form-item>
             </a-card>
           </a-card>
-
+          <br />
           <a-form-item v-bind="tailFormItemLayout">
             <a-button type="primary" html-type="submit"> Gửi tờ khai </a-button>
           </a-form-item>
@@ -407,11 +407,11 @@ export default {
         wrapperCol: {
           xs: {
             span: 24,
-            offset: 0,
+            offset: 8,
           },
           sm: {
-            span: 16,
-            offset: 8,
+            span: 24,
+            offset: 11,
           },
         },
       },
@@ -535,5 +535,26 @@ export default {
 }
 .gutter-box {
   padding-right: 10px;
+}
+.card-title {
+  text-align: center;
+  font-weight: normal !important;
+  font-size: 18px;
+}
+</style>
+<style>
+.ant-card-bordered {
+  border: 1px solid #52c41a !important;
+  border-radius: 25px !important;
+}
+.declard-form-cus .ant-card-head-wrapper .ant-card-head-title {
+  white-space: initial !important;
+}
+.declard-form-cus .ant-form-item-label {
+  white-space: initial !important;
+  text-align: left !important;
+}
+.table-responsive {
+  overflow: hidden !important;
 }
 </style>

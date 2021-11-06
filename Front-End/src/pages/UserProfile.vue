@@ -6,7 +6,15 @@
         </edit-profile-form>
       </div> -->
       <div class="col-md-12">
-        <user-card :user="user"></user-card>
+        <a-spin :spinning="loading">
+          <a-icon
+            type="loading"
+            slot="indicator"
+            style="font-size: 24px"
+            spin
+          />
+          <user-card :user="user"></user-card>
+        </a-spin>
       </div>
     </div>
   </div>
@@ -38,8 +46,9 @@ export default {
         fullName: "",
         phoneNumber: "",
         addressDetail: "",
-        gender:false
+        gender: false,
       },
+      loading: false,
     };
   },
   created() {
@@ -47,6 +56,7 @@ export default {
   },
   methods: {
     getUserProfile() {
+      this.loading = true;
       const username = this.$cookies.get("username");
       UserRepository.getUserByUsername(username).then((res) => {
         let userProfile = res.data.data;
@@ -54,10 +64,10 @@ export default {
         this.user.phoneNumber = userProfile.phoneNumber;
         this.user.addressDetail = userProfile.addressDetail;
         this.user.gender = userProfile.gender;
+        this.loading = false;
       });
     },
   },
 };
 </script>
-<style>
-</style>
+<style></style>
