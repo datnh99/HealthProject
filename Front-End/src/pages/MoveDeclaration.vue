@@ -140,12 +140,12 @@
                       rules: [
                         {
                           required: true,
-                          message: 'Bạn chưa chọn nơi đi!',
+                          message: 'Bạn chưa chọn nơi ở!',
                         },
                       ],
                     },
                   ]"
-                  placeholder="Chọn tỉnh"
+                  placeholder="Chọn tỉnh, thành phố"
                 >
                   <a-select-option
                     v-for="item in fetchedData.listProvince"
@@ -167,7 +167,7 @@
                       rules: [
                         {
                           required: true,
-                          message: 'Bạn chưa chọn điểm đi(Quận huyện)',
+                          message: 'Bạn chưa chọn nơi ở(Quận huyện)!',
                         },
                       ],
                     },
@@ -193,7 +193,7 @@
                       rules: [
                         {
                           required: true,
-                          message: 'Bạn chưa chọn điểm đi(Phường xã)',
+                          message: 'Bạn chưa chọn nơi ở(Phường xã)!',
                         },
                       ],
                     },
@@ -222,7 +222,285 @@
                       rules: [
                         {
                           required: true,
-                          message: 'Bạn chưa nhập địa chỉ',
+                          message: 'Bạn chưa nhập địa chỉ nơi ở!',
+                        },
+                      ],
+                    },
+                  ]"
+                  placeholder="Nhập..."
+                >
+                </a-input>
+              </a-form-item>
+            </a-col>
+          </a-row>
+
+          <a-row type="flex">
+            <a-col class="gutter-box" flex="1 1 200px">
+              <a-form-item label="Loại phương tiện" has-feedback>
+                <a-select
+                  v-decorator="[
+                    'vehicleType',
+                    {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Bạn chưa chọn loại phương tiện!',
+                        },
+                      ],
+                    },
+                  ]"
+                  placeholder="Chọn phương tiện"
+                >
+                  <a-select-option
+                    v-for="item in fetchedData.listVehicle"
+                    :key="item.id"
+                    :value="item.code"
+                  >
+                    {{ item.name }}
+                  </a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col class="gutter-box" flex="1 1 200px">
+              <a-form-item label="Biển số/ Số hiệu phương tiện" has-feedback>
+                <a-input
+                  v-decorator="[
+                    'controlPlateNumber',
+                    {
+                      rules: [
+                        {
+                          required: true,
+                          message:
+                            'Bạn chưa nhập biển số/ số hiệu phương tiện!',
+                        },
+                      ],
+                    },
+                  ]"
+                  placeholder="Nhập biển số/ số hiệu phương tiện"
+                >
+                </a-input>
+              </a-form-item>
+            </a-col>
+            <a-col class="gutter-box" flex="1 1 200px">
+              <a-form-item label="Ngày di chuyển" has-feedback>
+                <a-date-picker
+                  v-decorator="[
+                    'movingDate',
+                    {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Bạn chưa chọn ngày di chuyển!',
+                        },
+                      ],
+                    },
+                  ]"
+                  placeholder="Chọn ngày di chuyển"
+                >
+                </a-date-picker>
+              </a-form-item>
+            </a-col>
+          </a-row>
+
+          <a-row type="flex" label="1. Nơi đi" title="1. Nơi đi">
+            <a-col class="gutter-box" flex="1 1 200px">
+              <a-form-item label="Tỉnh thành" has-feedback>
+                <a-select
+                  @change="onChangeProvinceFrom"
+                  v-decorator="[
+                    'provinceCodeFrom',
+                    {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Bạn chưa chọn nơi đi!',
+                        },
+                      ],
+                    },
+                  ]"
+                  placeholder="Chọn tỉnh, thành phố"
+                >
+                  <a-select-option
+                    v-for="item in fetchedData.listProvince"
+                    :key="item.id"
+                    :value="item.code"
+                  >
+                    {{ item.name }}
+                  </a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col class="gutter-box" flex="1 1 200px">
+              <a-form-item label="Quận huyện" has-feedback>
+                <a-select
+                  @change="onChangeDistrictFrom"
+                  v-decorator="[
+                    'districtCodeFrom',
+                    {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Bạn chưa chọn điểm đi(Quận huyện)!',
+                        },
+                      ],
+                    },
+                  ]"
+                  placeholder="Chọn quận huyện"
+                >
+                  <a-select-option
+                    v-for="item in fetchedData.listDistrictFrom"
+                    :key="item.id"
+                    :value="item.districtCode"
+                  >
+                    {{ item.districtName }}
+                  </a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col class="gutter-box" flex="1 1 200px">
+              <a-form-item label="Phường xã" has-feedback>
+                <a-select
+                  v-decorator="[
+                    'wardCodeFrom',
+                    {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Bạn chưa chọn điểm đi(Phường xã)!',
+                        },
+                      ],
+                    },
+                  ]"
+                  placeholder="Chọn phường xã"
+                >
+                  <a-select-option
+                    v-for="item in fetchedData.listWardFrom"
+                    :key="item.id"
+                    :value="item.wardCode"
+                  >
+                    {{ item.wardName }}
+                  </a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col class="gutter-box" flex="1 1 200px">
+              <a-form-item
+                label="Số nhà,phố tổ,tổ dân phố/thôn/đội"
+                has-feedback
+              >
+                <a-input
+                  v-decorator="[
+                    'addressDetailFrom',
+                    {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Bạn chưa nhập địa chỉ đi điểm đi!',
+                        },
+                      ],
+                    },
+                  ]"
+                  placeholder="Nhập..."
+                >
+                </a-input>
+              </a-form-item>
+            </a-col>
+          </a-row>
+
+          <a-row type="flex" label="1. Nơi đi" title="1. Nơi đi">
+            <a-col class="gutter-box" flex="1 1 200px">
+              <a-form-item label="Tỉnh thành" has-feedback>
+                <a-select
+                  @change="onChangeProvinceTo"
+                  v-decorator="[
+                    'provinceCodeTo',
+                    {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Bạn chưa chọn nơi đến!',
+                        },
+                      ],
+                    },
+                  ]"
+                  placeholder="Chọn tỉnh, thành phố"
+                >
+                  <a-select-option
+                    v-for="item in fetchedData.listProvince"
+                    :key="item.id"
+                    :value="item.code"
+                  >
+                    {{ item.name }}
+                  </a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col class="gutter-box" flex="1 1 200px">
+              <a-form-item label="Quận huyện" has-feedback>
+                <a-select
+                  @change="onChangeDistrictTo"
+                  v-decorator="[
+                    'districtCodeTo',
+                    {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Bạn chưa chọn điểm đến(Quận huyện)!',
+                        },
+                      ],
+                    },
+                  ]"
+                  placeholder="Chọn quận huyện"
+                >
+                  <a-select-option
+                    v-for="item in fetchedData.listDistrictTo"
+                    :key="item.id"
+                    :value="item.districtCode"
+                  >
+                    {{ item.districtName }}
+                  </a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col class="gutter-box" flex="1 1 200px">
+              <a-form-item label="Phường xã" has-feedback>
+                <a-select
+                  v-decorator="[
+                    'wardCodeTo',
+                    {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Bạn chưa chọn điểm đến(Phường xã)!',
+                        },
+                      ],
+                    },
+                  ]"
+                  placeholder="Chọn phường xã"
+                >
+                  <a-select-option
+                    v-for="item in fetchedData.listWardTo"
+                    :key="item.id"
+                    :value="item.wardCode"
+                  >
+                    {{ item.wardName }}
+                  </a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col class="gutter-box" flex="1 1 200px">
+              <a-form-item
+                label="Số nhà,phố tổ,tổ dân phố/thôn/đội"
+                has-feedback
+              >
+                <a-input
+                  v-decorator="[
+                    'addressDetailTo',
+                    {
+                      rules: [
+                        {
+                          required: true,
+                          message: 'Bạn chưa nhập địa chỉ điểm đến!',
                         },
                       ],
                     },
@@ -246,7 +524,7 @@
                     rules: [
                       {
                         required: true,
-                        message: 'Bạn chưa nhập địa chỉ',
+                        message: 'Bạn chưa chọn',
                       },
                     ],
                   },
@@ -329,7 +607,7 @@
               >
                 <a-radio-group
                   v-decorator="[
-                    'contactToPlace',
+                    'closeToSicking',
                     {
                       rules: [
                         {
@@ -347,9 +625,42 @@
             </a-card>
           </a-card>
           <br />
-          <a-form-item v-bind="tailFormItemLayout">
-            <a-button type="primary" html-type="submit"> Gửi tờ khai </a-button>
-          </a-form-item>
+          <div class="confirm-and-submit">
+            <div>
+              <h4 class="number-header-rule">
+                Cam kết thực hiện biện pháp phòng chống dịch
+                <span class="red">*</span>
+              </h4>
+            </div>
+            <div>
+              <span class="number-header-rule">1. </span
+              ><span class="content-rule "
+                >Di chuyển thẳng từ sân bay về nơi lưu trú và thông báo ngay cho y
+                tế địa phương nơi cư trú.</span
+              >
+              <br />
+              <span class="number-header-rule">2. </span
+              ><span class="content-rule "
+                >Tuân thủ tuyệt đối các hướng dẫn, quy định và trả mọi chi phí
+                liên quan đến biện pháp phòng chống dịch Covid-19 theo quy định
+                của địa phương nơi đến.</span
+              >
+            </div>
+            <br />
+            <a-checkbox @change="onAcceptRule">
+              Tôi đã đoc và cam kết thực hiện các nội dung trên
+            </a-checkbox>
+            <br />
+            <a-form-item v-bind="tailFormItemLayout">
+              <a-button
+                type="primary"
+                html-type="submit"
+                :disabled="!showButtonSubmit"
+              >
+                Gửi tờ khai
+              </a-button>
+            </a-form-item>
+          </div>
         </a-form>
       </div>
     </card>
@@ -358,6 +669,7 @@
 <script>
 import { Card } from "@/components/index";
 import LocationRepository from "../api/location.js";
+import VehicleRepository from "../api/vehicle.js";
 import UserRepository from "../api/user.js";
 import HealthRepository from "../api/healthReport.js";
 export default {
@@ -368,8 +680,15 @@ export default {
     return {
       fetchedData: {
         listProvince: [],
+        listProvinceFrom: [],
+        listProvinceTo: [],
         listDistrict: [],
+        listDistrictFrom: [],
+        listDistrictTo: [],
         listWard: [],
+        listWardFrom: [],
+        listWardTo: [],
+        listVehicle: [],
       },
       confirmDirty: false,
       autoCompleteResult: [],
@@ -396,6 +715,7 @@ export default {
           },
         },
       },
+      showButtonSubmit: false,
     };
   },
   beforeCreate() {
@@ -404,9 +724,13 @@ export default {
   created() {
     this.fetchProvince();
     this.getUserDetail();
+    this.fetchVehicle("");
   },
   mounted: {},
   methods: {
+    onAcceptRule(e) {
+      this.showButtonSubmit = e.target.checked;
+    },
     getUserDetail() {
       UserRepository.getUserByUsername(this.$cookies.get("username")).then(
         (res) => {
@@ -433,10 +757,34 @@ export default {
       this.form.resetFields("wardCode");
       this.fetchDistrict(value);
     },
+    onChangeProvinceFrom(value) {
+      this.fetchedData.listDistrictFrom = [];
+      this.fetchedData.listWardFrom = [];
+      this.form.resetFields("districtCodeFrom");
+      this.form.resetFields("wardCodeFrom");
+      this.fetchDistrictFrom(value);
+    },
+    onChangeProvinceTo(value) {
+      this.fetchedData.listDistrictTo = [];
+      this.fetchedData.listWardTo = [];
+      this.form.resetFields("districtCodeTo");
+      this.form.resetFields("wardCodeTo");
+      this.fetchDistrictTo(value);
+    },
     onChangeDistrict(value) {
       this.fetchedData.listWard = [];
       this.form.resetFields("wardCode");
       this.fetchWard(value);
+    },
+    onChangeDistrictFrom(value) {
+      this.fetchedData.listWardFrom = [];
+      this.form.resetFields("wardCodeFrom");
+      this.fetchWardFrom(value);
+    },
+    onChangeDistrictTo(value) {
+      this.fetchedData.listWardTo = [];
+      this.form.resetFields("wardCodeTo");
+      this.fetchWardTo(value);
     },
     fetchProvince() {
       LocationRepository.getAllProvince().then((res) => {
@@ -448,9 +796,34 @@ export default {
         this.fetchedData.listDistrict = res.data.data;
       });
     },
+    fetchDistrictFrom(value) {
+      LocationRepository.getDistrictInProvince(value, "").then((res) => {
+        this.fetchedData.listDistrictFrom = res.data.data;
+      });
+    },
+    fetchDistrictTo(value) {
+      LocationRepository.getDistrictInProvince(value, "").then((res) => {
+        this.fetchedData.listDistrictTo = res.data.data;
+      });
+    },
     fetchWard(value) {
       LocationRepository.getWardInDistrict(value, "").then((res) => {
         this.fetchedData.listWard = res.data.data;
+      });
+    },
+    fetchWardFrom(value) {
+      LocationRepository.getWardInDistrict(value, "").then((res) => {
+        this.fetchedData.listWardFrom = res.data.data;
+      });
+    },
+    fetchWardTo(value) {
+      LocationRepository.getWardInDistrict(value, "").then((res) => {
+        this.fetchedData.listWardTo = res.data.data;
+      });
+    },
+    fetchVehicle(value) {
+      VehicleRepository.getVehicleByName(value).then((res) => {
+        this.fetchedData.listVehicle = res.data.data.items;
       });
     },
     handleSubmit(e) {
@@ -463,18 +836,19 @@ export default {
       });
     },
     submitHealthReport(form) {
-      HealthRepository.add(form)
-        .then((res) => {
-          this.$notification.success({
-            message: "Khai báo y tế thành công!",
-          });
-        })
-        .catch((err) => {
-          this.$notification.console.error();
-          ({
-            message: "Khai báo y tế thất bại!",
-          });
-        });
+      console.log("form data ===>", form);
+      // HealthRepository.add(form)
+      //   .then((res) => {
+      //     this.$notification.success({
+      //       message: "Khai báo y tế thành công!",
+      //     });
+      //   })
+      //   .catch((err) => {
+      //     this.$notification.console.error();
+      //     ({
+      //       message: "Khai báo y tế thất bại!",
+      //     });
+      //   });
     },
     handleConfirmBlur(e) {
       const value = e.target.value;
@@ -522,6 +896,13 @@ export default {
   font-weight: normal !important;
   font-size: 18px;
 }
+.number-header-rule {
+  font-weight: normal;
+  font-size: 14px;
+}
+.content-rule {
+  font-size: 0.75rem;
+}
 </style>
 <style>
 .ant-card-bordered {
@@ -537,5 +918,16 @@ export default {
 }
 .table-responsive {
   overflow: hidden !important;
+}
+
+.confirm-and-submit .ant-checkbox-wrapper:hover .ant-checkbox-inner,
+.ant-checkbox:hover .ant-checkbox-inner,
+.ant-checkbox-input:focus + .ant-checkbox-inner {
+  border-color: #52bb64 !important;
+}
+
+.confirm-and-submit .ant-checkbox-checked .ant-checkbox-inner {
+  border-color: #52bb64 !important;
+  background-color: #52bb64 !important;
 }
 </style>

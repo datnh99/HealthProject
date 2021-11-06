@@ -15,6 +15,7 @@ import Forbidden from "@/pages/403.vue";
 import CONFIG from "./config/index";
 import { checkLogin } from "./api/processLogin";
 import Declaration from "@/pages/Declaration.vue";
+import MoveDeclaration from "@/pages/MoveDeclaration.vue";
 
 const router = [
   {
@@ -31,6 +32,11 @@ const router = [
         path: "declare",
         name: "Declaration",
         component: Declaration
+      },
+      {
+        path: "move-declare",
+        name: "MoveDeclaration",
+        component: MoveDeclaration
       },
       {
         path: "login",
