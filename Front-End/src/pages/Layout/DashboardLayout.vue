@@ -2,7 +2,7 @@
   <div class="wrapper">
     <!-- <div class="wrapper" :class="{'nav-open': $sidebar.showSidebar}"> -->
 
-    <side-bar :background-color="backgroundColor" v-if="checkToken">
+    <side-bar class="side-bar-custom" v-if="checkToken">
       <!-- <mobile-menu slot="content"></mobile-menu> -->
       <sidebar-link to="/home-page">
         <i class="tim-icons icon-single-02"></i>
@@ -67,7 +67,7 @@ export default {
   },
   data() {
     return {
-      backgroundColor: "blue"
+      backgroundColor: "green"
     };
   },
   computed: {
@@ -87,3 +87,9 @@ export default {
   }
 };
 </script>
+
+<style>
+.sidebar-wrapper {
+  background-color: rgb(82 187 100) !important;
+}
+</style>

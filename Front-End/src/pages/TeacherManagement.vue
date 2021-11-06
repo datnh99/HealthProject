@@ -1392,3 +1392,55 @@ export default {
   padding: none !important;
 }
 </style>
+
+<style>
+.btn-primary {
+  background: #52bb64 !important;
+  background-image: #52bb64 !important;
+  background-color: #52bb64 !important;
+}
+
+.btn-primary:hover {
+  background: #52bb64 !important;
+  background-image: #52bb64 !important;
+  background-color: #52bb64 !important;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.btn-primary:active:focus,
+.btn-primary:active:hover,
+.btn-primary.active:focus,
+.btn-primary.active:hover {
+  background: #52bb64 !important;
+  background-image: #52bb64 !important;
+}
+.btn:hover,
+.btn:focus,
+.btn:active,
+.btn.active,
+.btn:active:focus,
+.btn:active:hover,
+.btn.active:focus,
+.btn.active:hover,
+.navbar .navbar-nav > a.btn:hover,
+.navbar .navbar-nav > a.btn:focus,
+.navbar .navbar-nav > a.btn:active,
+.navbar .navbar-nav > a.btn.active,
+.navbar .navbar-nav > a.btn:active:focus,
+.navbar .navbar-nav > a.btn:active:hover,
+.navbar .navbar-nav > a.btn.active:focus,
+.navbar .navbar-nav > a.btn.active:hover {
+  background: #52bb64 !important;
+  background-image: #52bb64 !important;
+}
+.ant-btn-primary {
+  background-color: #52bb64 !important;
+  border-color: #52bb64 !important;
+}
+.ant-btn-secondary:hover {
+  border-color: red !important;
+  color: red !important;
+}
+</style>

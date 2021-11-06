@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar" :data="backgroundColor">
+  <div class="sidebar">
     <div class="sidebar-wrapper text-left">
       <div class="logo">
         <a href="javascript:void(0)" class="simple-text logo-mini">
@@ -38,10 +38,6 @@ export default {
     title: {
       type: String,
       default: "Khai Báo Y Tế"
-    },
-    backgroundColor: {
-      type: String,
-      default: "green"
     },
     sidebarLinks: {
       type: Array,

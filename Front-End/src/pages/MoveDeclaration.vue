@@ -2,7 +2,7 @@
   <div class="content">
     <card>
       <template slot="header">
-        <h4 class="card-title">Khai báo y tế</h4>
+        <h4 class="card-title">Khai báo di chuyển nội địa</h4>
       </template>
       <div class="table-responsive text-left declard-form-cus">
         <a-form :form="form" @submit="handleSubmit">
@@ -27,25 +27,6 @@
                 </a-input>
               </a-form-item>
             </a-col>
-            <!-- <a-col class="gutter-box" flex="1 1 200px">
-              <a-form-item label="CMND/CCCD" has-feedback>
-                <a-input
-                  v-decorator="[
-                    'verificationId',
-                    {
-                      rules: [
-                        {
-                          required: true,
-                          message: 'Bạn chưa nhập CMND/CCCD',
-                        },
-                      ],
-                    },
-                  ]"
-                  placeholder="Nhập..."
-                >
-                </a-input>
-              </a-form-item>
-            </a-col> -->
             <a-col class="gutter-box" flex="1 1 200px">
               <a-form-item label="Giới tính" has-feedback>
                 <a-select
@@ -366,21 +347,8 @@
             </a-card>
           </a-card>
           <br />
-          <div class="red">
-            Dữ liệu bạn cung cấp hoàn toàn bảo mật và chỉ phục vụ cho việc
-            phòng, chống dịch, thuộc quản lý của ban lãnh đạo nhà trường và địa
-            phương về phòng, chống dịch Covid-19. Khi bạn ấn nút "Gửi" là bạn đã
-            hiểu và đồng ý.
-          </div>
-          <br />
           <a-form-item v-bind="tailFormItemLayout">
-            <a-button
-              type="primary"
-              html-type="submit"
-              style="border: 0px solid !important; border-radius: 25px !important; background-color: #1fc45c;"
-            >
-              Gửi tờ khai
-            </a-button>
+            <a-button type="primary" html-type="submit"> Gửi tờ khai </a-button>
           </a-form-item>
         </a-form>
       </div>
