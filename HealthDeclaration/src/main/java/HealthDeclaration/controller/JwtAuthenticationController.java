@@ -1,5 +1,6 @@
 package HealthDeclaration.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,7 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import HealthDeclaration.modal.entity.User;
 import HealthDeclaration.service.IUserService;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -32,6 +37,9 @@ import HealthDeclaration.service.serviceImpl.JwtUserDetailsService;
 @RestController
 @CrossOrigin
 public class JwtAuthenticationController {
+
+	@Value("${jwt.secret}")
+	private String secret;
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
@@ -62,11 +70,22 @@ public class JwtAuthenticationController {
 
 	@RequestMapping(value = "/api/logout", method = RequestMethod.GET)
 	public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (auth != null) {
-			new SecurityContextLogoutHandler().logout(request, response, auth);
-		}
-		return "redirect:/";
+		final Date createdDate = new Date();
+		final Date expirationDate = calculateExpirationDate(createdDate);
+
+		final Claims claims = getAllClaimsFromToken(jwtTokenUtil.parseJwt(request));
+		claims.setIssuedAt(createdDate);
+		claims.setExpiration(expirationDate);
+
+		return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS512, secret).compact();
+	}
+
+	private Claims getAllClaimsFromToken(String token) {
+		return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+	}
+
+	private Date calculateExpirationDate(Date createdDate) {
+		return new Date(createdDate.getTime() + 1 * 1000);
 	}
 
 //    @RequestMapping(value = "/api/verify", method = RequestMethod.POST)

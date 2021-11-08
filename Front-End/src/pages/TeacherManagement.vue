@@ -53,7 +53,6 @@
               >
                 <a-input
                   v-ant-ref="(c) => (searchInput = c)"
-                  :placeholder="`Search ${column.dataIndex}`"
                   :value="selectedKeys[0]"
                   style="width: 188px; margin-bottom: 8px; display: block;"
                   @change="
@@ -71,14 +70,14 @@
                   style="width: 90px; margin-right: 8px"
                   @click="() => handleSearch(selectedKeys, column.dataIndex)"
                 >
-                  Search
+                  Tìm
                 </a-button>
                 <a-button
                   size="small"
                   style="width: 90px"
                   @click="() => handleReset(column.dataIndex, clearFilters)"
                 >
-                  Reset
+                  Xóa
                 </a-button>
               </div>
               <a-icon

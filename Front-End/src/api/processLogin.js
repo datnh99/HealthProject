@@ -18,10 +18,10 @@ export async function processGoogleToken(userLogin) {
   let result = "";
   try {
     let res = await axios.post(`${API_LOGIN}/authenticate`, userLogin);
-    console.log('userData ====>', res);
+    console.log("userData ====>", res);
     let userData = res.data.data;
-    if(!res.data.success){
-      userData = false
+    if (!res.data.success) {
+      userData = false;
     }
     if (userData) {
       // const expiredTime = userData.expiredTime;
@@ -78,28 +78,24 @@ export async function checkLogin(next, objectTypeCode) {
   }
 }
 export async function processLogout() {
-  let res = await axios.post(
-    `${API_LOGIN}/processLogout`
-  );
-  if(res.data.success){
+  let res = await axios.get(`${API_LOGIN}/api/logout`);
+  if (res.data.success) {
     Vue.$cookies.remove("accessToken");
-    Vue.$cookies.remove("account");
-    Vue.$cookies.remove("roleCode");
-    Vue.$cookies.remove("displayName");
-    Vue.$cookies.remove("dateOfBirth");
-    Vue.$cookies.remove("avatar");
+    Vue.$cookies.remove("username");
+    Vue.$cookies.remove("role");
   }
+  return res;
 }
 export async function basicProcessLogins(username, password) {
   const formData = JSON.stringify({
     username: username,
-    password: password
-  })
-  let res = await axios.post( `${API_LOGIN}/api/login`, formData, {
+    password: password,
+  });
+  let res = await axios.post(`${API_LOGIN}/api/login`, formData, {
     headers: {
       // Overwrite Axios's automatically set Content-Type
-      'Content-Type': 'application/json'
-    }
-  })
+      "Content-Type": "application/json",
+    },
+  });
   return res.data;
 }

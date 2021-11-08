@@ -13,6 +13,9 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.util.StringUtils;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Component
 public class JwtTokenUtil implements Serializable {
@@ -72,4 +75,14 @@ public class JwtTokenUtil implements Serializable {
         final String username = getUsernameFromToken(token);
         return (username.equals(userName) && !isTokenExpired(token));
     }
+
+    public String parseJwt(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        // Checking whether the request has JWT token
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
+    }
+
 }
