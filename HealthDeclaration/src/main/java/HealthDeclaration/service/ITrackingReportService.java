@@ -2,12 +2,12 @@ package HealthDeclaration.service;
 
 import HealthDeclaration.form.HealthReportAddForm;
 import HealthDeclaration.modal.dto.HealthFormDto;
-import HealthDeclaration.modal.entity.HealthFormReport;
+import HealthDeclaration.modal.entity.TrackingReport;
 
 import java.util.List;
 
-public interface IHealthFormReportService {
-    HealthFormReport add(HealthReportAddForm formReportAdd);
+public interface ITrackingReportService {
+    TrackingReport add(HealthReportAddForm formReportAdd);
 
     void delete(Long id);
 
@@ -15,5 +15,5 @@ public interface IHealthFormReportService {
 
     Long countSearchHealthFormReport(Long userId);
 
-    HealthFormReport getById(Long id);
+    TrackingReport getById(Long id);
 }

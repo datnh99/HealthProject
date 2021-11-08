@@ -1,12 +1,10 @@
 package HealthDeclaration.repository.impl;
 
 import HealthDeclaration.common.base.repository.BaseRepository;
-import HealthDeclaration.form.ClassFormSearch;
 import HealthDeclaration.modal.dto.HealthFormDto;
-import HealthDeclaration.repository.IHealthFormRepositoryCustom;
+import HealthDeclaration.repository.ITrackingReportRepositoryCustom;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.ObjectUtils;
 
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
@@ -20,7 +18,7 @@ import java.util.Map;
 @Repository
 @Transactional
 @Log4j2
-public class HealthFormReportCustomImpl extends BaseRepository implements IHealthFormRepositoryCustom {
+public class TrackingReportRepositoryCustomImpl extends BaseRepository implements ITrackingReportRepositoryCustom {
     @Override
     public List<HealthFormDto> searchHealthForm(Long userId, int pageIndex, int pageSize) {
         TypedQuery<HealthFormDto> query = this.buildSearchHealthFormReport(false, userId, HealthFormDto.class);
@@ -38,10 +36,10 @@ public class HealthFormReportCustomImpl extends BaseRepository implements IHealt
         StringBuilder sql = new StringBuilder();
         Map<String, Object> params = new HashMap<>();
         if (count) {
-            sql.append("select count(hfr.id) from HealthFormReport hfr where  1 = 1 ");
+            sql.append("select count(hfr.id) from TrackingReport hfr where  1 = 1 ");
         } else {
             sql.append("select new HealthDeclaration.modal.dto.HealthFormDto(hfr.id, hfr.createdTime, hfr.userId, hfr.reportType, hfr.status) "
-                    + "from HealthFormReport hfr "
+                    + "from TrackingReport hfr "
                     + "where 1=1 ");
         }
         if (userId != null ) {

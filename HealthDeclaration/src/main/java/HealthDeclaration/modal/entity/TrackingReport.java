@@ -11,7 +11,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class HealthFormReport extends BaseEntity {
+public class TrackingReport extends BaseEntity {
     private String username;
     private String studentName;
     private String verificationId;

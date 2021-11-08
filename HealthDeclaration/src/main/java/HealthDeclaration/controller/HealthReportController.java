@@ -3,16 +3,11 @@ package HealthDeclaration.controller;
 import HealthDeclaration.common.response.utils.ResponseUtils;
 import HealthDeclaration.form.HealthAddForm;
 import HealthDeclaration.service.HealthReportService;
-import HealthDeclaration.service.IHealthFormReportService;
 import HealthDeclaration.vo.ResponseMessage;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/health-report")

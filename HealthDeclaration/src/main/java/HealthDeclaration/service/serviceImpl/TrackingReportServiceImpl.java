@@ -3,10 +3,10 @@ package HealthDeclaration.service.serviceImpl;
 import HealthDeclaration.common.base.service.BaseService;
 import HealthDeclaration.form.HealthReportAddForm;
 import HealthDeclaration.modal.dto.HealthFormDto;
-import HealthDeclaration.modal.entity.HealthFormReport;
-import HealthDeclaration.repository.IHealthFormReportRepository;
-import HealthDeclaration.repository.IHealthFormRepositoryCustom;
-import HealthDeclaration.service.IHealthFormReportService;
+import HealthDeclaration.modal.entity.TrackingReport;
+import HealthDeclaration.repository.ITrackingReportRepository;
+import HealthDeclaration.repository.ITrackingReportRepositoryCustom;
+import HealthDeclaration.service.ITrackingReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,16 +14,16 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class HealthFormReportServiceImpl extends BaseService implements IHealthFormReportService {
+public class TrackingReportServiceImpl extends BaseService implements ITrackingReportService {
     @Autowired
-    private IHealthFormReportRepository iHealthFormReportRepository;
+    private ITrackingReportRepository iTrackingReportRepository;
 
     @Autowired
-    private IHealthFormRepositoryCustom iHealthFormRepositoryCustom;
+    private ITrackingReportRepositoryCustom iTrackingReportRepositoryCustom;
 
     @Override
-    public HealthFormReport add(HealthReportAddForm formReportAdd) {
-        HealthFormReport report = new HealthFormReport();
+    public TrackingReport add(HealthReportAddForm formReportAdd) {
+        TrackingReport report = new TrackingReport();
         report.setCreatedBy(getLoggedInUsername());
         report.setCreatedTime(new Date());
         report.setModifiedBy(getLoggedInUsername());
@@ -60,17 +60,17 @@ public class HealthFormReportServiceImpl extends BaseService implements IHealthF
         report.setCloseToCountry(formReportAdd.getCloseToCountry());
         report.setCloseToSicking(formReportAdd.getCloseToSicking());
 
-        return iHealthFormReportRepository.save(report);
+        return iTrackingReportRepository.save(report);
     }
 
     @Override
     public void delete(Long id) {
-        iHealthFormReportRepository.deleteById(id);
+        iTrackingReportRepository.deleteById(id);
     }
 
     @Override
     public List<HealthFormDto> searchHealthFormReport(Long userId, int pageIndex, int pageSize) {
-        List<HealthFormDto> list = iHealthFormRepositoryCustom.searchHealthForm(userId, pageIndex, pageSize);
+        List<HealthFormDto> list = iTrackingReportRepositoryCustom.searchHealthForm(userId, pageIndex, pageSize);
         for(int i = 0 ; i < list.size(); i++) {
             list.get(i).setIndex((long) ((pageSize * (pageIndex - 1)) + (i + 1)));
         }
@@ -79,12 +79,12 @@ public class HealthFormReportServiceImpl extends BaseService implements IHealthF
 
     @Override
     public Long countSearchHealthFormReport(Long userId) {
-        return iHealthFormRepositoryCustom.countSearchHealthFormReport(userId);
+        return iTrackingReportRepositoryCustom.countSearchHealthFormReport(userId);
     }
 
     @Override
-    public HealthFormReport getById(Long id) {
-        HealthFormReport report = iHealthFormReportRepository.findById(id).get();
+    public TrackingReport getById(Long id) {
+        TrackingReport report = iTrackingReportRepository.findById(id).get();
         return report;
     }
 }

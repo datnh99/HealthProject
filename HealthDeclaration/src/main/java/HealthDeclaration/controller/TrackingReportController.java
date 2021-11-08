@@ -3,7 +3,7 @@ package HealthDeclaration.controller;
 import HealthDeclaration.common.response.utils.ResponseUtils;
 import HealthDeclaration.form.HealthReportAddForm;
 import HealthDeclaration.modal.dto.HealthFormDto;
-import HealthDeclaration.service.IHealthFormReportService;
+import HealthDeclaration.service.ITrackingReportService;
 import HealthDeclaration.vo.ResponseMessage;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +17,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/health-form-report")
 @Log4j2
-public class HealthFormReportController {
+public class TrackingReportController {
     @Autowired
-    IHealthFormReportService service;
+    ITrackingReportService service;
 
     @GetMapping(value = "/search-health-form-report")
     public ResponseEntity searchHealthFormReport(@RequestParam Long userId
