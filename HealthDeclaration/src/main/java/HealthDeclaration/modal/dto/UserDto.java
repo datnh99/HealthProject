@@ -32,6 +32,8 @@ public class UserDto {
     private String wardName;
     private String addressDetail;
     private String teacherUsername;
+    private String healthInsuranceId ;
+    private String email ;
 
     public UserDto(Long id, String userName, String fullName) {
         this.id = id;
@@ -42,7 +44,7 @@ public class UserDto {
     public UserDto(Long id, String userName, String fullName, Date dob, Boolean gender, String phoneNumber,
                    String parentPhoneNumber, Long provinceCode, String provinceName, Long districtCode,
                    String districtName, Long wardCode, String wardName, String addressDetail, String roleCode,
-                   String roleName, Long classID, String className, String teacherUsername) {
+                   String roleName, Long classID, String className, String teacherUsername,String healthInsuranceId,String email) {
         this.id = id;
         this.userName = userName;
         this.fullName = fullName;
@@ -62,6 +64,33 @@ public class UserDto {
         this.classID = classID;
         this.className = className;
         this.teacherUsername = teacherUsername;
+        this.healthInsuranceId = healthInsuranceId;
+        this.email = email;
+    }
+    public UserDto(Long id, String userName, String fullName, Date dob, Boolean gender, String phoneNumber,
+                   String parentPhoneNumber, Long provinceCode, String provinceName, Long districtCode,
+                   String districtName, Long wardCode, String wardName, String addressDetail, String roleCode,
+                   String roleName, Long classID, String className, String teacherUsername,String healthInsuranceId) {
+        this.id = id;
+        this.userName = userName;
+        this.fullName = fullName;
+        this.dob = dob;
+        this.gender = gender;
+        this.phoneNumber = phoneNumber;
+        this.parentPhoneNumber = parentPhoneNumber;
+        this.provinceCode = provinceCode;
+        this.provinceName = provinceName;
+        this.districtCode = districtCode;
+        this.districtName = districtName;
+        this.wardCode = wardCode;
+        this.wardName = wardName;
+        this.addressDetail = addressDetail;
+        this.roleCode = roleCode;
+        this.roleName = roleName;
+        this.classID = classID;
+        this.className = className;
+        this.teacherUsername = teacherUsername;
+        this.healthInsuranceId = healthInsuranceId;
     }
 
     public UserDto(Long id, String userName, String fullName, Date dob, Boolean gender, String phoneNumber,

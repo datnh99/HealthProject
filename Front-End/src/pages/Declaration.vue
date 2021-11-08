@@ -13,7 +13,7 @@
                   <a-input
                     :disabled="true"
                     v-decorator="[
-                      'studentName',
+                      'fullName',
                       {
                         rules: [
                           {
@@ -446,7 +446,7 @@ export default {
         (res) => {
           this.userDetail = res.data.data;
           this.form.setFieldsValue({
-            studentName: this.userDetail.fullName,
+            fullName: this.userDetail.fullName,
             gender: this.userDetail.gender,
             dateOfBirth: this.userDetail.dob,
             phoneNumber: this.userDetail.phoneNumber,

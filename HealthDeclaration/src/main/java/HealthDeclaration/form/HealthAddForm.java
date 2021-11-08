@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class HealthAddForm {
 	private String username;
-	private String studentName;
+	private String fullName;
 	private String verificationId;
 	private Boolean gender;
 	private Date dateOfBirth;

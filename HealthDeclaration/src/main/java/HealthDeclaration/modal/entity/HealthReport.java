@@ -11,8 +11,9 @@ import lombok.Data;
 @Data
 @Entity
 public class HealthReport extends BaseEntity {
+
 	private String username;
-	private String studentName;
+	private String fullName;
 	private String verificationId;
 	private Boolean gender;
 	private Date dateOfBirth;

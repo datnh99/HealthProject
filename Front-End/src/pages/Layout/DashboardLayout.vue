@@ -34,6 +34,12 @@
           <p>Quản lý giáo viên</p>
         </template>
       </sidebar-link>
+         <sidebar-link to="/health-report">
+        <i class="tim-icons icon-single-02"></i>
+        <template>
+          <p>Quản lý khai báo</p>
+        </template>
+      </sidebar-link>
     </side-bar>
     <sidebar-share :background-color.sync="backgroundColor"></sidebar-share>
 

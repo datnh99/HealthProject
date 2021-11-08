@@ -16,6 +16,7 @@ import CONFIG from "./config/index";
 import { checkLogin } from "./api/processLogin";
 import Declaration from "@/pages/Declaration.vue";
 import MoveDeclaration from "@/pages/MoveDeclaration.vue";
+import HealthReport from "@/pages/HealthReportManagement.vue";
 
 const router = [
   {
@@ -93,6 +94,11 @@ const router = [
         path: "typography",
         name: "Typography",
         component: Typography
+      },
+      {
+        path: "health-report",
+        name: "HealthReport",
+        component: HealthReport
       },
       // {
       //   path: ":catchAll(.*)",

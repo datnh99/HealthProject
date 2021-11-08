@@ -70,7 +70,7 @@ public class UserRepositoryCustomImpl extends BaseRepository implements IUserRep
             sql.append("select new HealthDeclaration.modal.dto.UserDto(u.id, u.username, u.fullName, u.dob, u.gender," +
                     " u.phoneNumber, u.parentPhoneNumber, u.provinceCode, prv.name as provinceName, u.districtCode, " +
                     " dis.name as districtName, u.wardCode, wa.name as wardName, u.addressDetail, u.roleCode, " +
-                    " rl.roleName, u.classID, cl.name, cl.teacherUsername ) "
+                    " rl.roleName, u.classID, cl.name, cl.teacherUsername,u.healthInsuranceId ) "
                     + " from User u "
                     + " LEFT JOIN Province prv ON prv.code = u.provinceCode "
                     + " LEFT JOIN District dis ON dis.code = u.districtCode "

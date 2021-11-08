@@ -1,29 +1,28 @@
 package HealthDeclaration.service.serviceImpl;
 
-import java.util.Date;
-
-import HealthDeclaration.modal.entity.User;
+import HealthDeclaration.common.base.service.BaseService;
+import HealthDeclaration.form.HealthAddForm;
+import HealthDeclaration.modal.dto.HealthReportDTO;
+import HealthDeclaration.modal.entity.HealthReport;
 import HealthDeclaration.modal.request.UserUpdateForm;
+import HealthDeclaration.repository.HealthReportRepository;
+import HealthDeclaration.service.HealthReportService;
 import HealthDeclaration.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import HealthDeclaration.common.base.service.BaseService;
-import HealthDeclaration.form.HealthAddForm;
-import HealthDeclaration.modal.entity.HealthReport;
-import HealthDeclaration.repository.HealthReportRepository;
-import HealthDeclaration.service.HealthReportService;
-
 import javax.transaction.Transactional;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class HeathReportServiceImpl extends BaseService implements HealthReportService {
 
-	@Autowired
-	private HealthReportRepository healthReportRepository;
+    @Autowired
+    private HealthReportRepository healthReportRepository;
 
-	@Autowired
-	private IUserService userService;
+    @Autowired
+    private IUserService userService;
 
 	@Override
 	@Transactional
@@ -37,7 +36,7 @@ public class HeathReportServiceImpl extends BaseService implements HealthReportS
 			report.setCreatedTime(new Date());
 
 			report.setUsername(username);
-			report.setStudentName(form.getStudentName());
+			report.setFullName(form.getFullName());
 			report.setVerificationId(form.getVerificationId());
 			report.setGender(form.getGender());
 			report.setDateOfBirth(form.getDateOfBirth());
@@ -57,9 +56,9 @@ public class HeathReportServiceImpl extends BaseService implements HealthReportS
 			healthReportRepository.save(report);
 
 			// Update user infor
-			UserUpdateForm user = new UserUpdateForm();
-			user.setUsername(username);
-			user.setFullName(form.getStudentName());
+            UserUpdateForm user = new UserUpdateForm();
+            user.setUsername(username);
+			user.setFullName(form.getFullName());
 			user.setGender(report.getGender());
 			user.setDob(report.getDateOfBirth());
 			user.setPhoneNumber(report.getPhoneNumber());
@@ -74,6 +73,13 @@ public class HeathReportServiceImpl extends BaseService implements HealthReportS
 		} catch (Exception e) {
 			return false;
 		}
-
+	}
+	@Override
+	public List<HealthReportDTO> getReportsByUsername(String username){
+		try {
+			return healthReportRepository.getReportsByUsername(username);
+		}catch (Exception e){
+			return null;
+		}
 	}
 }
