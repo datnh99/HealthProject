@@ -20,4 +20,5 @@ public class UserUpdateForm {
     private String addressDetail;
     private Long classID;
     private String healthInsuranceId;
+    private String gmail;
 }

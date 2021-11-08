@@ -76,18 +76,46 @@ public class UserServiceImpl extends BaseService implements IUserService {
         if(!oldFullName.equalsIgnoreCase(newFullName)) {
             user.setUsername(getNewAccountWithFullName(updateForm.getFullName()));
         }
-        user.setFullName(updateForm.getFullName());
-        user.setDob(updateForm.getDob());
-        user.setGender(updateForm.getGender());
-        user.setPhoneNumber(updateForm.getPhoneNumber());
-        user.setParentPhoneNumber(updateForm.getParentPhoneNumber());
-        user.setProvinceCode(updateForm.getProvinceCode());
-        user.setDistrictCode(updateForm.getDistrictCode());
-        user.setWardCode(updateForm.getWardCode());
+        if(!ObjectUtils.isNullorEmpty(updateForm.getFullName())) {
+            user.setFullName(updateForm.getFullName());
+        }
+        if(!ObjectUtils.isNullorEmpty(updateForm.getDob())) {
+            user.setDob(updateForm.getDob());
+        }
+        if(!ObjectUtils.isNullorEmpty(updateForm.getGender())) {
+            user.setGender(updateForm.getGender());
+        }
+        if(!ObjectUtils.isNullorEmpty(updateForm.getPhoneNumber())) {
+            user.setPhoneNumber(updateForm.getPhoneNumber());
+        }
+        if(!ObjectUtils.isNullorEmpty(updateForm.getParentPhoneNumber())) {
+            user.setParentPhoneNumber(updateForm.getParentPhoneNumber());
+        }
+        if(!ObjectUtils.isNullorEmpty(updateForm.getProvinceCode())) {
+            user.setProvinceCode(updateForm.getProvinceCode());
+        }
+        if(!ObjectUtils.isNullorEmpty(updateForm.getDistrictCode())) {
+            user.setDistrictCode(updateForm.getDistrictCode());
+        }
+        if(!ObjectUtils.isNullorEmpty(updateForm.getWardCode())) {
+            user.setWardCode(updateForm.getWardCode());
+        }
         if(!ObjectUtils.isNullorEmpty(updateForm.getRoleCode())) {
             user.setRoleCode(updateForm.getRoleCode());
         }
-        user.setAddressDetail(updateForm.getAddressDetail());
+        if(!ObjectUtils.isNullorEmpty(updateForm.getAddressDetail())) {
+            user.setAddressDetail(updateForm.getAddressDetail());
+        }
+        if(!ObjectUtils.isNullorEmpty(updateForm.getHealthInsuranceId())) {
+            user.setHealthInsuranceId(updateForm.getHealthInsuranceId());
+        }
+        if(!ObjectUtils.isNullorEmpty(updateForm.getGmail())) {
+            if(updateForm.getGmail().contains("@gmail.com")) {
+                user.setGmail(updateForm.getGmail());
+            } else {
+                throw new IllegalArgumentException("Email phải gồm đuôi \"@gmail.com\"");
+            }
+        }
         return repository.save(user);
     }
 

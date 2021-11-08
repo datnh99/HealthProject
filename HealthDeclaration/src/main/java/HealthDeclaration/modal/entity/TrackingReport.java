@@ -13,7 +13,7 @@ import lombok.Data;
 @Entity
 public class TrackingReport extends BaseEntity {
     private String username;
-    private String studentName;
+    private String fullName;
     private String verificationId;
     private Boolean gender;
     private Date dateOfBirth;

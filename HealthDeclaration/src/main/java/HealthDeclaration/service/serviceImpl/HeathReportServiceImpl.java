@@ -14,6 +14,8 @@ import HealthDeclaration.modal.entity.HealthReport;
 import HealthDeclaration.repository.HealthReportRepository;
 import HealthDeclaration.service.HealthReportService;
 
+import javax.transaction.Transactional;
+
 @Service
 public class HeathReportServiceImpl extends BaseService implements HealthReportService {
 
@@ -24,6 +26,7 @@ public class HeathReportServiceImpl extends BaseService implements HealthReportS
 	private IUserService userService;
 
 	@Override
+	@Transactional
 	public boolean add(HealthAddForm form) {
 		try {
 			String username = getLoggedInUsername();
@@ -53,17 +56,19 @@ public class HeathReportServiceImpl extends BaseService implements HealthReportS
 			report.setCloseToSicking(form.getCloseToSicking());
 			healthReportRepository.save(report);
 
-
+			// Update user infor
 			UserUpdateForm user = new UserUpdateForm();
 			user.setUsername(username);
+			user.setFullName(form.getStudentName());
 			user.setGender(report.getGender());
 			user.setDob(report.getDateOfBirth());
 			user.setPhoneNumber(report.getPhoneNumber());
+			user.setHealthInsuranceId(report.getHealthInsuranceId());
+			user.setGmail(report.getEmail());
 			user.setProvinceCode(report.getProvinceCode());
 			user.setDistrictCode(report.getDistrictCode());
 			user.setWardCode(report.getWardCode());
 			user.setAddressDetail(report.getAddressDetail());
-			user.setHealthInsuranceId(report.getHealthInsuranceId());
 			userService.update(user);
 			return true;
 		} catch (Exception e) {

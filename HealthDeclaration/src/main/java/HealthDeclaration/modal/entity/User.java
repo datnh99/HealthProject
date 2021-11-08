@@ -31,6 +31,9 @@ public class User extends BaseEntity {
     @Column(name = "gender")
     private boolean gender;
 
+    @Column(name = "gmail")
+    private String gmail;
+
     @Column(name = "health_insurance_id", length = 15)
     private String healthInsuranceId;
 

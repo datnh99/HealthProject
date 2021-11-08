@@ -7,13 +7,13 @@ import java.util.Date;
 @Data
 public class HealthReportAddForm {
     private String username;
-    private String studentName;
+    private String fullName;
     private String verificationId;
     private Boolean gender;
     private Date dateOfBirth;
     private String phoneNumber;
     private String healthInsuranceId;
-    private String email;
+    private String gmail;
 
     // Dia chi ca nhan
     private Long provinceCode;

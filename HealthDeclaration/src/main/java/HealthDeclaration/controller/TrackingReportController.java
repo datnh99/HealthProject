@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/health-form-report")
+@RequestMapping("/api/tracking-report")
 @Log4j2
 public class TrackingReportController {
     @Autowired
