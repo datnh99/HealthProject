@@ -47,6 +47,57 @@
         </base-button>
         <b> Feedback</b>
       </div>
+      <a-modal
+        title="Chọn khai báo: "
+        v-model="openReportModel"
+        :footer="null"
+        :centered="true"
+      >
+        <a-row :gutter="[24, 16]">
+          <a-col :span="12">
+            <a
+              href="javascript:void(0)"
+              class="health-report-cus-btn"
+              @click="goToHealthReport()"
+            >
+              <div>
+                <base-button
+                  type="success"
+                  @click="goToHealthReport()"
+                  icon
+                  size="lg"
+                >
+                  <a-icon style type="file-text" />
+                </base-button>
+              </div>
+              <div>
+                <b class="name-button-cus"> Khai báo y tế</b>
+              </div>
+            </a>
+          </a-col>
+          <a-col :span="12">
+            <a
+              href="javascript:void(0)"
+              class="tracking-cus-btn"
+              @click="goToTrackingReport()"
+            >
+              <div>
+                <base-button
+                  type="success"
+                  @click="goToTrackingReport()"
+                  icon
+                  size="lg"
+                >
+                  <a-icon style type="car" />
+                </base-button>
+              </div>
+              <div>
+                <b class="name-button-cus"> Khai báo di chuyển</b>
+              </div>
+            </a>
+          </a-col>
+        </a-row>
+      </a-modal>
     </div>
   </card>
 </template>
@@ -59,6 +110,11 @@ export default {
     Card,
     BaseButton,
   },
+  data() {
+    return {
+      openReportModel: false,
+    };
+  },
   props: {
     user: {
       type: Object,
@@ -69,14 +125,50 @@ export default {
   },
   methods: {
     goToReport() {
+      // this.$router.push("declare");
+      this.openReportModel = true;
+    },
+    goToHealthReport() {
       this.$router.push("declare");
+    },
+    goToTrackingReport() {
+      this.$router.push("move-declare");
     },
   },
 };
 </script>
-<style scoped lang="scss" >
+<style scoped lang="scss">
 .anticon {
   // margin-right: 6px;
   font-size: 22px;
+}
+.name-button-cus {
+  margin-left: 10px;
+  color: #000;
+  font-weight: bold;
+}
+</style>
+<style>
+.health-report-cus-btn {
+  text-align: center !important;
+}
+.tracking-cus-btn {
+  text-align: center !important;
+}
+.health-report-cus-btn .btn-success {
+  background-image: linear-gradient(
+    to bottom left,
+    #7bdf35,
+    #4cb582,
+    #7965d9
+  ) !important;
+}
+.tracking-cus-btn .btn-success {
+  background-image: linear-gradient(
+    to bottom left,
+    #67a25a,
+    #cfdc3b,
+    #7965d9
+  ) !important;
 }
 </style>
