@@ -1,15 +1,13 @@
 package HealthDeclaration.service;
 
-import HealthDeclaration.form.ClassFormSearch;
-import HealthDeclaration.modal.dto.ClassDto;
+import HealthDeclaration.form.HealthReportAddForm;
 import HealthDeclaration.modal.dto.HealthFormDto;
 import HealthDeclaration.modal.entity.HealthFormReport;
-import HealthDeclaration.modal.request.HealthFormReportAdd;
 
 import java.util.List;
 
 public interface IHealthFormReportService {
-    HealthFormReport add(HealthFormReportAdd formReportAdd);
+    HealthFormReport add(HealthReportAddForm formReportAdd);
 
     void delete(Long id);
 

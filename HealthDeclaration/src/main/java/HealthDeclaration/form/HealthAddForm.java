@@ -17,10 +17,11 @@ public class HealthAddForm {
 	private Long districtCode;
 	private Long wardCode;
 	private String addressDetail;
-	private String inconstantNote;
-	private Boolean closeToPatient;
-	private Boolean closeToCountry;
-	private Boolean closeToRiskingPeople;
+
+	private Boolean contactToPlace;
 	private Boolean sicking;
+	private Boolean closeToRiskingPeople;
+	private Boolean closeToCountry;
+	private Boolean closeToSicking;
 
 }

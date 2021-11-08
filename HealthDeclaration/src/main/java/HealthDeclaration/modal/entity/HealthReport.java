@@ -23,8 +23,7 @@ public class HealthReport extends BaseEntity {
 	private Long districtCode;
 	private Long wardCode;
 	private String addressDetail;
-	private String inconstantNote;
-	private Boolean closeToPatient;
+	private Boolean closeToSicking;
 	private Boolean closeToCountry;
 	private Boolean closeToRiskingPeople;
 	private Boolean contactToPlace;

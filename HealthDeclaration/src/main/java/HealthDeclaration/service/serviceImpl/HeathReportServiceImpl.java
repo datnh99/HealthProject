@@ -32,9 +32,8 @@ public class HeathReportServiceImpl extends BaseService implements HealthReportS
 			report.setModifiedBy(username);
 			report.setModifiedTime(new Date());
 			report.setCreatedTime(new Date());
-			report.setCloseToCountry(form.getCloseToCountry());
-			report.setCloseToPatient(form.getCloseToPatient());
-			report.setCloseToRiskingPeople(form.getCloseToRiskingPeople());
+
+			report.setUsername(username);
 			report.setStudentName(form.getStudentName());
 			report.setVerificationId(form.getVerificationId());
 			report.setGender(form.getGender());
@@ -44,16 +43,19 @@ public class HeathReportServiceImpl extends BaseService implements HealthReportS
 			report.setEmail(form.getEmail());
 			report.setProvinceCode(form.getProvinceCode());
 			report.setDistrictCode(form.getDistrictCode());
-			report.setWardCode(report.getWardCode());
-			report.setInconstantNote(form.getInconstantNote());
-			report.setSicking(form.getSicking());
+			report.setWardCode(form.getWardCode());
 			report.setAddressDetail(form.getAddressDetail());
+
+			report.setContactToPlace(form.getContactToPlace());
+			report.setSicking(form.getSicking());
+			report.setCloseToRiskingPeople(form.getCloseToRiskingPeople());
+			report.setCloseToCountry(form.getCloseToCountry());
+			report.setCloseToSicking(form.getCloseToSicking());
 			healthReportRepository.save(report);
 
 
 			UserUpdateForm user = new UserUpdateForm();
 			user.setUsername(username);
-//			user.setFullName(report.getStudentName());
 			user.setGender(report.getGender());
 			user.setDob(report.getDateOfBirth());
 			user.setPhoneNumber(report.getPhoneNumber());
@@ -61,6 +63,7 @@ public class HeathReportServiceImpl extends BaseService implements HealthReportS
 			user.setDistrictCode(report.getDistrictCode());
 			user.setWardCode(report.getWardCode());
 			user.setAddressDetail(report.getAddressDetail());
+			user.setHealthInsuranceId(report.getHealthInsuranceId());
 			userService.update(user);
 			return true;
 		} catch (Exception e) {

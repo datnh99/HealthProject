@@ -19,4 +19,5 @@ public class UserUpdateForm {
     private String roleCode;
     private String addressDetail;
     private Long classID;
+    private String healthInsuranceId;
 }

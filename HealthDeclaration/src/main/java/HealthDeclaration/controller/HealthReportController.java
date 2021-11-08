@@ -1,12 +1,7 @@
 package HealthDeclaration.controller;
 
 import HealthDeclaration.common.response.utils.ResponseUtils;
-import HealthDeclaration.form.ClassFormSearch;
 import HealthDeclaration.form.HealthAddForm;
-import HealthDeclaration.modal.dto.ClassDto;
-import HealthDeclaration.modal.dto.HealthFormDto;
-import HealthDeclaration.modal.request.ClassAddForm;
-import HealthDeclaration.modal.request.HealthFormReportAdd;
 import HealthDeclaration.service.HealthReportService;
 import HealthDeclaration.service.IHealthFormReportService;
 import HealthDeclaration.vo.ResponseMessage;

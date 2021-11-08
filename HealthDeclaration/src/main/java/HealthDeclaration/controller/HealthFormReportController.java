@@ -1,11 +1,8 @@
 package HealthDeclaration.controller;
 
 import HealthDeclaration.common.response.utils.ResponseUtils;
-import HealthDeclaration.form.ClassFormSearch;
-import HealthDeclaration.modal.dto.ClassDto;
+import HealthDeclaration.form.HealthReportAddForm;
 import HealthDeclaration.modal.dto.HealthFormDto;
-import HealthDeclaration.modal.request.ClassAddForm;
-import HealthDeclaration.modal.request.HealthFormReportAdd;
 import HealthDeclaration.service.IHealthFormReportService;
 import HealthDeclaration.vo.ResponseMessage;
 import lombok.extern.log4j.Log4j2;
@@ -20,7 +17,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/health-form-report")
 @Log4j2
-@CrossOrigin(origins = "http://localhost:8181")
 public class HealthFormReportController {
     @Autowired
     IHealthFormReportService service;
@@ -47,7 +43,7 @@ public class HealthFormReportController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity add(@RequestBody HealthFormReportAdd formReportAdd) {
+    public ResponseEntity add(@RequestBody HealthReportAddForm formReportAdd) {
         ResponseMessage responseMessage = new ResponseMessage();
         try {
             responseMessage.setSuccess(true);

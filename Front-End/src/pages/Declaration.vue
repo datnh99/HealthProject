@@ -265,7 +265,7 @@
                     rules: [
                       {
                         required: true,
-                        message: 'Bạn chưa nhập địa chỉ',
+                        message: 'Bạn chưa chọn',
                       },
                     ],
                   },
@@ -348,7 +348,7 @@
               >
                 <a-radio-group
                   v-decorator="[
-                    'contactToPlace',
+                    'closeToSicking',
                     {
                       rules: [
                         {

@@ -1,17 +1,11 @@
-package HealthDeclaration.modal.entity;
+package HealthDeclaration.form;
+
+import lombok.Data;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-
-import HealthDeclaration.common.base.constant.BaseEntityConstant;
-import HealthDeclaration.common.base.entity.BaseEntity;
-import lombok.Data;
-
 @Data
-@Entity
-public class HealthFormReport extends BaseEntity {
+public class HealthReportAddForm {
     private String username;
     private String studentName;
     private String verificationId;
@@ -50,4 +44,5 @@ public class HealthFormReport extends BaseEntity {
     private Boolean closeToRiskingPeople;
     private Boolean closeToCountry;
     private Boolean closeToSicking;
+
 }
