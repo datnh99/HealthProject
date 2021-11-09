@@ -7,12 +7,127 @@
             <h4 class="card-title">Quản lý khai báo</h4>
           </template>
           <div class="table-responsive text-left">
+            <base-button type="primary" @click="openAddForm()"
+              >Thêm giáo viên</base-button
+            >
             <a-table
               :columns="columns"
               :data-source="listUser"
               :pagination="false"
               :scroll="{ x: 1500, y: 800 }"
             >
+              <div
+                slot="filterDropdown"
+                slot-scope="{
+                  setSelectedKeys,
+                  selectedKeys,
+                  clearFilters,
+                  column,
+                }"
+                style="padding: 8px"
+              >
+                <a-input
+                  v-ant-ref="(c) => (searchInput = c)"
+                  :value="selectedKeys[0]"
+                  style="width: 188px; margin-bottom: 8px; display: block"
+                  @change="
+                    (e) =>
+                      setSelectedKeys(e.target.value ? [e.target.value] : [])
+                  "
+                  @pressEnter="
+                    () => handleSearch(selectedKeys, column.dataIndex)
+                  "
+                />
+                <a-button
+                  type="primary"
+                  icon="search"
+                  size="small"
+                  style="width: 90px; margin-right: 8px"
+                  @click="() => handleSearch(selectedKeys, column.dataIndex)"
+                >
+                  Tìm
+                </a-button>
+                <a-button
+                  size="small"
+                  style="width: 90px"
+                  @click="() => handleReset(column.dataIndex, clearFilters)"
+                >
+                  Xóa
+                </a-button>
+              </div>
+              <a-icon
+                slot="filterIcon"
+                slot-scope="filtered"
+                type="search"
+                :style="{ color: filtered ? '#108ee9' : undefined }"
+              />
+              <template
+                slot="customRender"
+                slot-scope="text, record, index, column"
+              >
+                <span v-if="searchText && searchedColumn === column.dataIndex">
+                  <template
+                    v-for="(fragment, i) in text
+                      .toString()
+                      .split(
+                        new RegExp(`(?<=${searchText})|(?=${searchText})`, 'i')
+                      )"
+                  >
+                    <span
+                      v-if="checkContainSearchKey(fragment, searchText)"
+                      :key="i"
+                      class="highlight"
+                      >{{ fragment }}</span
+                    >
+                    <template v-else>{{ fragment }}</template>
+                  </template>
+                </span>
+                <template v-else>
+                  {{ text }}
+                </template>
+              </template>
+              <template slot="gender" slot-scope="text, record, index, column">
+                <span v-if="searchText && searchedColumn === column.dataIndex">
+                  <template
+                    v-for="(fragment, i) in text
+                      .toString()
+                      .split(
+                        new RegExp(`(?<=${searchText})|(?=${searchText})`, 'i')
+                      )"
+                  >
+                    <span
+                      v-if="'nam' === searchText.toLowerCase()"
+                      :key="i"
+                      class="highlight"
+                    >
+                      Nam
+                    </span>
+                    <!-- <template v-else>
+                      Nam
+                    </template> -->
+                    <span
+                      v-if="
+                        'nu' === removeAccents(searchText).toLowerCase() &&
+                        searchText.toLowerCase() !== 'nam'
+                      "
+                      :key="i"
+                      class="highlight"
+                    >
+                      Nữ
+                    </span>
+                    <!-- <template v-else-if="searchText.toLowerCase() !== 'nam'">
+                      Nữ
+                    </template> -->
+                  </template>
+                </span>
+                <template v-else>
+                  <span v-if="text"> Nam </span>
+                  <span v-else> Nữ </span>
+                </template>
+              </template>
+              <template #dobCustom="item">
+                <span>{{ generateTime(item.dob) }}</span>
+              </template>
               <template #action="item">
                 <a-dropdown>
                   <a>Tùy chọn</a>
@@ -41,6 +156,7 @@
       v-model="visibleHealthReport"
       :title="`Danh sách khai báo : ${currentUser.fullName}`"
       :width="1080"
+      :closable="false"
       on-ok="handleOk"
     >
       <template slot="footer">
@@ -52,18 +168,17 @@
         <a-layout-sider
           :style="{
             overflow: 'auto',
-            height: '100vh',
             left: 0,
             background: '#fff',
             color: '000',
           }"
         >
           <div class="logo" />
-          <a-menu theme="light" mode="inline" :default-selected-keys="['4']">
+          <a-menu :default-selected-keys="[0]" theme="light" mode="inline">
             <a-menu-item
-              v-for="item in listHealthReport"
-              :key="item.id"
-              @click="currentHealthReport = item"
+              v-for="(item, index) in listHealthReport"
+              :key="index"
+              @click="onChangeSelectReport(item)"
             >
               <a-icon type="safety-certificate" />
               <span class="nav-text">{{
@@ -127,23 +242,35 @@
                 >
                   {{ currentHealthReport.addressDetail }}
                 </a-descriptions-item>
-               <a-descriptions-item
+                <a-descriptions-item
                   label="Trong vòng 14 ngày qua, Anh/Chị có đến khu vực tỉnh thành phố, quốc gia/vùng lãnh thổ nào (Có thể đi nhiều nơi)"
                   :span="3"
                 >
                   {{ formatYesNo(currentHealthReport.contactToPlace) }}
                 </a-descriptions-item>
-                   <a-descriptions-item
-                  label="Số nhà,phố tổ,tổ dân phố/thôn/đội"
+                <a-descriptions-item
+                  label="Trong vòng 14 ngày qua, Anh/Chị có thấy xuất hiện ít nhất  trong các dấu hiệu: sốt, ho, khó thở, viêm phổi, đau họng, mệt mỏi, thay đổi vị giác không?"
                   :span="3"
                 >
                   {{ formatYesNo(currentHealthReport.sicking) }}
                 </a-descriptions-item>
-                 <a-descriptions-item
-                  label="Số nhà,phố tổ,tổ dân phố/thôn/đội"
+                <a-descriptions-item
+                  label="Trong vòng 14 ngày qua, Anh/Chị có tiếp xúc với người bệnh hoặc nghi ngờ mắc bệnh Covid-19"
                   :span="3"
                 >
                   {{ formatYesNo(currentHealthReport.closeToRiskingPeople) }}
+                </a-descriptions-item>
+                <a-descriptions-item
+                  label="Trong vòng 14 ngày qua, Anh/Chị có tiếp xúc với người từ nước có bệnh Covid-19"
+                  :span="3"
+                >
+                  {{ formatYesNo(currentHealthReport.closeToCountry) }}
+                </a-descriptions-item>
+                <a-descriptions-item
+                  label="Trong vòng 14 ngày qua, Anh/Chị có tiếp xúc với người bệnh có biểu hiện sốt, ho, khó, thở, viêm phổi"
+                  :span="3"
+                >
+                  {{ formatYesNo(currentHealthReport.contactToPlace) }}
                 </a-descriptions-item>
               </a-descriptions>
             </div>
@@ -178,6 +305,20 @@ const columns = [
     dataIndex: "fullName",
     width: 200,
     key: "fullName",
+    scopedSlots: {
+      filterDropdown: "filterDropdown",
+      filterIcon: "filterIcon",
+      customRender: "customRender",
+    },
+    onFilter: (value, record) =>
+      record.fullName.toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: (visible) => {
+      if (visible) {
+        setTimeout(() => {
+          this.searchInput.focus();
+        }, 0);
+      }
+    },
   },
   {
     title: "Lớp",
@@ -190,6 +331,20 @@ const columns = [
     dataIndex: "gender",
     width: 140,
     key: "gender",
+    scopedSlots: {
+      filterDropdown: "filterDropdown",
+      filterIcon: "filterIcon",
+      customRender: "gender",
+    },
+    onFilter: (value, record) =>
+      record.gender.toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: (visible) => {
+      if (visible) {
+        setTimeout(() => {
+          this.searchInput.focus();
+        }, 0);
+      }
+    },
   },
   {
     title: "Ngày sinh",
@@ -204,6 +359,20 @@ const columns = [
     dataIndex: "userName",
     width: 150,
     key: "userName",
+    scopedSlots: {
+      filterDropdown: "filterDropdown",
+      filterIcon: "filterIcon",
+      customRender: "customRender",
+    },
+    onFilter: (value, record) =>
+      record.userName.toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: (visible) => {
+      if (visible) {
+        setTimeout(() => {
+          this.searchInput.focus();
+        });
+      }
+    },
   },
   {
     title: "Địa chỉ chi tiết",
@@ -216,18 +385,66 @@ const columns = [
     dataIndex: "wardName",
     width: 150,
     key: "wardName",
+    scopedSlots: {
+      filterDropdown: "filterDropdown",
+      filterIcon: "filterIcon",
+      customRender: "customRender",
+    },
+    onFilter: (value, record) =>
+      record.wardName.toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: (visible) => {
+      if (visible) {
+        setTimeout(() => {
+          this.searchInput.focus();
+        });
+      }
+    },
   },
   {
     title: "Quận / Huyện",
     dataIndex: "districtName",
     width: 150,
     key: "districtName",
+    scopedSlots: {
+      filterDropdown: "filterDropdown",
+      filterIcon: "filterIcon",
+      customRender: "customRender",
+    },
+    onFilter: (value, record) =>
+      record.districtName
+        .toString()
+        .toLowerCase()
+        .includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: (visible) => {
+      if (visible) {
+        setTimeout(() => {
+          this.searchInput.focus();
+        });
+      }
+    },
   },
   {
     title: "Tỉnh thành",
     dataIndex: "provinceName",
     width: 150,
     key: "provinceName",
+    scopedSlots: {
+      filterDropdown: "filterDropdown",
+      filterIcon: "filterIcon",
+      customRender: "customRender",
+    },
+    onFilter: (value, record) =>
+      record.provinceName
+        .toString()
+        .toLowerCase()
+        .includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: (visible) => {
+      if (visible) {
+        setTimeout(() => {
+          this.searchInput.focus();
+        });
+      }
+    },
   },
   {
     title: "Số điện thoại",
@@ -243,7 +460,7 @@ const columns = [
   },
   {
     title: "Tùy chọn",
-    key: "operation",
+    key: "action",
     fixed: "right",
     width: 100,
     scopedSlots: { customRender: "action" },
@@ -287,11 +504,14 @@ export default {
     this.getListUser();
   },
   methods: {
-    formatYesNo(item){
-      if(item){
-        return 'Có'
+    onChangeSelectReport(item) {
+      this.currentHealthReport = item;
+    },
+    formatYesNo(item) {
+      if (item) {
+        return "Có";
       }
-      return 'Không'
+      return "Không";
     },
     formatGender(gender) {
       if (gender) {
@@ -320,6 +540,9 @@ export default {
     getListReportByUsername(username) {
       HealthReportRepository.getReportsByUsername(username).then((res) => {
         this.listHealthReport = res.data.data.items;
+        if (this.listHealthReport && this.listHealthReport.length > 0) {
+          this.currentHealthReport = this.listHealthReport[0];
+        }
       });
     },
     showModal(item) {
@@ -336,6 +559,8 @@ export default {
     },
     handleCancelHealthReport(e) {
       this.visibleHealthReport = false;
+      this.currentHealthReport = {};
+      this.listHealthReport = [];
     },
   },
 };
