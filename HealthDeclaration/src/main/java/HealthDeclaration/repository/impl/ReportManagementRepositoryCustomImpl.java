@@ -37,7 +37,7 @@ public class ReportManagementRepositoryCustomImpl extends BaseRepository impleme
     private <T> TypedQuery<T> buildSearchReportManagement(final boolean count, ReportManagementSearchForm form, Class<T> clazz) {
         StringBuilder sql = new StringBuilder();
         Map<String, Object> params = new HashMap<>();
-        List<Long> listAllowedClassIds = reportPermissionRepository.findAllowedClassIdByUsername(form.getUsername());
+
         if (count) {
             sql.append("SELECT COUNT (u.id) ");
         } else {
@@ -57,11 +57,7 @@ public class ReportManagementRepositoryCustomImpl extends BaseRepository impleme
             sql.append("and cl.id = :classId ");
             params.put("classId", form.getClassId());
         }
-        if(!ObjectUtils.isNullorEmpty(listAllowedClassIds)){
-            sql.append("and cl.id IN :listAllowedClassIds ");
-            params.put("listAllowedClassIds", listAllowedClassIds);
 
-        }
         if (!count) {
             sql.append(" GROUP BY u.id ");
             sql.append(" ORDER BY u.createdTime DESC");

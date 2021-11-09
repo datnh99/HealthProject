@@ -34,8 +34,8 @@
           <p>Quản lý giáo viên</p>
         </template>
       </sidebar-link>
-         <sidebar-link to="/health-report">
-        <i class="tim-icons icon-single-02"></i>
+      <sidebar-link to="/health-report">
+        <a-icon type="snippets" />
         <template>
           <p>Quản lý khai báo</p>
         </template>
@@ -69,11 +69,11 @@ export default {
     ContentFooter,
     SideBar,
     SidebarLink,
-    SidebarShare
+    SidebarShare,
   },
   data() {
     return {
-      backgroundColor: "green"
+      backgroundColor: "green",
     };
   },
   computed: {
@@ -82,15 +82,15 @@ export default {
         return true;
       }
       return false;
-    }
+    },
   },
   methods: {
     toggleSidebar() {
       if (this.$sidebar.showSidebar) {
         this.$sidebar.displaySidebar(false);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

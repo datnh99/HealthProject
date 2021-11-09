@@ -60,4 +60,7 @@ public class User extends BaseEntity {
 
     @Column(name = "class_id")
     private Long classID;
+
+    @Column(name = "allow_view_report")
+    private Boolean allowViewReport;
 }

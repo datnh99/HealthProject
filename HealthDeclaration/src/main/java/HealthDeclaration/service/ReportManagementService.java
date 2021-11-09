@@ -1,5 +1,6 @@
 package HealthDeclaration.service;
 
+import HealthDeclaration.form.AllowViewReportForm;
 import HealthDeclaration.form.ReportManagementSearchForm;
 import HealthDeclaration.modal.dto.UserDto;
 
@@ -21,4 +22,11 @@ public interface ReportManagementService {
      * @return
      */
     Long countStudent(ReportManagementSearchForm form);
+
+    /**
+     *
+     * @param form
+     * @return
+     */
+    boolean updateAllowViewReport(AllowViewReportForm form);
 }

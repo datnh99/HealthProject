@@ -34,4 +34,10 @@ public interface IUserRepository extends JpaRepository<User, Long>, CrudReposito
     List<UserDto> getTeacherFreeByName(@Param("roleGVCN") String roleGVCN,
                                        @Param("roleGVBM") String roleGVBM,
                                        @Param("teacherName") String teacherName);
+
+    @Query(value = "SELECT u FROM User u WHERE u.classID = :classId")
+    List<User> getAllUserByClassId(@Param("classId") Long classId);
+
+    @Query(value = "SELECT u.allowViewReport FROM User u WHERE u.username = :username")
+    Boolean getAllowedViewReport(@Param("username") Long username);
 }

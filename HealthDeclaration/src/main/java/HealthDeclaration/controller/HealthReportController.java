@@ -1,10 +1,14 @@
 package HealthDeclaration.controller;
 
 import HealthDeclaration.common.response.utils.ResponseUtils;
+import HealthDeclaration.common.utils.ObjectUtils;
+import HealthDeclaration.form.AllowViewReportForm;
 import HealthDeclaration.form.HealthAddForm;
 import HealthDeclaration.form.ReportManagementSearchForm;
 import HealthDeclaration.modal.dto.HealthReportDTO;
+import HealthDeclaration.modal.entity.User;
 import HealthDeclaration.service.HealthReportService;
+import HealthDeclaration.service.IUserService;
 import HealthDeclaration.service.ReportManagementService;
 import HealthDeclaration.vo.ResponseMessage;
 import lombok.extern.log4j.Log4j2;
@@ -58,6 +62,20 @@ public class HealthReportController {
             Map<String, Object> results = new HashMap<>();
             results.put("items", result);
             responseMessage.setData(results);
+        } catch (Exception e) {
+            log.error(e);
+            responseMessage.setSuccess(false);
+            return ResponseUtils.buildResponseMessage(false, responseMessage);
+        }
+        return ResponseUtils.buildResponseMessage(true, responseMessage);
+    }
+
+    @RequestMapping(value = "/allow-view-report", method = RequestMethod.POST)
+    public ResponseEntity<?> updateAllowViewReport(@RequestBody AllowViewReportForm form) throws Exception {
+        ResponseMessage responseMessage = new ResponseMessage();
+        try {
+            responseMessage.setSuccess(true);
+            responseMessage.setData(reportManagementService.updateAllowViewReport(form));
         } catch (Exception e) {
             log.error(e);
             responseMessage.setSuccess(false);

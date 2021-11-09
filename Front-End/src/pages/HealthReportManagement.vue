@@ -6,10 +6,87 @@
           <template slot="header">
             <h4 class="card-title">Quản lý khai báo</h4>
           </template>
+
           <div class="table-responsive text-left">
-            <base-button type="primary" @click="openAddForm()"
-              >Thêm giáo viên</base-button
-            >
+            <div class="header-filter-custom text-left">
+              <a-form>
+                <a-row type="flex" justify="space-between">
+                  <a-col class="gutter-box" :span="4">
+                    <a-form-item label="Lớp" has-feedback>
+                      <a-select
+                        v-model="searchForm.classID"
+                        class="filter-select"
+                        placeholder="~Chọn lớp học~"
+                        style="width: 100%"
+                        @search="fetchClass"
+                        @change="submitForm"
+                      >
+                        <a-select-option
+                          v-for="item in classList"
+                          :key="item.id"
+                          :value="item.id"
+                        >
+                          {{ item.className }}
+                        </a-select-option>
+                      </a-select>
+                    </a-form-item>
+                  </a-col>
+                  <a-col class="gutter-box" :span="4">
+                    <a-form-item label="Giáo viên chủ nhiệm" has-feedback>
+                      <span v-if="teacherInfor && teacherInfor.teacherName">
+                        {{ teacherInfor.teacherName }}
+                      </span>
+                    </a-form-item>
+                  </a-col>
+                  <a-col class="gutter-box" :span="4">
+                    <a-form-item label="Tổng số học sinh" has-feedback>
+                      <span v-if="total">
+                        {{ total }}
+                      </span>
+                    </a-form-item>
+                  </a-col>
+                  <a-col class="gutter-box custom-button-header" :span="6">
+                    <div :style="{ borderBottom: '1px solid #E9E9E9' }">
+                      <p>Chọn đối tượng được phép xem khai báo:</p>
+                      <!-- <a-checkbox
+                        :indeterminate="indeterminate"
+                        :checked="checkAll"
+                        @change="onCheckAllChange"
+                      >
+                        Check all
+                      </a-checkbox> -->
+                    </div>
+                    <div class="allow-report">
+                      <div class="row">
+                        <div class="col-12">
+                          <a-checkbox
+                            :disabled="!teacherInfor.id"
+                            v-model="allowViewForm.teacher"
+                            @change="onChangeAllow('teacher')"
+                          >
+                            Giáo viên chủ nhiệm
+                          </a-checkbox>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <a-checkbox
+                            :disabled="!teacherInfor.id"
+                            v-model="allowViewForm.student"
+                            @change="
+                              onChangeAllow('student'),
+                                (allowViewForm.studentChecked = true)
+                            "
+                          >
+                            Học sinh
+                          </a-checkbox>
+                        </div>
+                      </div>
+                    </div>
+                  </a-col>
+                </a-row>
+              </a-form>
+            </div>
             <a-table
               :columns="columns"
               :data-source="listUser"
@@ -286,6 +363,8 @@
 <script>
 import { Card } from "@/components/index";
 import HealthReportRepository from "../api/healthReport";
+import ClassRepository from "../api/class.js";
+
 import moment from "moment";
 const columns = [
   {
@@ -480,6 +559,14 @@ const defaultSearchForm = {
   addressDetail: "",
   classID: undefined,
 };
+const defaultUpdateAllowViewReportForm = {
+  userId: undefined,
+  teacherChecked: false,
+  studentChecked: false,
+  teacher: false,
+  student: false,
+  classId: undefined,
+};
 export default {
   components: {
     Card,
@@ -488,8 +575,10 @@ export default {
     return {
       columns: columns,
       searchForm: { ...defaultSearchForm },
+      allowViewForm: { ...defaultUpdateAllowViewReportForm },
       listHealthReport: [],
       listUser: [],
+      classList: [],
       current: 1,
       total: 0,
       totalHealthReport: 0,
@@ -498,12 +587,57 @@ export default {
       currentUser: {},
       currentHealthReport: {},
       columnsHealthReport: columnsHealthReport,
+      searchText: "",
+      teacherInfor: {},
     };
   },
   created() {
-    this.getListUser();
+    // this.getListUser();
+    this.fetchClass("");
   },
   methods: {
+    onChangeAllow(type) {
+      if (type === "student") {
+        this.allowViewForm.studentChecked = true;
+      }
+      if (type === "teacher") {
+        this.allowViewForm.teacherChecked = true;
+      }
+      this.allowViewForm.userId = this.teacherInfor.teacherID;
+      this.allowViewForm.classId = this.teacherInfor.id;
+      this.updateAllowViewReport();
+    },
+    updateAllowViewReport() {
+      HealthReportRepository.updateAllowViewReport(this.allowViewForm)
+        .then((res) => {
+          if (res.data.data) {
+            this.$notifications.error({
+              message: "Cấp quyền thành công !",
+            });
+          }
+          this.allowViewForm = {...defaultUpdateAllowViewReportForm}
+        })
+        .catch((err) => {
+          this.$notifications.error({
+            message: "Cấp quyền thất bại !",
+          });
+        });
+    },
+    submitForm(e) {
+      this.teacherInfor = this.classList.filter((cl) => cl.id === e)[0];
+      this.getListUser();
+      console.log(this.teacherInfor);
+    },
+    generateTime(dateNumber) {
+      const date = new Date(dateNumber);
+      const m = moment(date);
+      return m.isValid() ? m.format("DD-MM-YYYY") : "";
+    },
+    fetchClass(className) {
+      ClassRepository.searchClassByName(className).then((res) => {
+        this.classList = res.data.data.items;
+      });
+    },
     onChangeSelectReport(item) {
       this.currentHealthReport = item;
     },
@@ -565,5 +699,9 @@ export default {
   },
 };
 </script>
-<style>
+<style lang="scss" scoped>
+.allow-report {
+  padding-top: 3px;
+  padding-left: 10px;
+}
 </style>
