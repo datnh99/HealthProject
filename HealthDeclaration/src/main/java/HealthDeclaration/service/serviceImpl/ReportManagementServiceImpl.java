@@ -4,6 +4,7 @@ import HealthDeclaration.common.base.service.BaseService;
 import HealthDeclaration.common.utils.ObjectUtils;
 import HealthDeclaration.form.AllowViewReportForm;
 import HealthDeclaration.form.ReportManagementSearchForm;
+import HealthDeclaration.form.UserFormSearch;
 import HealthDeclaration.modal.dto.UserDto;
 import HealthDeclaration.modal.entity.User;
 import HealthDeclaration.repository.IUserRepository;
@@ -26,12 +27,12 @@ public class ReportManagementServiceImpl extends BaseService implements ReportMa
     private IUserRepository userRepository;
 
     @Override
-    public List<UserDto> searchStudent(ReportManagementSearchForm form, int pageIndex, int pageSize) {
+    public List<UserDto> searchStudent(UserFormSearch form, int pageIndex, int pageSize) {
         return reportManagementRepository.searchStudent(form, pageIndex, pageSize);
     }
 
     @Override
-    public Long countStudent(ReportManagementSearchForm form) {
+    public Long countStudent(UserFormSearch form) {
         return reportManagementRepository.countStudent(form);
     }
 

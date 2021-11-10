@@ -355,6 +355,11 @@ public class UserServiceImpl extends BaseService implements IUserService {
         return repository.save(user);
     }
 
+    @Override
+    public Boolean getAllowedViewReport(String username) {
+        return repository.getAllowedViewReport(username);
+    }
+
     private String getNewAccountWithFullName(String fullName) {
         String account = null;
         fullName = StringUtils.convertVietnameseToEnglish(fullName);

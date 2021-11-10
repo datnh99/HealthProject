@@ -610,12 +610,11 @@ export default {
     updateAllowViewReport() {
       HealthReportRepository.updateAllowViewReport(this.allowViewForm)
         .then((res) => {
-          if (res.data.data) {
-            this.$notifications.error({
-              message: "Cấp quyền thành công !",
-            });
-          }
-          this.allowViewForm = {...defaultUpdateAllowViewReportForm}
+          this.$notifications.error({
+            message: "Cấp quyền thành công !",
+          });
+          this.allowViewForm = { ...defaultUpdateAllowViewReportForm };
+          this.getListUser()
         })
         .catch((err) => {
           this.$notifications.error({
@@ -625,6 +624,8 @@ export default {
     },
     submitForm(e) {
       this.teacherInfor = this.classList.filter((cl) => cl.id === e)[0];
+      this.allowViewForm.teacher = this.teacherInfor.allowViewReport;
+      this.searchForm.classID = e
       this.getListUser();
       console.log(this.teacherInfor);
     },
@@ -669,6 +670,7 @@ export default {
         console.log(res, "res");
         this.listUser = res.data.items;
         this.total = res.data.total;
+        this.allowViewForm.student = this.listUser[0].allowViewReport;
       });
     },
     getListReportByUsername(username) {

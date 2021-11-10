@@ -13,7 +13,7 @@ import Typography from "@/pages/Typography.vue";
 import NotFound from "@/pages/404.vue";
 import Forbidden from "@/pages/403.vue";
 import CONFIG from "./config/index";
-import { checkLogin } from "./api/processLogin";
+import { checkLogin,checkLoginViewReport } from "./api/processLogin";
 import Declaration from "@/pages/Declaration.vue";
 import MoveDeclaration from "@/pages/MoveDeclaration.vue";
 import HealthReport from "@/pages/HealthReportManagement.vue";
@@ -98,7 +98,10 @@ const router = [
       {
         path: "health-report",
         name: "HealthReport",
-        component: HealthReport
+        component: HealthReport,
+        beforeEnter: async (to, from, next) => {
+          await checkLoginViewReport(next);
+        },
       },
       // {
       //   path: ":catchAll(.*)",

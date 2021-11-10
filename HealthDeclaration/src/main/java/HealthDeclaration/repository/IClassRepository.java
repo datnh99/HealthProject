@@ -18,7 +18,7 @@ public interface IClassRepository extends JpaRepository<Class, Long>, CrudReposi
     @Query(value = "Select cl FROM Class cl where cl.name = :className")
     Class getByClassName(@Param("className") String className);
 
-    @Query(value = "Select new HealthDeclaration.modal.dto.ClassDto(cl.id, cl.name,u.id,u.username,u.fullName) " +
+    @Query(value = "Select new HealthDeclaration.modal.dto.ClassDto(cl.id, cl.name,u.id,u.username,u.fullName,u.allowViewReport) " +
             "FROM Class cl JOIN User u ON cl.teacherUsername = u.username where cl.name like :className")
     List<ClassDto> searchClassesByName(@Param("className") String className);
 

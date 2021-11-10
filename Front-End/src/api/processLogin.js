@@ -2,7 +2,7 @@ import axios from "axios";
 import CONFIG from "../config/index";
 import Vue from "vue";
 const API_LOGIN = `${CONFIG.apiUrl}`;
-
+const API_HEALTH_REPORT = `${CONFIG.apiUrl}/api/health-report`;
 export function checkPermission(objectTypeCode, view) {
   if (objectTypeCode) {
     const accessRole = CONFIG.DISPLAY_SCREEN_MAP[objectTypeCode];
@@ -13,7 +13,10 @@ export function checkPermission(objectTypeCode, view) {
   }
   return false;
 }
-
+export async function checkPermissionViewReport() {
+  let res = await axios.get(`${API_HEALTH_REPORT}/get-allow-view-report`);
+  return res.data.data;
+}
 export async function processGoogleToken(userLogin) {
   let result = "";
   try {
@@ -70,6 +73,19 @@ export async function checkLogin(next, objectTypeCode) {
       } else {
         next();
       }
+    } else {
+      next();
+    }
+  } else {
+    next("/login");
+  }
+}
+export async function checkLoginViewReport(next) {
+  let check = await checkToken();
+  if (check) {
+    check = await checkPermissionViewReport();
+    if (!check) {
+      next("/forbidden");
     } else {
       next();
     }

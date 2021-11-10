@@ -39,5 +39,5 @@ public interface IUserRepository extends JpaRepository<User, Long>, CrudReposito
     List<User> getAllUserByClassId(@Param("classId") Long classId);
 
     @Query(value = "SELECT u.allowViewReport FROM User u WHERE u.username = :username")
-    Boolean getAllowedViewReport(@Param("username") Long username);
+    Boolean getAllowedViewReport(@Param("username") String username);
 }

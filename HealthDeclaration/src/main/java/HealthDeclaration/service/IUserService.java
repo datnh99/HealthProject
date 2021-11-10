@@ -6,6 +6,7 @@ import HealthDeclaration.modal.dto.UserDto;
 import HealthDeclaration.modal.entity.User;
 import HealthDeclaration.modal.request.UserChangePassForm;
 import HealthDeclaration.modal.request.UserUpdateForm;
+import org.springframework.data.repository.query.Param;
 
 import java.awt.*;
 import java.util.List;
@@ -42,4 +43,10 @@ public interface IUserService {
     Long countSearchTeacherToManagement(UserFormSearch formSearch);
 
     User addNewTeacher(UserAddForm userAddForm);
+
+    /**
+     * @param username
+     * @return
+     */
+    Boolean getAllowedViewReport(String username);
 }

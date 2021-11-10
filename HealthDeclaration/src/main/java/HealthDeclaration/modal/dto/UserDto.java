@@ -23,7 +23,7 @@ public class UserDto {
     private String className;
     private Boolean gender;
     private String phoneNumber;
-    private String  parentPhoneNumber;
+    private String parentPhoneNumber;
     private Long provinceCode;
     private String provinceName;
     private Long districtCode;
@@ -32,8 +32,9 @@ public class UserDto {
     private String wardName;
     private String addressDetail;
     private String teacherUsername;
-    private String healthInsuranceId ;
-    private String email ;
+    private String healthInsuranceId;
+    private String email;
+    private Boolean allowViewReport;
 
     public UserDto(Long id, String userName, String fullName) {
         this.id = id;
@@ -44,7 +45,7 @@ public class UserDto {
     public UserDto(Long id, String userName, String fullName, Date dob, Boolean gender, String phoneNumber,
                    String parentPhoneNumber, Long provinceCode, String provinceName, Long districtCode,
                    String districtName, Long wardCode, String wardName, String addressDetail, String roleCode,
-                   String roleName, Long classID, String className, String teacherUsername,String healthInsuranceId,String email) {
+                   String roleName, Long classID, String className, String teacherUsername, String healthInsuranceId, String email, Boolean allowViewReport) {
         this.id = id;
         this.userName = userName;
         this.fullName = fullName;
@@ -66,11 +67,13 @@ public class UserDto {
         this.teacherUsername = teacherUsername;
         this.healthInsuranceId = healthInsuranceId;
         this.email = email;
+        this.allowViewReport = allowViewReport;
     }
+
     public UserDto(Long id, String userName, String fullName, Date dob, Boolean gender, String phoneNumber,
                    String parentPhoneNumber, Long provinceCode, String provinceName, Long districtCode,
                    String districtName, Long wardCode, String wardName, String addressDetail, String roleCode,
-                   String roleName, Long classID, String className, String teacherUsername,String healthInsuranceId) {
+                   String roleName, Long classID, String className, String teacherUsername, String healthInsuranceId) {
         this.id = id;
         this.userName = userName;
         this.fullName = fullName;
