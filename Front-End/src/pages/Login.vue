@@ -123,6 +123,8 @@ export default {
             Vue.$cookies.set("accessToken", this.userData.token, expiredTime);
             Vue.$cookies.set("username", this.userData.username, expiredTime);
             Vue.$cookies.set("role", userInfo.roleCode, expiredTime);
+            Vue.$cookies.set("class", userInfo.classID, expiredTime);
+
             this.$router.push("home-page");
             this.loading = false;
           } else {

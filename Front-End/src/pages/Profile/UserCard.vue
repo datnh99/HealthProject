@@ -28,6 +28,8 @@
     <p class="card-description">
       {{ user.addressDetail }}
     </p>
+    <vue-qrcode v-if="url" :value="url" :options="{ width: 200 }" />
+    <h4 class="card-description">Quét QR để khai báo</h4>
     <div slot="footer" class="row button-container">
       <div class="col-4">
         <base-button type="info" icon size="lg" class="btn-facebook">
@@ -104,15 +106,19 @@
 <script>
 import { Card } from "@/components/index";
 import BaseButton from "@/components/BaseButton";
+import VueQrcode from "@chenfengyuan/vue-qrcode";
+import CONFIG from "../../config/index";
 
 export default {
   components: {
     Card,
     BaseButton,
+    VueQrcode,
   },
   data() {
     return {
       openReportModel: false,
+      url: `${CONFIG.CLIENT_URL}/#/declare`,
     };
   },
   props: {
@@ -170,5 +176,15 @@ export default {
     #cfdc3b,
     #7965d9
   ) !important;
+}
+.ant-menu-item-selected {
+  background-color: rgb(82 187 100) !important;
+  color: white !important;
+}
+.ant-menu-vertical .ant-menu-item::after,
+.ant-menu-vertical-left .ant-menu-item::after,
+.ant-menu-vertical-right .ant-menu-item::after,
+.ant-menu-inline .ant-menu-item::after {
+  border-right: 3px solid white;
 }
 </style>

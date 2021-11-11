@@ -1,6 +1,7 @@
 package HealthDeclaration.service.serviceImpl;
 
 import HealthDeclaration.common.base.service.BaseService;
+import HealthDeclaration.common.utils.ObjectUtils;
 import HealthDeclaration.form.HealthAddForm;
 import HealthDeclaration.modal.dto.HealthReportDTO;
 import HealthDeclaration.modal.entity.HealthReport;
@@ -53,6 +54,7 @@ public class HeathReportServiceImpl extends BaseService implements HealthReportS
 			report.setCloseToRiskingPeople(form.getCloseToRiskingPeople());
 			report.setCloseToCountry(form.getCloseToCountry());
 			report.setCloseToSicking(form.getCloseToSicking());
+			report.setFactor(form.getFactor());
 			healthReportRepository.save(report);
 
 			// Update user infor

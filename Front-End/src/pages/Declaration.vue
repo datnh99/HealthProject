@@ -366,6 +366,33 @@
                 <a-radio :value="false"> Không </a-radio>
               </a-radio-group>
             </a-form-item>
+            <a-form-item
+              label=" Anh/chị có đang là đối tượng nguy cơ hay không ? (Vui lòng chọn) "
+              has-feedback
+            >
+              <a-select
+                v-decorator="[
+                  'factor',
+                  {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Bạn chưa chọn điểm đi(Phường xã)',
+                      },
+                    ],
+                  },
+                ]"
+                placeholder="Chọn phường xã"
+              >
+                <a-select-option
+                  v-for="item in fetchedData.listFactor"
+                  :key="item.id"
+                  :value="item.code"
+                >
+                  {{ item.name }}
+                </a-select-option>
+              </a-select>
+            </a-form-item>
           </a-card>
           <br />
           <div class="red">
@@ -379,7 +406,11 @@
             <a-button
               type="primary"
               html-type="submit"
-              style="border: 0px solid !important; border-radius: 25px !important; background-color: #1fc45c;"
+              style="
+                border: 0px solid !important;
+                border-radius: 25px !important;
+                background-color: #1fc45c;
+              "
             >
               Gửi tờ khai
             </a-button>
@@ -404,6 +435,32 @@ export default {
         listProvince: [],
         listDistrict: [],
         listWard: [],
+        listFactor: [
+          {
+            code: "normal",
+            name: "Bình thường",
+          },
+          {
+            code: "F0",
+            name: "F0",
+          },
+          {
+            code: "F1",
+            name: "F1",
+          },
+          {
+            code: "F2",
+            name: "F2",
+          },
+          {
+            code: "F3",
+            name: "F3",
+          },
+          {
+            code: "F4",
+            name: "F4",
+          },
+        ],
       },
       confirmDirty: false,
       autoCompleteResult: [],
@@ -456,6 +513,7 @@ export default {
             districtCode: this.userDetail.districtCode,
             wardCode: this.userDetail.wardCode,
             addressDetail: this.userDetail.addressDetail,
+            factor: "normal",
           });
           this.fetchDistrict(this.userDetail.provinceCode);
           this.fetchWard(this.userDetail.districtCode);

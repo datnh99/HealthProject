@@ -14,6 +14,7 @@
                   <a-col class="gutter-box" :span="4">
                     <a-form-item label="Lớp" has-feedback>
                       <a-select
+                        :disabled="userRole !== 'HIEU_TRUONG'"
                         v-model="searchForm.classID"
                         class="filter-select"
                         placeholder="~Chọn lớp học~"
@@ -45,7 +46,11 @@
                       </span>
                     </a-form-item>
                   </a-col>
-                  <a-col class="gutter-box custom-button-header" :span="6">
+                  <a-col
+                    class="gutter-box custom-button-header"
+                    :span="6"
+                    v-if="userRole === 'HIEU_TRUONG'"
+                  >
                     <div :style="{ borderBottom: '1px solid #E9E9E9' }">
                       <p>Chọn đối tượng được phép xem khai báo:</p>
                       <!-- <a-checkbox
@@ -269,6 +274,7 @@
             :style="{ margin: '24px 16px 0', overflow: 'initial' }"
           >
             <div
+              v-if="currentHealthReport"
               :style="{
                 padding: '24px',
                 background: '#fff',
@@ -350,6 +356,19 @@
                   {{ formatYesNo(currentHealthReport.contactToPlace) }}
                 </a-descriptions-item>
               </a-descriptions>
+            </div>
+            <div v-else>
+              <a-result title="Chưa có khai báo">
+                <template #extra>
+                  <a-button
+                    key="console"
+                    type="primary"
+                    @click="handleCancelHealthReport"
+                  >
+                    Trở lại
+                  </a-button>
+                </template>
+              </a-result>
             </div>
           </a-layout-content>
           <a-layout-footer :style="{ textAlign: 'center' }">
@@ -585,13 +604,18 @@ export default {
       loading: false,
       visibleHealthReport: false,
       currentUser: {},
-      currentHealthReport: {},
+      currentHealthReport: null,
       columnsHealthReport: columnsHealthReport,
       searchText: "",
       teacherInfor: {},
+      userRole: this.$cookies.get("role"),
     };
   },
   created() {
+    if (this.userRole !== "HIEU_TRUONG") {
+      this.searchForm.classID = Number(this.$cookies.get("class"));
+      this.getListUser();
+    }
     // this.getListUser();
     this.fetchClass("");
   },
@@ -614,7 +638,7 @@ export default {
             message: "Cấp quyền thành công !",
           });
           this.allowViewForm = { ...defaultUpdateAllowViewReportForm };
-          this.getListUser()
+          this.getListUser();
         })
         .catch((err) => {
           this.$notifications.error({
@@ -625,7 +649,7 @@ export default {
     submitForm(e) {
       this.teacherInfor = this.classList.filter((cl) => cl.id === e)[0];
       this.allowViewForm.teacher = this.teacherInfor.allowViewReport;
-      this.searchForm.classID = e
+      this.searchForm.classID = e;
       this.getListUser();
       console.log(this.teacherInfor);
     },
@@ -637,6 +661,11 @@ export default {
     fetchClass(className) {
       ClassRepository.searchClassByName(className).then((res) => {
         this.classList = res.data.data.items;
+        if (this.userRole !== "HIEU_TRUONG") {
+          this.teacherInfor = this.classList.filter(
+            (cl) => cl.id === this.searchForm.classID
+          )[0];
+        }
       });
     },
     onChangeSelectReport(item) {
