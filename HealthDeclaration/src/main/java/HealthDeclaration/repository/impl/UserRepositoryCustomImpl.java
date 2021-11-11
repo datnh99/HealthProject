@@ -113,7 +113,7 @@ public class UserRepositoryCustomImpl extends BaseRepository implements IUserRep
             params.put("classID", formSearch.getClassID());
         }
         if(!count) {
-            sql.append(" ORDER BY u.roleCode ASC, u.fullName ASC");
+            sql.append(" ORDER BY u.fullName ASC, u.username ASC");
         }
         return super.createQuery(sql.toString(), params, clazz);
     }
@@ -174,7 +174,7 @@ public class UserRepositoryCustomImpl extends BaseRepository implements IUserRep
             params.put("roleCode", formSearch.getRoleCode());
         }
         if(!count) {
-            sql.append(" ORDER BY u.roleCode ASC, u.fullName ASC");
+            sql.append(" ORDER BY u.fullName ASC, u.username ASC ");
         }
         return super.createQuery(sql.toString(), params, clazz);
     }

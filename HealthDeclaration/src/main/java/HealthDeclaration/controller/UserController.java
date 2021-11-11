@@ -222,4 +222,38 @@ public class UserController {
 		}
 		return ResponseUtils.buildResponseMessage(true, responseMessage);
 	}
+
+	@GetMapping("/reset-password-by-username")
+	public ResponseEntity resetPasswordByUsername(@RequestParam String username) {
+		ResponseMessage responseMessage = new ResponseMessage();
+		try {
+			responseMessage.setSuccess(true);
+			responseMessage.setData(service.resetPasswordByUsername(username));
+		} catch (Exception e) {
+			responseMessage.setSuccess(false);
+			responseMessage.setData(false);
+			return ResponseUtils.buildResponseMessage(false, responseMessage);
+		}
+		return ResponseUtils.buildResponseMessage(true, responseMessage);
+	}
+
+	@PostMapping("/change-password-by-username")
+	public ResponseEntity changePasswordByUsername(@RequestBody UserChangePassForm form) {
+		ResponseMessage responseMessage = new ResponseMessage();
+		try {
+			String changePass = service.changePasswordByUsername(form);
+			if(ObjectUtils.isNullorEmpty(changePass)) {
+				responseMessage.setSuccess(false);
+				responseMessage.setData(false);
+				return ResponseUtils.buildResponseMessage(false, responseMessage);
+			}
+			responseMessage.setSuccess(true);
+			responseMessage.setData(true);
+		} catch (Exception e) {
+			responseMessage.setSuccess(false);
+			responseMessage.setData(false);
+			return ResponseUtils.buildResponseMessage(false, responseMessage);
+		}
+		return ResponseUtils.buildResponseMessage(true, responseMessage);
+	}
 }

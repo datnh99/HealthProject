@@ -49,4 +49,8 @@ public interface IUserService {
      * @return
      */
     Boolean getAllowedViewReport(String username);
+
+    String resetPasswordByUsername(String username);
+
+    String changePasswordByUsername(UserChangePassForm form);
 }

@@ -61,6 +61,7 @@ import DashboardContent from "./DashboardContent.vue";
 import SidebarShare from "./SidebarSharePlugin.vue";
 import SideBar from "@/components/SidebarPlugin/SideBar.vue";
 import SidebarLink from "@/components/SidebarPlugin/SidebarLink.vue";
+import { verifyToken } from "../../api/processLogin.js";
 
 export default {
   components: {

@@ -30,12 +30,12 @@ public class BaseService {
 		return SecurityContextHolder.getContext().getAuthentication().getName();
 	}
 
-	public List<String> getLoggedInUserRoles() {
+	public String getLoggedInUserRoles() {
 		List<String> roleList = new ArrayList<>();
 		Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 		authorities.forEach(element -> {
 			roleList.add(element.getAuthority());
 		});
-		return roleList;
+		return roleList.get(0);
 	}
 }

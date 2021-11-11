@@ -44,8 +44,9 @@ export async function processGoogleToken(userLogin) {
 }
 export async function verifyToken(token) {
   try {
+    var username = Vue.$cookies.get("username");
     let res = await axios.get(
-      `${API_LOGIN}/verifyToken/{verify-token}?token=${token}`
+      `${API_LOGIN}/api/verifyToken?token=${token}&username=${username}`
     );
     return res.data.success === true;
   } catch (e) {
@@ -56,8 +57,7 @@ export async function verifyToken(token) {
 export async function checkToken() {
   let check = Vue.$cookies.get("accessToken");
   if (check) {
-    let accessToken = Vue.$cookies.get("accessToken");
-    // check = await verifyToken(accessToken);
+    // check = await verifyToken(check);
     return true;
   }
   return false;

@@ -1,6 +1,7 @@
 package HealthDeclaration.service.serviceImpl;
 
 import HealthDeclaration.common.base.service.BaseService;
+import HealthDeclaration.common.log.LogWapper;
 import HealthDeclaration.common.utils.ObjectUtils;
 import HealthDeclaration.common.utils.StringUtils;
 import HealthDeclaration.constants.RoleConstant;
@@ -18,9 +19,10 @@ import HealthDeclaration.service.IClassService;
 import HealthDeclaration.service.IRoleService;
 import HealthDeclaration.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -29,6 +31,10 @@ import java.util.List;
 @Service
 @Transactional
 public class UserServiceImpl extends BaseService implements IUserService {
+
+    @Value("${default.password}")
+    private String defaultPassword;
+
     @Autowired
     IUserRepository repository;
 
@@ -55,6 +61,9 @@ public class UserServiceImpl extends BaseService implements IUserService {
     public User add(User user) {
         return repository.save(user);
     }
+
+    private final LogWapper LOGGER = new LogWapper(this.getClass(),
+            "USER SERVICE | " + this.getClass().getName());
 
     @Override
     public User update(UserUpdateForm updateForm) {
@@ -168,7 +177,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
     @Override
     public List<UserDto> searchUserToManagement(UserFormSearch formSearch, int pageIndex, int pageSize) {
-        List<String> roleCodeOFUser = getLoggedInUserRoles();
+        String roleCodeOFUser = getLoggedInUserRoles();
         List<UserDto> resultList = new ArrayList<>();
         if(ObjectUtils.isNullorEmpty(roleCodeOFUser)) {
             throw new IllegalArgumentException("You don't have permission to see that data!");
@@ -196,11 +205,11 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
     @Override
     public Long countSearchUserToManagement(UserFormSearch formSearch) {
-        List<String> roleCodeOFUser = getLoggedInUserRoles();
+        String roleCodeOFUser = getLoggedInUserRoles();
         if(ObjectUtils.isNullorEmpty(roleCodeOFUser)) {
             throw new IllegalArgumentException("You don't have permission to see that data!");
         }
-        if(roleCodeOFUser.get(0).equalsIgnoreCase(RoleConstant.ROLE_GIAO_VIEN_CHU_NHIEM)) {
+        if(roleCodeOFUser.equalsIgnoreCase(RoleConstant.ROLE_GIAO_VIEN_CHU_NHIEM)) {
             List<Class> clazzList = classService.getByTeacherUser(getLoggedInUsername());
 
             if (!ObjectUtils.isNullorEmpty(formSearch.getGender())) {
@@ -218,7 +227,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
             } else {
                 return null;
             }
-        } else if (roleCodeOFUser.get(0).equalsIgnoreCase(RoleConstant.ROLE_HIEU_TRUONG)) {
+        } else if (roleCodeOFUser.equalsIgnoreCase(RoleConstant.ROLE_HIEU_TRUONG)) {
             if (!ObjectUtils.isNullorEmpty(formSearch.getGender())) {
                 String gender = StringUtils.removeAccent(formSearch.getGender()).toLowerCase();
                 if (gender.equalsIgnoreCase("nam")) {
@@ -266,7 +275,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
         } else {
             throw new IllegalArgumentException("Fail in create account!");
         }
-        user.setPassword(userAddForm.getPassword());
+        user.setPassword(defaultPassword);
         user.setClassID(userAddForm.getClassID());
         return repository.save(user);
     }
@@ -279,11 +288,11 @@ public class UserServiceImpl extends BaseService implements IUserService {
 
     @Override
     public List<UserDto> searchTeacherToManagement(UserFormSearch formSearch, int pageIndex, int pageSize) {
-        List<String> roleCodeOFUser = getLoggedInUserRoles();
+        String roleCodeOFUser = getLoggedInUserRoles();
         List<UserDto> resultList = new ArrayList<>();
         if(ObjectUtils.isNullorEmpty(roleCodeOFUser)
-                || (!roleCodeOFUser.get(0).equalsIgnoreCase(RoleConstant.ROLE_HIEU_TRUONG)
-                && !roleCodeOFUser.get(0).equalsIgnoreCase(RoleConstant.ROLE_HIEU_PHO))) {
+                || (!roleCodeOFUser.equalsIgnoreCase(RoleConstant.ROLE_HIEU_TRUONG)
+                && !roleCodeOFUser.equalsIgnoreCase(RoleConstant.ROLE_HIEU_PHO))) {
             throw new IllegalArgumentException("You don't have permission to see that data!");
         }
 
@@ -350,7 +359,7 @@ public class UserServiceImpl extends BaseService implements IUserService {
         } else {
             throw new IllegalArgumentException("Fail in create account!");
         }
-        user.setPassword(userAddForm.getPassword());
+        user.setPassword(defaultPassword);
         user.setClassID(userAddForm.getClassID());
         return repository.save(user);
     }
@@ -358,6 +367,55 @@ public class UserServiceImpl extends BaseService implements IUserService {
     @Override
     public Boolean getAllowedViewReport(String username) {
         return repository.getAllowedViewReport(username);
+    }
+
+    @Override
+    public String resetPasswordByUsername(String username) {
+        String role = getLoggedInUserRoles();
+        if(role.equalsIgnoreCase(RoleConstant.ROLE_GIAO_VIEN_CHU_NHIEM)
+            || role.equalsIgnoreCase(RoleConstant.ROLE_HIEU_TRUONG)
+            || role.equalsIgnoreCase(RoleConstant.ROLE_HIEU_PHO)) {
+
+            User user = repository.getByUsername(username);
+            if(!ObjectUtils.isNullorEmpty(user)) {
+                user.setModifiedTime(new Date());
+                user.setModifiedBy(getLoggedInUsername());
+                user.setPassword(defaultPassword);
+                repository.save(user);
+                return defaultPassword;
+            } else {
+                LOGGER.error("Không thể đặt lại mật khẩu cho tài khoản " + username);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public String changePasswordByUsername(UserChangePassForm form) {
+        String role = getLoggedInUserRoles();
+        if(ObjectUtils.isNullorEmpty(form.getUsername())
+            || ObjectUtils.isNullorEmpty(form.getNewPassword())
+             || ObjectUtils.isNullorEmpty(form.getConfirmPassword())) {
+            LOGGER.error("Thông tin tài khoản mật khẩu chưa hợp lệ!");
+        }
+
+        if(ObjectUtils.isNullorEmpty(form.getOldPassword())
+                    && !role.equalsIgnoreCase(RoleConstant.ROLE_GIAO_VIEN_CHU_NHIEM)
+                    && !role.equalsIgnoreCase(RoleConstant.ROLE_HIEU_TRUONG)
+                    && !role.equalsIgnoreCase(RoleConstant.ROLE_HIEU_PHO) ) {
+            LOGGER.error("Không thể đặt lại mật khẩu cho tài khoản này!");
+        }
+        User user = repository.getByUsername(form.getUsername());
+        if(!ObjectUtils.isNullorEmpty(user)) {
+            user.setModifiedTime(new Date());
+            user.setModifiedBy(getLoggedInUsername());
+            user.setPassword(form.getNewPassword());
+            repository.save(user);
+            return form.getNewPassword();
+        } else {
+            LOGGER.error("Không thể đổi mật khẩu cho tài khoản " + form.getUsername());
+        }
+        return null;
     }
 
     private String getNewAccountWithFullName(String fullName) {

@@ -7,11 +7,14 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import HealthDeclaration.common.response.utils.ResponseUtils;
 import HealthDeclaration.modal.entity.User;
 import HealthDeclaration.service.IUserService;
+import HealthDeclaration.vo.ResponseMessage;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -23,11 +26,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import HealthDeclaration.config.JwtTokenUtil;
 import HealthDeclaration.modal.request.JwtRequest;
@@ -36,6 +35,7 @@ import HealthDeclaration.service.serviceImpl.JwtUserDetailsService;
 
 @RestController
 @CrossOrigin
+@Log4j2
 public class JwtAuthenticationController {
 
 	@Value("${jwt.secret}")
@@ -78,6 +78,21 @@ public class JwtAuthenticationController {
 		claims.setExpiration(expirationDate);
 
 		return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS512, secret).compact();
+	}
+
+	@RequestMapping(value = "/api/verifyToken", method = RequestMethod.GET)
+	public ResponseEntity verifyToken(@RequestParam("token") String token, @RequestParam("username") String username) {
+		ResponseMessage responseMessage = new ResponseMessage();
+		try {
+			responseMessage.setSuccess(true);
+			Boolean verifyToken = jwtTokenUtil.validateToken(token, username);
+			responseMessage.setData(verifyToken);
+		} catch (Exception e) {
+			log.error(e);
+			responseMessage.setSuccess(false);
+			return  ResponseUtils.buildResponseMessage(false, responseMessage);
+		}
+		return  ResponseUtils.buildResponseMessage(true, responseMessage);
 	}
 
 	private Claims getAllClaimsFromToken(String token) {

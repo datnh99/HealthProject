@@ -53,6 +53,13 @@ function addNewTeacher(formAddNew) {
   return axios.post(`${API_USER}/add-new-teacher`, formAddNew);
 }
 
+function changePasswordByUsername(changePasswordForm) {
+  return axios.post(
+    `${API_USER}/change-password-by-username`,
+    changePasswordForm
+  );
+}
+
 export default {
   getAllUser,
   searchTeacherByName,
@@ -64,5 +71,6 @@ export default {
   deleteUser,
   getUserByUsername,
   addNewStudent,
-  addNewTeacher
+  addNewTeacher,
+  changePasswordByUsername,
 };

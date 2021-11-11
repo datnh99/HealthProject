@@ -1,6 +1,7 @@
 package HealthDeclaration.common.utils;
 
 import java.text.Normalizer;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 public class StringUtils {
@@ -35,13 +36,20 @@ public class StringUtils {
         str = str.replaceAll("ỳ|ý|ỵ|ỷ|ỹ", "y");
         str = str.replaceAll("đ", "d");
 
-//        str = str.replaceAll("À|Á|Ạ|Ả|Ã|Â|Ầ|Ấ|Ậ|Ẩ|Ẫ|Ă|Ằ|Ắ|Ặ|Ẳ|Ẵ", "A");
-//        str = str.replaceAll("È|É|Ẹ|Ẻ|Ẽ|Ê|Ề|Ế|Ệ|Ể|Ễ", "E");
-//        str = str.replaceAll("Ì|Í|Ị|Ỉ|Ĩ", "I");
-//        str = str.replaceAll("Ò|Ó|Ọ|Ỏ|Õ|Ô|Ồ|Ố|Ộ|Ổ|Ỗ|Ơ|Ờ|Ớ|Ợ|Ở|Ỡ", "O");
-//        str = str.replaceAll("Ù|Ú|Ụ|Ủ|Ũ|Ư|Ừ|Ứ|Ự|Ử|Ữ", "U");
-//        str = str.replaceAll("Ỳ|Ý|Ỵ|Ỷ|Ỹ", "Y");
-//        str = str.replaceAll("Đ", "D");
         return str;
+    }
+
+    public static String randomAlphabeticString(int targetStringLength) {
+        if(ObjectUtils.isNullorEmpty(targetStringLength) || targetStringLength < 1) {
+            throw new IllegalArgumentException("Không thể tạo mã ngẫu nhiên với độ dài = " + targetStringLength);
+        }
+        int leftLimit = 97; // letter 'a'
+        int rightLimit = 122; // letter 'z'
+        Random random = new Random();
+
+        return random.ints(leftLimit, rightLimit + 1)
+                .limit(targetStringLength)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
     }
 }
