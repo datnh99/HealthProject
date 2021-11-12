@@ -1,6 +1,5 @@
 import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
 
-import Dashboard from "@/pages/Dashboard.vue";
 import Login from "@/pages/Login.vue";
 import ClassManagement from "@/pages/ClassManagement.vue";
 import UserManagement from "@/pages/UserManagement.vue";
@@ -31,12 +30,12 @@ const router = [
       },
       {
         path: "declare",
-        name: "Declaration",
+        name: "Khai báo y tế",
         component: Declaration
       },
       {
         path: "move-declare",
-        name: "MoveDeclaration",
+        name: "Khai báo di chuyển",
         component: MoveDeclaration
       },
       {
@@ -45,13 +44,8 @@ const router = [
         component: Login
       },
       {
-        path: "dashboard",
-        name: "Dashboard",
-        component: Dashboard
-      },
-      {
         path: "forbidden",
-        name: "Forbidden",
+        name: "Không có quyền",
         component: Forbidden
       },
       {
@@ -97,7 +91,7 @@ const router = [
       },
       {
         path: "health-report",
-        name: "HealthReport",
+        name: "Quản lý khai báo y tế",
         component: HealthReport,
         beforeEnter: async (to, from, next) => {
           await checkLoginViewReport(next);
@@ -110,7 +104,7 @@ const router = [
       // },
       {
         path: "*",
-        name: "NotFound",
+        name: "Trang không tồn tại",
         component: NotFound
       }
     ]

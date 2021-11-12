@@ -10,12 +10,6 @@
           <p>Trang chủ</p>
         </template>
       </sidebar-link>
-      <sidebar-link to="/dashboard">
-        <i class="tim-icons icon-chart-pie-36"></i>
-        <template>
-          <p>Dashboard</p>
-        </template>
-      </sidebar-link>
       <sidebar-link to="/class-management">
         <i class="tim-icons icon-bank"></i>
         <template>
@@ -58,10 +52,8 @@
 import TopNavbar from "./TopNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
 import DashboardContent from "./DashboardContent.vue";
-import SidebarShare from "./SidebarSharePlugin.vue";
 import SideBar from "@/components/SidebarPlugin/SideBar.vue";
 import SidebarLink from "@/components/SidebarPlugin/SidebarLink.vue";
-import { verifyToken } from "../../api/processLogin.js";
 
 export default {
   components: {
@@ -70,7 +62,6 @@ export default {
     ContentFooter,
     SideBar,
     SidebarLink,
-    SidebarShare,
   },
   data() {
     return {
