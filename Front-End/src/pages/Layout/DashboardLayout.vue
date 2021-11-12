@@ -40,6 +40,18 @@
           <p>Quản lý giáo viên</p>
         </template>
       </sidebar-link>
+      <sidebar-link to="/change-password">
+        <a-icon type="key" />
+        <template>
+          <p>Đổi mật khẩu</p>
+        </template>
+      </sidebar-link>
+      <sidebar-link to="/login">
+        <a-icon type="logout" />
+        <template>
+          <p>Đăng xuất</p>
+        </template>
+      </sidebar-link>
     </side-bar>
     <sidebar-share :background-color.sync="backgroundColor"></sidebar-share>
 

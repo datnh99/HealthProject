@@ -1,6 +1,7 @@
 import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
 
 import Login from "@/pages/Login.vue";
+import ChangePassword from "@/pages/ChangePassword.vue";
 import ClassManagement from "@/pages/ClassManagement.vue";
 import UserManagement from "@/pages/UserManagement.vue";
 import TeacherManagement from "@/pages/TeacherManagement.vue";
@@ -12,7 +13,7 @@ import Typography from "@/pages/Typography.vue";
 import NotFound from "@/pages/404.vue";
 import Forbidden from "@/pages/403.vue";
 import CONFIG from "./config/index";
-import { checkLogin,checkLoginViewReport } from "./api/processLogin";
+import { checkLogin, checkLoginViewReport } from "./api/processLogin";
 import Declaration from "@/pages/Declaration.vue";
 import MoveDeclaration from "@/pages/MoveDeclaration.vue";
 import HealthReport from "@/pages/HealthReportManagement.vue";
@@ -37,6 +38,11 @@ const router = [
         path: "move-declare",
         name: "Khai báo di chuyển",
         component: MoveDeclaration
+      },
+      {
+        path: "change-password",
+        name: "Đổi mật khẩu",
+        component: ChangePassword
       },
       {
         path: "login",
