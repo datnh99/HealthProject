@@ -10,6 +10,18 @@
           <p>Trang chủ</p>
         </template>
       </sidebar-link>
+      <!-- <sidebar-link to="/dashboard">
+        <i class="tim-icons icon-chart-pie-36"></i>
+        <template>
+          <p>Dashboard</p>
+        </template>
+      </sidebar-link> -->
+      <sidebar-link to="/health-report" v-if="allowViewReport">
+        <a-icon type="snippets" />
+        <template>
+          <p>Quản lý khai báo</p>
+        </template>
+      </sidebar-link>
       <sidebar-link to="/class-management">
         <i class="tim-icons icon-bank"></i>
         <template>
@@ -26,12 +38,6 @@
         <i class="tim-icons icon-single-02"></i>
         <template>
           <p>Quản lý giáo viên</p>
-        </template>
-      </sidebar-link>
-      <sidebar-link to="/health-report">
-        <a-icon type="snippets" />
-        <template>
-          <p>Quản lý khai báo</p>
         </template>
       </sidebar-link>
     </side-bar>
@@ -54,7 +60,7 @@ import ContentFooter from "./ContentFooter.vue";
 import DashboardContent from "./DashboardContent.vue";
 import SideBar from "@/components/SidebarPlugin/SideBar.vue";
 import SidebarLink from "@/components/SidebarPlugin/SidebarLink.vue";
-
+import { checkPermissionViewReport } from "../../api/healthReport";
 export default {
   components: {
     TopNavbar,
@@ -66,6 +72,7 @@ export default {
   data() {
     return {
       backgroundColor: "green",
+      allowViewReport: false,
     };
   },
   computed: {
@@ -76,11 +83,17 @@ export default {
       return false;
     },
   },
+  created() {
+    this.checkPermissionViewReport()
+  },
   methods: {
     toggleSidebar() {
       if (this.$sidebar.showSidebar) {
         this.$sidebar.displaySidebar(false);
       }
+    },
+    checkPermissionViewReport() {
+      this.allowViewReport = checkPermissionViewReport();
     },
   },
 };
