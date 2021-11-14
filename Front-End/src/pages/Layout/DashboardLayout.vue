@@ -16,7 +16,7 @@
           <p>Dashboard</p>
         </template>
       </sidebar-link> -->
-      <sidebar-link to="/health-report" v-if="allowViewReport">
+      <sidebar-link to="/health-report" v-if="allowViewReport || role === 'HIEU_TRUONG'">
         <a-icon type="snippets" />
         <template>
           <p>Quản lý khai báo</p>
@@ -88,6 +88,7 @@ export default {
       allowClassManagement: false,
       allowTeacherManagement: false,
       allowStudentManagement: false,
+      role : this.$cookies.get("role")
     };
   },
   computed: {
@@ -110,6 +111,7 @@ export default {
       }
     }
     // this.checkPermissionViewReport()
+     this.checkPermissionViewReport()
   },
   methods: {
     toggleSidebar() {
