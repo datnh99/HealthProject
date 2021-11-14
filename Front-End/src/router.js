@@ -45,7 +45,7 @@ const router = [
         component: ChangePassword
       },
       {
-        path: "login",
+        path: "login/:isLogout?",
         name: "Đăng nhập",
         component: Login
       },
