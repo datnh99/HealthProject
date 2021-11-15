@@ -45,16 +45,15 @@ We are very excited to share this dashboard with you and we look forward to hear
 - [Start page](https://demos.creative-tim.com/vue-white-dashboard)
 - [User profile page](https://demos.creative-tim.com/vue-white-dashboard/#/user)
 - [Tables page ](https://demos.creative-tim.com/vue-white-dashboard/#/table)
-- [Maps Page](https://demos.creative-tim.com/vue-white-dashboard/#/maps)
 - [Notifications page](https://demos.creative-tim.com//vue-white-dashboard/#/notifications)
 
 | Start page | User profile page | Tables page  |
 | --- | --- | ---  |
 | [![Start page](https://github.com/creativetimofficial/public-assets/blob/master/vue-white-dashboard/start-page.png?raw=true)](https://demos.creative-tim.com/vue-white-dashboard)  | [![User profile page](https://github.com/creativetimofficial/public-assets/blob/master/vue-white-dashboard/profile-page.png?raw=true)](https://demos.creative-tim.com/vue-white-dashboard/#/user)  | [![Tables pages](https://github.com/creativetimofficial/public-assets/blob/master/vue-white-dashboard/tables-page.png?raw=true)](https://demos.creative-tim.com/vue-white-dashboard/#/table)
 
-| Maps page | Notifications page | RTL page  |
+| Notifications page | RTL page  |
 | --- | --- | ---  |
-| [![Maps page](https://github.com/creativetimofficial/public-assets/blob/master/vue-white-dashboard/maps-page.png?raw=true)](https://demos.creative-tim.com/vue-white-dashboard/#/maps)  | [![Notifications page](https://github.com/creativetimofficial/public-assets/blob/master/vue-white-dashboard/notifications-page.png?raw=true)](https://demos.creative-tim.com/vue-white-dashboard/#/notifications)  | [![RTL page](https://github.com/creativetimofficial/public-assets/blob/master/vue-white-dashboard/rtl-page.png?raw=true)](https://demos.creative-tim.com/vue-white-dashboard/#/dashboard?enableRTL=true)  
+| [![Notifications page](https://github.com/creativetimofficial/public-assets/blob/master/vue-white-dashboard/notifications-page.png?raw=true)](https://demos.creative-tim.com/vue-white-dashboard/#/notifications)  | [![RTL page](https://github.com/creativetimofficial/public-assets/blob/master/vue-white-dashboard/rtl-page.png?raw=true)](https://demos.creative-tim.com/vue-white-dashboard/#/dashboard?enableRTL=true)  
 
 ## Quick start
 
@@ -121,7 +120,6 @@ Within the download you'll find the following directories and files:
     │   ├── Dashboard.vue
     │   ├── Icons.vue
     │   ├── Layout
-    │   ├── Maps.vue
     │   ├── Notifications
     │   ├── Notifications.vue
     │   ├── Profile
